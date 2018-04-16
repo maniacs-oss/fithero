@@ -1,0 +1,3 @@
+rootProject.name = 'Dziku'
+
+include ':app'

@@ -1,0 +1,27 @@
+{
+  "name": "Dziku",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "flow": "flow",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "react": "16.3.1",
+    "react-native": "0.55.2"
+  },
+  "devDependencies": {
+    "babel-jest": "22.4.3",
+    "babel-preset-react-native": "4.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-callstack-io": "^1.1.1",
+    "flow-bin": "^0.67.1",
+    "jest": "22.4.3",
+    "react-test-renderer": "16.3.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
