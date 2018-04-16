@@ -19,6 +19,11 @@
 ; Ignore metro
 .*/node_modules/metro/.*
 
+[untyped]
+
+; Current library problems
+.*/node_modules/react-native-paper/.*
+
 [include]
 
 [libs]
