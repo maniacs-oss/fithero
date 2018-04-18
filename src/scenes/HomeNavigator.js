@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { BottomNavigation } from 'react-native-paper';
 
-import Home from './Home';
+import HomeScreen from './HomeScreen';
 
 type State = {
   index: number,
@@ -28,7 +28,7 @@ export default class HomeNavigator extends React.Component<{}, State> {
   _handleIndexChange = index => this.setState({ index });
 
   _renderScene = BottomNavigation.SceneMap({
-    home: Home,
+    home: HomeScreen,
     // calendar: Calendar,
     // progress: Progress,
     // profile: Profile,

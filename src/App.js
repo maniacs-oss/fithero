@@ -1,10 +1,18 @@
 /* @flow */
 
 import * as React from 'react';
-import { Platform, StatusBar } from 'react-native';
+import { Platform, StatusBar, YellowBox } from 'react-native';
 import { DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 
-import HomeNavigator from './scenes/HomeNavigator';
+import MainNavigator from './MainNavigator';
+
+// react-navigation is fixing it: https://github.com/react-navigation/react-navigation/issues/3956
+if (global.__DEV__) {
+  YellowBox.ignoreWarnings([
+    'Warning: isMounted(...) is deprecated',
+    'Module RCTImageLoader',
+  ]);
+}
 
 const theme = {
   ...DarkTheme,
@@ -21,7 +29,7 @@ export default class App extends React.Component<{}> {
       <PaperProvider theme={theme}>
         <React.Fragment>
           {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-          <HomeNavigator />
+          <MainNavigator />
         </React.Fragment>
       </PaperProvider>
     );
