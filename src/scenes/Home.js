@@ -6,12 +6,11 @@ import { Headline } from 'react-native-paper';
 
 import Screen from '../components/Screen';
 
-type Props = {};
-export default class Home extends Component<Props> {
+export default class Home extends Component<{}> {
   render() {
     return (
       <Screen style={styles.container}>
-        <Headline>Dziku</Headline>
+        <Headline>Home</Headline>
       </Screen>
     );
   }

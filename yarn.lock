@@ -1743,7 +1743,7 @@ create-react-class@^15.6.3:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-create-react-context@^0.2.1:
+create-react-context@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/create-react-context/-/create-react-context-0.2.2.tgz#9836542f9aaa22868cd7d4a6f82667df38019dca"
   dependencies:
@@ -1830,7 +1830,7 @@ deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
 
-deepmerge@^2.0.1:
+deepmerge@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.1.0.tgz#511a54fff405fc346f0240bb270a3e9533a31102"
 
@@ -4726,19 +4726,19 @@ react-is@^16.3.1:
   version "16.3.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.1.tgz#ee66e6d8283224a83b3030e110056798488359ba"
 
-react-lifecycles-compat@^2.0.0:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-2.0.2.tgz#00a23160eec17a43b94dd74f95d44a1a2c3c5ec1"
+react-lifecycles-compat@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.2.tgz#7279047275bd727a912e25f734c0559527e84eff"
 
-react-native-paper@^1.2.7:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-1.2.7.tgz#703c01305ad231351f40985be29ae92d2c553740"
+react-native-paper@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-1.3.0.tgz#7f77283844ca1220edbc4fc53bb58e0369c3752b"
   dependencies:
     color "^2.0.1"
-    create-react-context "^0.2.1"
-    deepmerge "^2.0.1"
+    create-react-context "^0.2.2"
+    deepmerge "^2.1.0"
     hoist-non-react-statics "^2.5.0"
-    react-lifecycles-compat "^2.0.0"
+    react-lifecycles-compat "^3.0.2"
 
 react-native-vector-icons@^4.6.0:
   version "4.6.0"

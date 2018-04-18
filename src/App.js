@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Platform, StatusBar } from 'react-native';
 import { DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 
-import Home from './scenes/Home';
+import HomeNavigator from './scenes/HomeNavigator';
 
 const theme = {
   ...DarkTheme,
@@ -21,7 +21,7 @@ export default class App extends React.Component<{}> {
       <PaperProvider theme={theme}>
         <React.Fragment>
           {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-          <Home />
+          <HomeNavigator />
         </React.Fragment>
       </PaperProvider>
     );
