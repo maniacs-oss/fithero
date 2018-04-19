@@ -3,6 +3,8 @@
 import { StackNavigator } from 'react-navigation';
 import { Colors } from 'react-native-paper';
 
+import i18n from './utils/i18n';
+
 import HomeNavigator from './scenes/HomeNavigator';
 import ExercisesScreen from './scenes/ExercisesScreen';
 
@@ -14,7 +16,7 @@ export default StackNavigator(
     Exercises: {
       screen: ExercisesScreen,
       navigationOptions: {
-        title: 'Exercises',
+        title: i18n.t('exercises'),
       },
     },
   },

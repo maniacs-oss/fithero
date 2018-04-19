@@ -6,11 +6,13 @@ import { DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 
 import MainNavigator from './MainNavigator';
 
-// react-navigation is fixing it: https://github.com/react-navigation/react-navigation/issues/3956
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
+    // https://github.com/react-navigation/react-navigation/issues/3956
     'Warning: isMounted(...) is deprecated',
     'Module RCTImageLoader',
+    // https://github.com/facebook/react-native/issues/18201
+    'Warning: Class RCTCxxModule was not exported',
   ]);
 }
 

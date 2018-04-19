@@ -19,7 +19,7 @@ class HomeScreen extends Component<Props> {
 
   render() {
     return (
-      <Screen style={styles.container}>
+      <Screen>
         <FAB icon="add" onPress={this._onAddExercises} style={styles.fab} />
       </Screen>
     );

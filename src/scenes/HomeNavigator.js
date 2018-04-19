@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { BottomNavigation } from 'react-native-paper';
 
+import i18n from '../utils/i18n';
 import HomeScreen from './HomeScreen';
 
 type State = {
@@ -18,10 +19,10 @@ export default class HomeNavigator extends React.Component<{}, State> {
   state = {
     index: 0,
     routes: [
-      { key: 'home', title: 'Home', icon: 'home' },
-      // { key: 'calendar', title: 'Calendar', icon: 'date-range' },
-      // { key: 'progress', title: 'Progress', icon: 'show-chart' },
-      // { key: 'profile', title: 'Profile', icon: 'person' },
+      { key: 'home', title: i18n.t('menu__home'), icon: 'home' },
+      // { key: 'calendar', title: i18n.t('menu__calendar'), icon: 'date-range' },
+      // { key: 'progress', title: i18n.t('menu__progress), icon: 'show-chart' },
+      // { key: 'profile', title: i18n.t('menu__profile'), icon: 'person' },
     ],
   };
 
