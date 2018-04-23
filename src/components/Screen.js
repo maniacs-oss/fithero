@@ -32,6 +32,7 @@ class Screen extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingVertical: 8,
   },
 });
 

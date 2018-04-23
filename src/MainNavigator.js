@@ -6,7 +6,7 @@ import { Colors } from 'react-native-paper';
 import i18n from './utils/i18n';
 
 import HomeNavigator from './scenes/HomeNavigator';
-import ExercisesScreen from './scenes/ExercisesScreen';
+import ExercisesScreen from './scenes/Exercises/ExercisesScreen';
 
 export default StackNavigator(
   {

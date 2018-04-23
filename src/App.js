@@ -20,8 +20,9 @@ const theme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary: '#FF1B1B',
-    accent: '#FF1B1B',
+    primary: '#F44336',
+    accent: '#F44336',
+    secondaryText: 'rgba(255, 255, 255, .7)',
   },
 };
 

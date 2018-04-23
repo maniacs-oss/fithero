@@ -1,0 +1,10 @@
+[
+  {
+    "id": "barbell-squat",
+    "category": "legs"
+  },
+  {
+    "id": "bench-press",
+    "category": "chest"
+  }
+]

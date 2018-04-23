@@ -6,10 +6,10 @@ import { FAB } from 'react-native-paper';
 import { withNavigation } from 'react-navigation';
 
 import Screen from '../components/Screen';
-import type { Navigation } from '../types';
+import type { NavigationType } from '../types';
 
 type Props = {
-  navigation: Navigation,
+  navigation: NavigationType,
 };
 
 class HomeScreen extends Component<Props> {
