@@ -3,7 +3,9 @@
 import * as React from 'react';
 import { Platform, StatusBar, YellowBox } from 'react-native';
 import { DarkTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Provider } from 'react-redux';
 
+import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
 
 if (global.__DEV__) {
@@ -29,12 +31,14 @@ const theme = {
 export default class App extends React.Component<{}> {
   render() {
     return (
-      <PaperProvider theme={theme}>
-        <React.Fragment>
-          {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-          <MainNavigator />
-        </React.Fragment>
-      </PaperProvider>
+      <Provider store={store}>
+        <PaperProvider theme={theme}>
+          <React.Fragment>
+            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
+            <MainNavigator />
+          </React.Fragment>
+        </PaperProvider>
+      </Provider>
     );
   }
 }
