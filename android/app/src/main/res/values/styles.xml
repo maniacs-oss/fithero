@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">#131313</item>
         <item name="colorControlActivated">#F44336</item>
+        <item name="android:windowBackground">@color/darkBackground</item>
     </style>
 
 </resources>
