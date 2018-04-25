@@ -6,7 +6,8 @@ import { Colors } from 'react-native-paper';
 import i18n from './utils/i18n';
 
 import HomeNavigator from './scenes/HomeNavigator';
-import ExercisesScreen from './scenes/Exercises/ExercisesScreen';
+import ExercisesScreen from './scenes/Exercises';
+import EditSetsScreen from './scenes/EditSets';
 
 export default StackNavigator(
   {
@@ -17,6 +18,12 @@ export default StackNavigator(
       screen: ExercisesScreen,
       navigationOptions: {
         title: i18n.t('exercises'),
+      },
+    },
+    EditSets: {
+      screen: EditSetsScreen,
+      navigationOptions: {
+        title: i18n.t('edit_exercise'),
       },
     },
   },
