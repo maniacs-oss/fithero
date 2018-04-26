@@ -1,6 +1,8 @@
 /* @flow */
 
-export const parseSummary = (exerciseSummary: string) => {
+import type { ExerciseLog } from '../types';
+
+export const parseSummary = (exerciseSummary: string): ExerciseLog => {
   const sets = [];
   let comments = '';
 
@@ -32,4 +34,13 @@ export const parseSummary = (exerciseSummary: string) => {
     sets,
     comments,
   };
+};
+
+export const generateSummary = (log: ExerciseLog) => {
+  const sets = [];
+  log.sets.forEach(set => {
+    sets.push(`${set.reps}x${set.weight}`);
+  });
+
+  return `${sets.join(`\n`)}${log.comments ? `\n\n${log.comments}` : ''}`;
 };
