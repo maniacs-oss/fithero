@@ -7,19 +7,40 @@ import { withNavigation } from 'react-navigation';
 
 import Screen from '../components/Screen';
 import type { NavigationType } from '../types';
+import DayRow from './Home/DayRow';
+import { getToday } from '../utils/date';
 
 type Props = {
   navigation: NavigationType,
 };
 
-class HomeScreen extends Component<Props> {
+type State = {
+  selectedDay: string,
+};
+
+class HomeScreen extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      selectedDay: getToday(),
+    };
+  }
+
   _onAddExercises = () => {
     this.props.navigation.push('Exercises');
+  };
+
+  _onDaySelected = dateString => {
+    this.setState({ selectedDay: dateString });
   };
 
   render() {
     return (
       <Screen>
+        <DayRow
+          selected={this.state.selectedDay}
+          onDaySelected={this._onDaySelected}
+        />
         <FAB icon="add" onPress={this._onAddExercises} style={styles.fab} />
       </Screen>
     );

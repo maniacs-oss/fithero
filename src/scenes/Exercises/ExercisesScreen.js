@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 
 import data from '../../data/exercises.json';
 import Screen from '../../components/Screen';
@@ -41,7 +41,7 @@ export default class ExercisesScreen extends Component<{}, State> {
 
   render() {
     return (
-      <Screen>
+      <Screen style={styles.screen}>
         <FlatList
           data={data}
           extraData={this.state}
@@ -52,3 +52,9 @@ export default class ExercisesScreen extends Component<{}, State> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    paddingVertical: 8,
+  },
+});

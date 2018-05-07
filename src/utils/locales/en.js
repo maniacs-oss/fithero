@@ -12,4 +12,5 @@ export default {
   menu__home: 'Home',
   set: 'set',
   sets: 'sets',
+  today: 'Today',
 };
