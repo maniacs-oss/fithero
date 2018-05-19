@@ -50,11 +50,7 @@ describe('getCurrentWeek and getShortDayInfo', () => {
 });
 
 it('getToday', () => {
-  expect(
-    moment()
-      .startOf('day')
-      .toISOString()
-  ).toEqual(getToday());
+  expect(moment().startOf('day')).toEqual(getToday());
 });
 
 it('isSame', () => {

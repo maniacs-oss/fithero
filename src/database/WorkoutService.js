@@ -1,16 +1,35 @@
 /* @flow */
 
 import realm from './index';
-import type { ExerciseSchemaType } from './types';
+
+import type { ExerciseSchemaType, WorkoutSchemaType } from './types';
+import type { DispatchType } from '../types';
+import { getWorkouts } from '../redux/modules/workouts';
+import { dateToString } from '../utils/date';
+
+export const getWorkoutsByRange = (
+  dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
+  startDate: Date,
+  endDate: Date
+) => {
+  const workouts = realm
+    .objects('Workout')
+    .filtered(`date >= $0 AND date <= $1`, startDate, endDate);
+
+  dispatch(getWorkouts(workouts));
+};
 
 export const addExerciseForWorkout = (
-  date: string,
+  dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
+  date: Date,
   exercise: ExerciseSchemaType
 ) => {
   realm.write(() => {
-    let workout = realm.objectForPrimaryKey('Workout', date);
+    const workoutId = dateToString(date);
+    let workout = realm.objectForPrimaryKey('Workout', workoutId);
     if (!workout) {
       workout = realm.create('Workout', {
+        id: workoutId,
         date,
       });
     }
@@ -49,5 +68,7 @@ export const addExerciseForWorkout = (
         }
       });
     }
+
+    dispatch(getWorkouts([workout]));
   });
 };

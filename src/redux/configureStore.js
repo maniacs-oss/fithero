@@ -1,7 +1,13 @@
 /* @flow */
 
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
-const store = createStore(() => {});
+import workouts from './modules/workouts';
+
+const store = createStore(
+  combineReducers({
+    workouts,
+  })
+);
 
 export default store;

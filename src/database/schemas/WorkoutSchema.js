@@ -2,9 +2,10 @@
 
 const WorkoutSchema = {
   name: 'Workout',
-  primaryKey: 'date',
+  primaryKey: 'id',
   properties: {
-    date: 'string',
+    id: 'string',
+    date: 'date',
     exercises: { type: 'list', objectType: 'Exercise' },
     comments: { type: 'string', optional: true },
   },

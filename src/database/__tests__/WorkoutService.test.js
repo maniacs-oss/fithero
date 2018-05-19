@@ -1,7 +1,9 @@
 /* @flow */
 
 import realm from '../index';
-import { addExerciseForWorkout } from '../WorkoutService';
+import { addExerciseForWorkout, getWorkoutsByRange } from '../WorkoutService';
+import { toDate } from '../../utils/date';
+import { GET_WORKOUT } from '../../redux/modules/workouts';
 
 const mockSets = [
   {
@@ -25,7 +27,8 @@ const mockExercise = {
 };
 
 const mockWorkout = {
-  date: '2018-05-04T00:00:00.000Z',
+  id: '2018-05-04T00:00:00.000Z',
+  date: toDate('2018-05-04T00:00:00.000Z'),
   exercises: {
     filtered: () => [],
     push: jest.fn(),
@@ -46,6 +49,8 @@ jest.mock(
 );
 
 describe('WorkoutService', () => {
+  const dispatch = jest.fn();
+
   beforeEach(() => {
     realm.create = jest.fn(() => mockWorkout);
     realm.delete = jest.fn();
@@ -55,63 +60,103 @@ describe('WorkoutService', () => {
     jest.clearAllMocks();
   });
 
-  it('adds a workout if it is not there yet', () => {
-    // realm.objectForPrimaryKey = jest.fn(() => mockWorkout);
+  describe('getWorkoutsByRange', () => {
+    it('dispatches an action when getting workouts', () => {
+      realm.objects = jest.fn(() => ({
+        filtered: jest.fn(() => [mockWorkout]),
+      }));
 
-    addExerciseForWorkout('2018-05-04T00:00:00.000Z', {
-      id: mockExercise.id,
-      sets: mockSets,
-    });
+      getWorkoutsByRange(
+        dispatch,
+        toDate('2018-05-04T00:00:00.000Z'),
+        toDate('2018-05-04T00:00:00.000Z')
+      );
 
-    expect(realm.create).toHaveBeenCalledTimes(1);
-    expect(realm.create).toBeCalledWith('Workout', {
-      date: '2018-05-04T00:00:00.000Z',
-    });
-    expect(mockWorkout.exercises.push).toHaveBeenCalledTimes(1);
-    expect(mockWorkout.exercises.push).toBeCalledWith({
-      id: mockExercise.id,
-      sets: mockSets,
-    });
-  });
-
-  it('updates the workout if is already there', () => {
-    realm.objectForPrimaryKey = jest.fn(() => mockWorkout);
-
-    addExerciseForWorkout('2018-05-04T00:00:00.000Z', {
-      id: mockExercise.id,
-      sets: mockSets,
-    });
-
-    expect(realm.create).not.toBeCalled();
-    expect(mockWorkout.exercises.push).toHaveBeenCalledTimes(1);
-    expect(mockWorkout.exercises.push).toBeCalledWith({
-      id: mockExercise.id,
-      sets: mockSets,
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: GET_WORKOUT,
+        payload: [mockWorkout],
+      });
     });
   });
 
-  it('updates the exercise if it already exists', () => {
-    const newExercise = {
-      id: '2018-05-04T00:00:00.000Z_bench-press',
-      sets: mockSets,
-    };
+  describe('addExerciseForWorkout', () => {
+    it('adds a workout if it is not there yet', () => {
+      addExerciseForWorkout(dispatch, toDate('2018-05-04T00:00:00.000Z'), {
+        id: mockExercise.id,
+        sets: mockSets,
+      });
 
-    const workout = {
-      date: '2018-05-04T00:00:00.000Z',
-      exercises: {
-        filtered: () => [mockExercise],
-        push: jest.fn(),
-      },
-    };
+      expect(realm.create).toHaveBeenCalledTimes(1);
+      expect(realm.create).toBeCalledWith('Workout', {
+        id: '2018-05-04T00:00:00.000Z',
+        date: toDate('2018-05-04T00:00:00.000Z'),
+      });
+      expect(mockWorkout.exercises.push).toHaveBeenCalledTimes(1);
+      expect(mockWorkout.exercises.push).toBeCalledWith({
+        id: mockExercise.id,
+        sets: mockSets,
+      });
 
-    realm.create = jest.fn(() => workout);
-    realm.objectForPrimaryKey = jest.fn(() => workout);
-
-    addExerciseForWorkout(workout.date, {
-      id: newExercise.id,
-      sets: mockSets,
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: GET_WORKOUT,
+        payload: [mockWorkout],
+      });
     });
 
-    expect(workout.exercises.push).not.toBeCalled();
+    it('updates the workout if is already there', () => {
+      realm.objectForPrimaryKey = jest.fn(() => mockWorkout);
+
+      addExerciseForWorkout(dispatch, toDate('2018-05-04T00:00:00.000Z'), {
+        id: mockExercise.id,
+        sets: mockSets,
+      });
+
+      expect(realm.create).not.toBeCalled();
+      expect(mockWorkout.exercises.push).toHaveBeenCalledTimes(1);
+      expect(mockWorkout.exercises.push).toBeCalledWith({
+        id: mockExercise.id,
+        sets: mockSets,
+      });
+
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: GET_WORKOUT,
+        payload: [mockWorkout],
+      });
+    });
+
+    it('updates the exercise if it already exists', () => {
+      const newExercise = {
+        id: '2018-05-04T00:00:00.000Z_bench-press',
+        sets: mockSets,
+      };
+
+      const workout = {
+        id: '2018-05-04T00:00:00.000Z',
+        date: toDate('2018-05-04T00:00:00.000Z'),
+        exercises: {
+          filtered: () => [mockExercise],
+          push: jest.fn(),
+        },
+      };
+
+      realm.create = jest.fn(() => workout);
+      realm.objectForPrimaryKey = jest.fn(() => workout);
+
+      addExerciseForWorkout(dispatch, workout.date, {
+        id: newExercise.id,
+        sets: mockSets,
+      });
+
+      expect(workout.exercises.push).not.toBeCalled();
+
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: GET_WORKOUT,
+        payload: [workout],
+      });
+    });
   });
 });
