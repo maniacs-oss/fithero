@@ -6,6 +6,11 @@ export type NavigationType = {
   push: (route: string) => void,
 };
 
+export type DispatchType<T> = {
+  type: string,
+  payload: T,
+};
+
 export type ExerciseType = {|
   id: string,
   category: string,

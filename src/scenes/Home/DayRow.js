@@ -7,13 +7,13 @@ import { Text } from 'react-native-paper';
 import DayItem from './DayItem';
 import {
   dateToString,
-  getCurrentWeek,
   getDatePrettyFormat,
   getToday,
   isSameDay,
 } from '../../utils/date';
 
 type Props = {
+  currentWeek: Array<Date>,
   onDaySelected: string => void,
   selected: string,
 };
@@ -24,8 +24,7 @@ class DayRow extends React.Component<Props> {
   };
 
   _renderDays() {
-    const days = getCurrentWeek(new Date());
-    return days.map(d => {
+    return this.props.currentWeek.map(d => {
       const isSelected = isSameDay(d, this.props.selected);
       const dateString = dateToString(d);
       return (
@@ -43,7 +42,7 @@ class DayRow extends React.Component<Props> {
     return (
       <React.Fragment>
         <Text style={styles.title}>
-          {getDatePrettyFormat(this.props.selected, getToday())}
+          {getDatePrettyFormat(this.props.selected, dateToString(getToday()))}
         </Text>
         <View style={styles.row}>{this._renderDays()}</View>
       </React.Fragment>

@@ -43,15 +43,14 @@ export const getShortDayInfo = (dateString: string) => {
   };
 };
 
-export const getToday = () =>
-  moment()
-    .startOf('day')
-    .toISOString();
+export const getToday = () => moment().startOf('day');
 
 export const isSameDay = (date: Date, today: string) =>
   moment(date).isSame(moment(today), 'day');
 
 export const dateToString = (date: Date) => moment(date).toISOString();
+
+export const toDate = (dateString: string) => moment(dateString).toDate();
 
 export const getDatePrettyFormat = (dateString: string, today: string) => {
   const date = moment(dateString);
