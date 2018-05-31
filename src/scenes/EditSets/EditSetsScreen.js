@@ -1,58 +1,52 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, TextInput } from 'react-native';
-import { Subheading, Title, withTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
-import i18n from '../../utils/i18n';
-import { parseSummary } from '../../utils/exercisePaper';
+import type { NavigationType } from '../../types';
+import type { ExerciseSchemaType } from '../../database/types';
+import { getExerciseSchemaId } from '../../database/utils';
+import EditSetsWithControls from './EditSetsWithControls';
+import ExerciseHeader from '../Exercises/ExerciseHeader';
+// import EditSetsWithPaper from './EditSetsWithPaper';
+import { getExerciseName } from '../../utils/exercises';
 
 type Props = {
-  // eslint-disable-next-line flowtype/no-weak-types
-  theme: Object,
+  // eslint-disable-next-line react/no-unused-prop-types
+  dispatch: () => void,
+  exercise?: ExerciseSchemaType,
+  navigation: NavigationType<{
+    day: string,
+    exerciseKey: string,
+  }>,
 };
 
-type State = {
-  exerciseSummary: string,
-  numberOfSets: number,
-};
-
-class EditSetsScreen extends Component<Props, State> {
-  state = {
-    exerciseSummary: '',
-    numberOfSets: 0,
-  };
-
-  _onValueChange = (value: string) => {
-    const { sets } = parseSummary(value);
-    this.setState({ exerciseSummary: value, numberOfSets: sets.length });
-  };
+class EditSetsScreen extends Component<Props> {
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: getExerciseName(navigation.state.params.exerciseKey),
+  });
 
   render() {
-    const { theme } = this.props;
-    const { exerciseSummary, numberOfSets } = this.state;
+    const { dispatch, exercise } = this.props;
+    const { day, exerciseKey } = this.props.navigation.state.params;
 
     return (
       <Screen style={styles.container}>
-        <Title>Exercise title</Title>
-        <Subheading>{`${numberOfSets} ${i18n.t(
-          numberOfSets === 1 ? 'set' : 'sets'
-        )}`}</Subheading>
-        <TextInput
-          autoFocus
-          autoCorrect={false}
-          multiline
-          labelColor={theme.colors.primary}
-          underlineColorAndroid="transparent"
-          selectionColor={theme.colors.primary}
-          style={[{ color: theme.colors.text }, styles.textArea]}
-          placeholderTextColor={theme.colors.placeholder}
-          placeholder={i18n.t('exercise__paper-placeholder')}
-          value={exerciseSummary}
-          onChangeText={this._onValueChange}
-          textAlignVertical="top"
+        <ExerciseHeader day={day} style={styles.header} />
+        <EditSetsWithControls
+          dispatch={dispatch}
+          day={day}
+          exerciseKey={exerciseKey}
+          exercise={exercise}
         />
+        {/* <EditSetsWithPaper */}
+        {/* dispatch={dispatch} */}
+        {/* day={day} */}
+        {/* exerciseKey={exerciseKey} */}
+        {/* exercise={exercise} */}
+        {/* /> */}
       </Screen>
     );
   }
@@ -60,14 +54,26 @@ class EditSetsScreen extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingVertical: 8,
   },
-  textArea: {
-    flex: 1,
-    paddingHorizontal: 0,
-    paddingTop: 24,
-    fontSize: Platform.OS === 'ios' ? 16 : 18,
+  header: {
+    paddingHorizontal: 16,
   },
 });
 
-export default withTheme(EditSetsScreen);
+export default connect(
+  (state, ownProps: Props) => {
+    const { day, exerciseKey } = ownProps.navigation.state.params;
+    const workout = state.workouts[day];
+    let exercise = null;
+    if (workout) {
+      exercise = workout.exercises.find(
+        e => e.id === getExerciseSchemaId(day, exerciseKey)
+      );
+    }
+    return {
+      exercise,
+    };
+  },
+  null
+)(EditSetsScreen);

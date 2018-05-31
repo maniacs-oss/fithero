@@ -1,6 +1,15 @@
 {
   "presets": ["react-native"],
-  "plugins": [
-    "react-native-paper/babel"
-  ]
+  "env": {
+    "development": {
+      "plugins": [
+        "react-native-paper/babel"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "react-native-paper/babel"
+      ]
+    }
+  }
 }

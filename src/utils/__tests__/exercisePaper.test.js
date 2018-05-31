@@ -9,14 +9,20 @@ describe('parseSummary', () => {
   8x110
   `;
 
-    const result = parseSummary(summary);
+    const result = parseSummary(
+      summary,
+      '2018-05-01T22:00:00.000Z',
+      'bench-press'
+    );
     expect(result).toEqual({
       sets: [
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_001',
           reps: 8,
           weight: 100,
         },
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_002',
           reps: 8,
           weight: 110,
         },
@@ -33,14 +39,20 @@ describe('parseSummary', () => {
   Testing a comment.
   `;
 
-    const result = parseSummary(summary);
+    const result = parseSummary(
+      summary,
+      '2018-05-01T22:00:00.000Z',
+      'bench-press'
+    );
     expect(result).toEqual({
       sets: [
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_001',
           reps: 8,
           weight: 100,
         },
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_002',
           reps: 8,
           weight: 110,
         },
@@ -62,18 +74,25 @@ describe('parseSummary', () => {
   7x120
   `;
 
-    const result = parseSummary(summary);
+    const result = parseSummary(
+      summary,
+      '2018-05-01T22:00:00.000Z',
+      'bench-press'
+    );
     expect(result).toEqual({
       sets: [
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_001',
           reps: 10,
           weight: 100,
         },
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_002',
           reps: 8,
           weight: 110,
         },
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_003',
           reps: 7,
           weight: 120,
         },
@@ -88,14 +107,20 @@ describe('parseSummary', () => {
   8x20.25
   `;
 
-    const result = parseSummary(summary);
+    const result = parseSummary(
+      summary,
+      '2018-05-01T22:00:00.000Z',
+      'bench-press'
+    );
     expect(result).toEqual({
       sets: [
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_001',
           reps: 10,
           weight: 50.35,
         },
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_002',
           reps: 8,
           weight: 20.25,
         },
@@ -111,10 +136,15 @@ describe('parseSummary', () => {
   Testing comment.
   `;
 
-    const result = parseSummary(summary);
+    const result = parseSummary(
+      summary,
+      '2018-05-01T22:00:00.000Z',
+      'bench-press'
+    );
     expect(result).toEqual({
       sets: [
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_001',
           reps: 5,
           weight: 50,
         },
@@ -129,14 +159,20 @@ describe('parseSummary', () => {
   10 x50
   `;
 
-    const result = parseSummary(summary);
+    const result = parseSummary(
+      summary,
+      '2018-05-01T22:00:00.000Z',
+      'bench-press'
+    );
     expect(result).toEqual({
       sets: [
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_001',
           reps: 8,
           weight: 50,
         },
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_002',
           reps: 10,
           weight: 50,
         },
@@ -151,14 +187,20 @@ describe('parseSummary', () => {
   09x0110.5
   `;
 
-    const result = parseSummary(summary);
+    const result = parseSummary(
+      summary,
+      '2018-05-01T22:00:00.000Z',
+      'bench-press'
+    );
     expect(result).toEqual({
       sets: [
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_001',
           reps: 8,
           weight: 100,
         },
         {
+          id: '2018-05-01T22:00:00.000Z_bench-press_002',
           reps: 9,
           weight: 110.5,
         },
@@ -171,7 +213,13 @@ describe('parseSummary', () => {
 describe('generateSummary', () => {
   it('generates summary from a log with one set', () => {
     const log = {
-      sets: [{ reps: 10, weight: 50.5 }],
+      sets: [
+        {
+          id: '2018-05-01T22:00:00.000Z_bench-press_000',
+          reps: 10,
+          weight: 50.5,
+        },
+      ],
       comments: '',
     };
     expect(generateSummary(log)).toEqual('10x50.5');
@@ -179,7 +227,14 @@ describe('generateSummary', () => {
 
   it('generates summary from a log without comments', () => {
     const log = {
-      sets: [{ reps: 8, weight: 50.5 }, { reps: 7, weight: 45 }],
+      sets: [
+        {
+          id: '2018-05-01T22:00:00.000Z_bench-press_000',
+          reps: 8,
+          weight: 50.5,
+        },
+        { id: '2018-05-01T22:00:00.000Z_bench-press_001', reps: 7, weight: 45 },
+      ],
       comments: '',
     };
     expect(generateSummary(log)).toEqual('8x50.5\n7x45');
@@ -187,7 +242,14 @@ describe('generateSummary', () => {
 
   it('generates summary from a log with comments', () => {
     const log = {
-      sets: [{ reps: 8, weight: 50.5 }, { reps: 7, weight: 45 }],
+      sets: [
+        {
+          id: '2018-05-01T22:00:00.000Z_bench-press_000',
+          reps: 8,
+          weight: 50.5,
+        },
+        { id: '2018-05-01T22:00:00.000Z_bench-press_001', reps: 7, weight: 45 },
+      ],
       comments: 'Testing comment.',
     };
     expect(generateSummary(log)).toEqual('8x50.5\n7x45\n\nTesting comment.');

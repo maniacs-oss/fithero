@@ -2,8 +2,13 @@
 
 // Shared types
 
-export type NavigationType = {
-  push: (route: string) => void,
+import type { SetSchemaType } from './database/types';
+
+export type NavigationType<T> = {
+  state: {
+    params: T,
+  },
+  push: (route: string, params?: { [key: string]: mixed }) => void,
 };
 
 export type DispatchType<T> = {
@@ -17,6 +22,6 @@ export type ExerciseType = {|
 |};
 
 export type ExerciseLog = {|
-  sets: Array<{ reps: number, weight: number }>,
+  sets: Array<SetSchemaType>,
   comments?: string,
 |};

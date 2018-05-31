@@ -2,11 +2,12 @@
 
 import * as React from 'react';
 import { Platform, StatusBar, YellowBox } from 'react-native';
-import { DarkTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
 
 import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
+import theme from './utils/theme';
 
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
@@ -17,16 +18,6 @@ if (global.__DEV__) {
     'Warning: Class RCTCxxModule was not exported',
   ]);
 }
-
-const theme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: '#F44336',
-    accent: '#F44336',
-    secondaryText: 'rgba(255, 255, 255, .7)',
-  },
-};
 
 export default class App extends React.Component<{}> {
   render() {

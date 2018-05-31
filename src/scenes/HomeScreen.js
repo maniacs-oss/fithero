@@ -10,13 +10,13 @@ import Screen from '../components/Screen';
 import type { NavigationType } from '../types';
 import DayRow from './Home/DayRow';
 import { dateToString, getCurrentWeek, getToday } from '../utils/date';
-import { getWorkoutsByRange } from '../database/WorkoutService';
+import { getWorkoutsByRange } from '../database/services/WorkoutService';
 import WorkoutList from './Home/WorkoutList';
 import type { WorkoutSchemaType } from '../database/types';
 
 type Props = {
   dispatch: () => void,
-  navigation: NavigationType,
+  navigation: NavigationType<{}>,
   workouts: { [date: string]: WorkoutSchemaType },
 };
 
@@ -43,11 +43,17 @@ class HomeScreen extends Component<Props, State> {
   }
 
   _onAddExercises = () => {
-    this.props.navigation.push('Exercises');
+    const { selectedDay } = this.state;
+    this.props.navigation.push('Exercises', { day: selectedDay });
   };
 
   _onDaySelected = dateString => {
     this.setState({ selectedDay: dateString });
+  };
+
+  _onExercisePress = (exerciseKey: string) => {
+    const { selectedDay } = this.state;
+    this.props.navigation.push('EditSets', { day: selectedDay, exerciseKey });
   };
 
   render() {
@@ -62,7 +68,13 @@ class HomeScreen extends Component<Props, State> {
           currentWeek={this.state.currentWeek}
           onDaySelected={this._onDaySelected}
         />
-        {workout && <WorkoutList workout={workout} />}
+        {workout && (
+          <WorkoutList
+            contentContainerStyle={styles.list}
+            workout={workout}
+            onPressItem={this._onExercisePress}
+          />
+        )}
         <FAB icon="add" onPress={this._onAddExercises} style={styles.fab} />
       </Screen>
     );
@@ -70,6 +82,9 @@ class HomeScreen extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
+  list: {
+    paddingTop: 8,
+  },
   fab: {
     position: 'absolute',
     bottom: 16,
@@ -78,5 +93,8 @@ const styles = StyleSheet.create({
 });
 
 export default withNavigation(
-  connect(state => ({ workouts: state.workouts }), null)(HomeScreen)
+  connect(
+    state => ({ workouts: state.workouts }),
+    null
+  )(HomeScreen)
 );

@@ -9,6 +9,12 @@ export type WorkoutSchemaType = {|
 
 export type ExerciseSchemaType = {|
   id: string,
-  sets: Array<{ id: string, reps: number, weight: number }>,
+  sets: Array<SetSchemaType>,
   comments?: string,
+|};
+
+export type SetSchemaType = {|
+  id: string,
+  reps: number,
+  weight: number,
 |};

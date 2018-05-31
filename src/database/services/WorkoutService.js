@@ -1,11 +1,12 @@
 /* @flow */
 
-import realm from './index';
+import realm from '../index';
 
-import type { ExerciseSchemaType, WorkoutSchemaType } from './types';
-import type { DispatchType } from '../types';
-import { getWorkouts } from '../redux/modules/workouts';
-import { dateToString } from '../utils/date';
+import type { ExerciseSchemaType, WorkoutSchemaType } from '../types';
+import type { DispatchType } from '../../types';
+import { getWorkouts } from '../../redux/modules/workouts';
+import { dateToString } from '../../utils/date';
+import { deserializeWorkout } from '../utils';
 
 export const getWorkoutsByRange = (
   dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
@@ -16,10 +17,10 @@ export const getWorkoutsByRange = (
     .objects('Workout')
     .filtered(`date >= $0 AND date <= $1`, startDate, endDate);
 
-  dispatch(getWorkouts(workouts));
+  dispatch(getWorkouts(workouts.map(w => deserializeWorkout(w))));
 };
 
-export const addExerciseForWorkout = (
+export const addExercisePaperForWorkout = (
   dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
   date: Date,
   exercise: ExerciseSchemaType
@@ -69,6 +70,7 @@ export const addExerciseForWorkout = (
       });
     }
 
-    dispatch(getWorkouts([workout]));
+    // TODO do it in redux before Realm
+    dispatch(getWorkouts([deserializeWorkout(workout)]));
   });
 };

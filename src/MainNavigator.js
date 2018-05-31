@@ -23,7 +23,7 @@ export default StackNavigator(
     EditSets: {
       screen: EditSetsScreen,
       navigationOptions: {
-        title: i18n.t('edit_exercise'),
+        title: i18n.t('sets'),
       },
     },
   },
