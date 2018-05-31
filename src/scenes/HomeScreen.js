@@ -84,6 +84,7 @@ class HomeScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
   list: {
     paddingTop: 8,
+    paddingHorizontal: 4,
   },
   fab: {
     position: 'absolute',

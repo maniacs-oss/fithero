@@ -49,7 +49,7 @@ class EditSetItem extends React.PureComponent<Props> {
               <Text
                 style={[styles.unit, { color: theme.colors.secondaryText }]}
               >
-                {i18n.t('reps_unit', { count: set.weight })}{' '}
+                {i18n.t('reps_unit', { count: set.reps })}{' '}
               </Text>
             </Text>
           </View>
