@@ -1,13 +1,13 @@
 /* @flow */
 
 import leftPad from 'left-pad';
-import type { SetSchemaType, WorkoutSchemaType } from './types';
+import type { WorkoutSchemaType } from './types';
 
 export const getExerciseSchemaId = (day: string, exerciseKey: string) =>
   `${day}_${exerciseKey}`;
 
-export const getExerciseSchemaIdFromSet = (set: SetSchemaType) => {
-  const parts = set.id.split('_');
+export const getExerciseSchemaIdFromSet = (setId: string) => {
+  const parts = setId.split('_');
   return `${parts[0]}_${parts[1]}`;
 };
 

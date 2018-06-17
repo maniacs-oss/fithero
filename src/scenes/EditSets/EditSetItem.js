@@ -4,13 +4,13 @@ import * as React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Divider, Text, withTheme } from 'react-native-paper';
 
-import { extractSetIndexFromDatabase } from '../../database/utils';
 import i18n from '../../utils/i18n';
 import type { SetSchemaType } from '../../database/types';
 
 type Props = {
   isSelected: boolean,
   onPressItem: (setId: string) => void,
+  index: number,
   set: SetSchemaType,
   // eslint-disable-next-line flowtype/no-weak-types
   theme: Object,
@@ -22,7 +22,7 @@ class EditSetItem extends React.PureComponent<Props> {
   };
 
   render() {
-    const { isSelected, set, theme } = this.props;
+    const { index, isSelected, set, theme } = this.props;
 
     return (
       <View>
@@ -33,9 +33,7 @@ class EditSetItem extends React.PureComponent<Props> {
               isSelected && { backgroundColor: theme.colors.selected },
             ]}
           >
-            <Text style={[styles.text, styles.index]}>
-              {extractSetIndexFromDatabase(set.id)}.
-            </Text>
+            <Text style={[styles.text, styles.index]}>{index}.</Text>
             <Text style={[styles.text, styles.weight]}>
               {set.weight}{' '}
               <Text

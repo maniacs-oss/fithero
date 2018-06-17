@@ -5,6 +5,7 @@ import reducer, {
   getExercise,
   getSet,
   getWorkouts,
+  removeSet,
   UPDATE_SET,
 } from '../workouts';
 import { toDate } from '../../../utils/date';
@@ -135,6 +136,53 @@ describe('workouts reducer', () => {
         updatedSet,
         workouts[0].exercises[0].sets[1],
       ]);
+    });
+  });
+
+  describe('REMOVE_SET', () => {
+    it('removes only a set', () => {
+      const setId = workouts[0].exercises[0].sets[0].id;
+      const newState = reducer(
+        { [workouts[0].id]: workouts[0] },
+        removeSet(setId)
+      );
+      const newWorkout = newState[workouts[0].id];
+
+      expect(newWorkout.exercises.length).toBe(2);
+      expect(newWorkout.exercises[0].sets.length).toEqual(1);
+      expect(newWorkout.exercises[0].sets[0]).toEqual(
+        workouts[0].exercises[0].sets[1]
+      );
+    });
+
+    it('removes the last set so it also removes the exercise', () => {
+      const setId = workouts[0].exercises[1].sets[0].id;
+      const newState = reducer(
+        { [workouts[0].id]: workouts[0] },
+        removeSet(setId)
+      );
+      const newWorkout = newState[workouts[0].id];
+
+      expect(newWorkout.exercises.length).toBe(1);
+      expect(newWorkout.exercises[0]).toEqual(workouts[0].exercises[0]);
+    });
+
+    it('removes the whole workout when there are not sets left', () => {
+      const getNextState = (state, setIds: Array<string>) => {
+        let newState = state;
+        setIds.forEach(id => {
+          newState = reducer(newState, removeSet(id));
+        });
+        return newState;
+      };
+
+      expect(
+        getNextState({ [workouts[0].id]: workouts[0] }, [
+          workouts[0].exercises[0].sets[0].id,
+          workouts[0].exercises[0].sets[1].id,
+          workouts[0].exercises[1].sets[0].id,
+        ])
+      ).toEqual({});
     });
   });
 });

@@ -9,6 +9,7 @@ import i18n from '../../utils/i18n';
 type Props = {
   isUpdate: boolean,
   onAddSet: () => void,
+  onDeleteSet: () => void,
   // eslint-disable-next-line flowtype/no-weak-types
   theme: Object,
 };
@@ -31,8 +32,8 @@ class EditSetActionButtons extends React.Component<Props> {
           {i18n.t(isUpdate ? 'update' : 'add')}
         </Button>
         <Button
-          onPress={() => {}}
-          disabled
+          onPress={this.props.onDeleteSet}
+          disabled={!isUpdate}
           raised
           style={[
             styles.button,

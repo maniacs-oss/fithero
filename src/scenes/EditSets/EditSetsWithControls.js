@@ -9,8 +9,16 @@ import EditSetsInputControls from './EditSetsInputControls';
 import i18n from '../../utils/i18n';
 import EditSetItem from './EditSetItem';
 import EditSetActionButtons from './EditSetActionButtons';
-import { getExerciseSchemaId, getSetSchemaId } from '../../database/utils';
-import { addSet, updateSet } from '../../database/services/SetService';
+import {
+  extractSetIndexFromDatabase,
+  getExerciseSchemaId,
+  getSetSchemaId,
+} from '../../database/utils';
+import {
+  addSet,
+  deleteSet,
+  updateSet,
+} from '../../database/services/SetService';
 import { addExercise } from '../../database/services/ExerciseService';
 
 type Props = {
@@ -117,8 +125,11 @@ class EditSetsWithControls extends React.Component<Props, State> {
       };
       addExercise(dispatch, newExercise);
     } else if (!selectedId) {
+      const lastId = exercise.sets[exercise.sets.length - 1].id;
+      const lastIndex = extractSetIndexFromDatabase(lastId);
+
       addSet(dispatch, {
-        id: getSetSchemaId(day, exerciseKey, exercise.sets.length + 1),
+        id: getSetSchemaId(day, exerciseKey, lastIndex + 1),
         weight,
         reps,
       });
@@ -135,9 +146,18 @@ class EditSetsWithControls extends React.Component<Props, State> {
     }
   };
 
-  _renderItem = ({ item }) => (
+  _onDeleteSet = () => {
+    const { dispatch } = this.props;
+    const { selectedId } = this.state;
+
+    deleteSet(dispatch, selectedId);
+    this.setState({ selectedId: '' });
+  };
+
+  _renderItem = ({ item, index }) => (
     <EditSetItem
       set={item}
+      index={index + 1}
       isSelected={this.state.selectedId === item.id}
       onPressItem={this._onPressItem}
     />
@@ -179,6 +199,7 @@ class EditSetsWithControls extends React.Component<Props, State> {
           <EditSetActionButtons
             isUpdate={!!selectedId}
             onAddSet={this._onAddSet}
+            onDeleteSet={this._onDeleteSet}
           />
         </Card>
         <FlatList
