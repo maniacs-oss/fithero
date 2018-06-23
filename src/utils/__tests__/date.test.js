@@ -9,6 +9,7 @@ import {
   getDatePrettyFormat,
   getToday,
   isSameDay,
+  getDay,
 } from '../date';
 
 beforeEach(() => {
@@ -49,11 +50,11 @@ describe('getCurrentWeek and getShortDayInfo', () => {
   });
 });
 
-it('getToday', () => {
+test('getToday', () => {
   expect(moment().startOf('day')).toEqual(getToday());
 });
 
-it('isSame', () => {
+test('isSame', () => {
   expect(
     isSameDay(new Date('2018-05-01T22:00:00.000Z'), '2018-05-01T22:00:00.000Z')
   ).toBe(true);
@@ -97,4 +98,27 @@ describe('getDatePrettyFormat', () => {
       )
     ).toEqual('viernes, mayo 4');
   });
+  it('returns the correct day of the week word in short form', () => {
+    expect(
+      getDatePrettyFormat(
+        '2018-05-04T00:00:00.000Z',
+        '2018-05-05T00:00:00.000Z',
+        true
+      )
+    ).toEqual('Fri, May 4');
+
+    moment.locale('es');
+    I18nJs.locale = 'es';
+    expect(
+      getDatePrettyFormat(
+        '2018-05-04T00:00:00.000Z',
+        '2018-05-05T00:00:00.000Z',
+        true
+      )
+    ).toEqual('vie., mayo 4');
+  });
+});
+
+test('getDay', () => {
+  expect(getDay('2018-06-23')).toEqual('2018-06-22T22:00:00.000Z');
 });

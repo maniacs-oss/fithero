@@ -1,10 +1,14 @@
 /* @flow */
 
 import * as React from 'react';
-import { BottomNavigation } from 'react-native-paper';
+import { Platform } from 'react-native';
+import { BottomNavigation, Button } from 'react-native-paper';
 
 import i18n from '../utils/i18n';
-import HomeScreen from './HomeScreen';
+import HomeScreen from './Home';
+import TouchableIcon from '../components/TouchableIcon';
+import type { NavigationType } from '../types';
+import { getToday } from '../utils/date';
 
 type State = {
   index: number,
@@ -16,6 +20,27 @@ type State = {
 };
 
 export default class HomeNavigator extends React.Component<{}, State> {
+  static navigationOptions = ({
+    navigation,
+  }: {
+    // eslint-disable-next-line react/no-unused-prop-types
+    navigation: NavigationType<{}>,
+  }) => {
+    const navigateToCalendar = () => {
+      navigation.navigate('Calendar', {
+        today: getToday().format('YYYY-MM-DD'),
+      });
+    };
+    return {
+      headerRight:
+        Platform.OS === 'ios' ? (
+          <Button onPress={navigateToCalendar}>{i18n.t('calendar')}</Button>
+        ) : (
+          <TouchableIcon onPress={navigateToCalendar} name="calendar" />
+        ),
+    };
+  };
+
   state = {
     index: 0,
     routes: [

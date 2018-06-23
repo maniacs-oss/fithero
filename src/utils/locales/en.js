@@ -2,6 +2,7 @@
 
 export default {
   add: 'Add',
+  calendar: 'Calendar',
   delete: 'Delete',
   exercises: 'Exercises',
   'exercise__barbell-squat': 'Barbell Squat',

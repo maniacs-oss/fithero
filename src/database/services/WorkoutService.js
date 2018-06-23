@@ -20,6 +20,16 @@ export const getWorkoutsByRange = (
   dispatch(getWorkouts(workouts.map(w => deserializeWorkout(w))));
 };
 
+export const getWorkout = (
+  dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
+  date: Date
+) => {
+  const workouts = realm.objects('Workout').filtered(`date = $0`, date);
+  if (workouts.length > 0) {
+    dispatch(getWorkouts([deserializeWorkout(workouts[0])]));
+  }
+};
+
 export const addExercisePaperForWorkout = (
   dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
   date: Date,

@@ -9,6 +9,9 @@ export type NavigationType<T> = {
     params: T,
   },
   push: (route: string, params?: { [key: string]: mixed }) => void,
+  navigate: (route: string, params?: { [key: string]: mixed }) => void,
+  // eslint-disable-next-line flowtype/no-weak-types
+  setParams: (params: { [key: string]: any }) => void,
 };
 
 export type DispatchType<T> = {

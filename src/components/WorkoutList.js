@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { FlatList, View } from 'react-native';
 
-import type { WorkoutSchemaType } from '../../database/types';
+import type { WorkoutSchemaType } from '../database/types';
 import WorkoutItem from './WorkoutItem';
 
 type Props = {

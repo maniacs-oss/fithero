@@ -3,6 +3,7 @@
 import realm from '../../index';
 import {
   addExercisePaperForWorkout,
+  getWorkout,
   getWorkoutsByRange,
 } from '../WorkoutService';
 import { toDate } from '../../../utils/date';
@@ -70,6 +71,32 @@ describe('WorkoutService', () => {
         toDate('2018-05-04T00:00:00.000Z'),
         toDate('2018-05-04T00:00:00.000Z')
       );
+
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: GET_WORKOUT,
+        payload: [mockWorkout],
+      });
+    });
+  });
+
+  describe('getWorkout', () => {
+    it('does not dispatch an action if there is no workout', () => {
+      realm.objects = jest.fn(() => ({
+        filtered: jest.fn(() => []),
+      }));
+
+      getWorkout(dispatch, toDate('2018-06-23T00:00:00.000Z'));
+
+      expect(dispatch).not.toBeCalled();
+    });
+
+    it('dispatch an action if there is a workout', () => {
+      realm.objects = jest.fn(() => ({
+        filtered: jest.fn(() => [mockRealmWorkout]),
+      }));
+
+      getWorkout(dispatch, toDate('2018-06-23T00:00:00.000Z'));
 
       expect(dispatch).toHaveBeenCalledTimes(1);
       expect(dispatch).toHaveBeenCalledWith({

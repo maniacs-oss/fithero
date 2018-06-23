@@ -6,13 +6,13 @@ import { StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { withNavigation } from 'react-navigation';
 
-import Screen from '../components/Screen';
-import type { NavigationType } from '../types';
-import DayRow from './Home/DayRow';
-import { dateToString, getCurrentWeek, getToday } from '../utils/date';
-import { getWorkoutsByRange } from '../database/services/WorkoutService';
-import WorkoutList from './Home/WorkoutList';
-import type { WorkoutSchemaType } from '../database/types';
+import Screen from '../../components/Screen';
+import type { NavigationType } from '../../types';
+import DayRow from './DayRow';
+import { dateToString, getCurrentWeek, getToday } from '../../utils/date';
+import { getWorkoutsByRange } from '../../database/services/WorkoutService';
+import WorkoutList from '../../components/WorkoutList';
+import type { WorkoutSchemaType } from '../../database/types';
 
 type Props = {
   dispatch: () => void,

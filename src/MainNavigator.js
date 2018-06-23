@@ -8,11 +8,19 @@ import i18n from './utils/i18n';
 import HomeNavigator from './scenes/HomeNavigator';
 import ExercisesScreen from './scenes/Exercises';
 import EditSetsScreen from './scenes/EditSets';
+import CalendarScreen from './scenes/Calendar';
+import WorkoutScreen from './scenes/Workouts';
 
 export default StackNavigator(
   {
     Home: {
       screen: HomeNavigator,
+    },
+    Calendar: {
+      screen: CalendarScreen,
+      navigationOptions: {
+        title: i18n.t('calendar'),
+      },
     },
     Exercises: {
       screen: ExercisesScreen,
@@ -25,6 +33,9 @@ export default StackNavigator(
       navigationOptions: {
         title: i18n.t('sets'),
       },
+    },
+    Workouts: {
+      screen: WorkoutScreen,
     },
   },
   {

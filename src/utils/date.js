@@ -52,12 +52,21 @@ export const dateToString = (date: Date) => moment(date).toISOString();
 
 export const toDate = (dateString: string) => moment(dateString).toDate();
 
-export const getDatePrettyFormat = (dateString: string, today: string) => {
+export const getDatePrettyFormat = (
+  dateString: string,
+  today: string,
+  short?: boolean = false
+) => {
   const date = moment(dateString);
   const isToday = date.isSame(moment(today), 'day');
 
   if (isToday) {
     return `${i18n.t('today')}, ${date.format('MMMM D')}`;
   }
-  return date.format('dddd, MMMM D');
+  return date.format(`${!short ? 'dddd' : 'ddd'}, MMMM D`);
 };
+
+export const getDay = (day: string) =>
+  moment(day)
+    .startOf('day')
+    .toISOString();

@@ -4,10 +4,10 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text, withTheme } from 'react-native-paper';
 
-import { getExerciseName } from '../../utils/exercises';
-import type { ExerciseSchemaType, SetSchemaType } from '../../database/types';
-import { extractExerciseKeyFromDatabase } from '../../database/utils';
-import i18n from '../../utils/i18n';
+import { getExerciseName } from '../utils/exercises';
+import type { ExerciseSchemaType, SetSchemaType } from '../database/types';
+import { extractExerciseKeyFromDatabase } from '../database/utils';
+import i18n from '../utils/i18n';
 
 type Props = {
   exercise: ExerciseSchemaType,
