@@ -39,11 +39,15 @@ class EditSetsInputControls extends React.Component<Props> {
               value={input >= 0 ? input.toString() : ''}
               onChangeText={onChangeText}
               keyboardType="numeric"
-              labelColor={theme.colors.primary}
               underlineColorAndroid="transparent"
               selectionColor={theme.colors.primary}
-              textAlign="center"
-              style={[{ color: theme.colors.text }, styles.textInput]}
+              style={[
+                {
+                  color: theme.colors.text,
+                  textAlign: 'center',
+                },
+                styles.textInput,
+              ]}
               placeholderTextColor={theme.colors.placeholder}
             />
           </View>

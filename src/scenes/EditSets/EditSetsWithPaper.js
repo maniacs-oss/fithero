@@ -89,15 +89,16 @@ class EditSetsWithPaper extends React.Component<Props, State> {
           autoFocus
           autoCorrect={false}
           multiline
-          labelColor={theme.colors.primary}
           underlineColorAndroid="transparent"
           selectionColor={theme.colors.primary}
-          style={[{ color: theme.colors.text }, styles.textArea]}
+          style={[
+            { color: theme.colors.text, textAlignVertical: 'top' },
+            styles.textArea,
+          ]}
           placeholderTextColor={theme.colors.placeholder}
           placeholder={i18n.t('exercise__paper-placeholder')}
           value={exerciseSummary}
           onChangeText={this._onValueChange}
-          textAlignVertical="top"
         />
       </View>
     );
