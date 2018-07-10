@@ -9,6 +9,10 @@ function Realm(): {
     create: jest.fn(),
     delete: jest.fn(),
     objectForPrimaryKey: jest.fn(),
+    objects: jest.fn(() => ({
+      addListener: jest.fn(),
+      removeAllListeners: jest.fn(),
+    })),
     write: jest.fn(f => f()),
   };
 }

@@ -28,3 +28,8 @@ export type ExerciseLog = {|
   sets: Array<SetSchemaType>,
   comments?: string,
 |};
+
+export type RealmListener<T> = {|
+  addListener: (data: T) => void,
+  removeAllListeners: () => void,
+|};

@@ -1,6 +1,6 @@
 /* @flow */
 
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { Colors } from 'react-native-paper';
 
 import i18n from './utils/i18n';
@@ -11,7 +11,7 @@ import EditSetsScreen from './scenes/EditSets';
 import CalendarScreen from './scenes/Calendar';
 import WorkoutScreen from './scenes/Workouts';
 
-export default StackNavigator(
+export default createStackNavigator(
   {
     Home: {
       screen: HomeNavigator,
@@ -39,6 +39,7 @@ export default StackNavigator(
     },
   },
   {
+    initialRouteName: 'Home',
     navigationOptions: {
       title: 'Dziku',
       headerStyle: {

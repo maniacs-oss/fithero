@@ -8,6 +8,8 @@ import { getWorkouts } from '../../redux/modules/workouts';
 import { dateToString } from '../../utils/date';
 import { deserializeWorkout } from '../utils';
 
+export const getAllWorkouts = () => realm.objects('Workout');
+
 export const getWorkoutsByRange = (
   dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
   startDate: Date,

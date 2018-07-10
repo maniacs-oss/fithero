@@ -61,7 +61,7 @@ export const getDatePrettyFormat = (
   const isToday = date.isSame(moment(today), 'day');
 
   if (isToday) {
-    return `${i18n.t('today')}, ${date.format('MMMM D')}`;
+    return `${i18n.t('today')}${!short ? `, ${date.format('MMMM D')}` : ''}`;
   }
   return date.format(`${!short ? 'dddd' : 'ddd'}, MMMM D`);
 };
@@ -70,3 +70,6 @@ export const getDay = (day: string) =>
   moment(day)
     .startOf('day')
     .toISOString();
+
+export const formatDate = (date: Date, format: string) =>
+  moment(date).format(format);

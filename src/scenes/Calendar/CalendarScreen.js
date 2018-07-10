@@ -1,33 +1,56 @@
 /* @flow */
 
 import * as React from 'react';
+import { InteractionManager } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { withTheme } from 'react-native-paper';
 
 import Screen from '../../components/Screen';
-import type { NavigationType } from '../../types';
+import type { NavigationType, RealmListener } from '../../types';
 import TouchableIcon from '../../components/TouchableIcon';
+import { formatDate } from '../../utils/date';
+import { getAllWorkouts } from '../../database/services/WorkoutService';
+import type { WorkoutSchemaType } from '../../database/types';
 
-type Props = {
+type NavigationOptions = {
   navigation: NavigationType<{
     today: string,
     scrollToToday?: () => void,
   }>,
+};
+
+type Props = NavigationOptions & {
   // eslint-disable-next-line flowtype/no-weak-types
   theme: Object,
 };
 
-class CalendarScreen extends React.Component<Props> {
+type State = {
+  markedDates: { [day: string]: boolean },
+  showCalendar: boolean,
+};
+
+export class CalendarScreen extends React.Component<Props, State> {
+  state = {
+    showCalendar: false,
+    markedDates: {},
+  };
+
   calendarList: {
     scrollToDay: (day: string, offset?: number, animation?: boolean) => void,
   } | null;
 
-  static navigationOptions = ({ navigation }) => {
+  workoutsListener: RealmListener<Array<WorkoutSchemaType>>;
+
+  static navigationOptions = ({ navigation }: NavigationOptions) => {
     const { params = {} } = navigation.state;
     return {
       headerRight: (
         <TouchableIcon
-          onPress={() => params.scrollToToday()}
+          onPress={() => {
+            if (params.scrollToToday) {
+              params.scrollToToday();
+            }
+          }}
           name="calendar-blank"
         />
       ),
@@ -35,9 +58,31 @@ class CalendarScreen extends React.Component<Props> {
   };
 
   componentDidMount() {
-    this.props.navigation.setParams({
-      scrollToToday: this.scrollToToday,
+    global.requestAnimationFrame(() => {
+      this.workoutsListener = getAllWorkouts();
+      this.workoutsListener.addListener(workouts => {
+        // TODO handle specific cases one by one?
+        const markedDates = {};
+        workouts.forEach(w => {
+          markedDates[formatDate(w.date, 'YYYY-MM-DD')] = {
+            marked: true,
+          };
+        });
+        this.setState({ markedDates });
+      });
+      this.setState({
+        showCalendar: true,
+      });
     });
+    InteractionManager.runAfterInteractions(() => {
+      this.props.navigation.setParams({
+        scrollToToday: this.scrollToToday,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.workoutsListener.removeAllListeners();
   }
 
   scrollToToday = () => {
@@ -52,34 +97,42 @@ class CalendarScreen extends React.Component<Props> {
   };
 
   render() {
-    const { theme } = this.props;
+    const { showCalendar } = this.state;
+    const {
+      theme: { colors },
+    } = this.props;
     const { today } = this.props.navigation.state.params;
 
     return (
       <Screen>
-        <CalendarList
-          ref={c => {
-            this.calendarList = c;
-          }}
-          onDayPress={this._goToDay}
-          pastScrollRange={24}
-          futureScrollRange={1}
-          selected={today}
-          markedDates={{
-            [today]: {
-              selected: true,
-            },
-          }}
-          theme={{
-            calendarBackground: theme.colors.background,
-            dayTextColor: theme.colors.text,
-            todayTextColor: theme.colors.text,
-            monthTextColor: theme.colors.text,
-            textSectionTitleColor: theme.colors.secondaryText,
-            selectedDayTextColor: theme.colors.text,
-            selectedDayBackgroundColor: theme.colors.primary,
-          }}
-        />
+        {showCalendar && (
+          <CalendarList
+            ref={c => {
+              this.calendarList = c;
+            }}
+            onDayPress={this._goToDay}
+            pastScrollRange={24}
+            futureScrollRange={1}
+            selected={today}
+            markedDates={{
+              ...this.state.markedDates,
+              [today]: {
+                selected: true,
+                marked: !!this.state.markedDates[today],
+              },
+            }}
+            theme={{
+              calendarBackground: colors.background,
+              dayTextColor: colors.text,
+              todayTextColor: colors.text,
+              monthTextColor: colors.text,
+              textSectionTitleColor: colors.secondaryText,
+              selectedDayTextColor: colors.text,
+              selectedDayBackgroundColor: colors.primary,
+              dotColor: colors.primary,
+            }}
+          />
+        )}
       </Screen>
     );
   }
