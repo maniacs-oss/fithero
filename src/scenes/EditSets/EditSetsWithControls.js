@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
+import { AndroidBackHandler } from 'react-navigation-backhandler';
 
 import type { ExerciseSchemaType } from '../../database/types';
 import EditSetsInputControls from './EditSetsInputControls';
@@ -69,6 +70,14 @@ class EditSetsWithControls extends React.Component<Props, State> {
       selectedId: '',
     };
   }
+
+  onBackButtonPressAndroid = () => {
+    if (this.state.selectedId) {
+      this.setState({ selectedId: '' });
+      return true;
+    }
+    return false;
+  };
 
   handleIncDec = (property: string, value: number) => {
     const currentValue = this.state[property] >= 0 ? this.state[property] : 0;
@@ -168,48 +177,50 @@ class EditSetsWithControls extends React.Component<Props, State> {
     const { reps, selectedId, weight } = this.state;
 
     return (
-      <View style={styles.container}>
-        <Card style={styles.card}>
-          <View style={styles.cardContent}>
-            <EditSetsInputControls
-              input={weight}
-              label={i18n.t('weight_label', {
-                w: i18n.t('kg_unit', { count: 10 }),
-              })}
-              onChangeText={this._onChangeWeightInput}
-              controls={[
-                { label: '-0.5', action: this.smallestWeightDec },
-                { label: '-1.0', action: this.weightDec },
-                { label: '+1.0', action: this.weightInc },
-                { label: '+0.5', action: this.smallestWeightInc },
-              ]}
+      <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>
+        <View style={styles.container}>
+          <Card style={styles.card}>
+            <View style={styles.cardContent}>
+              <EditSetsInputControls
+                input={weight}
+                label={i18n.t('weight_label', {
+                  w: i18n.t('kg_unit', { count: 10 }),
+                })}
+                onChangeText={this._onChangeWeightInput}
+                controls={[
+                  { label: '-0.5', action: this.smallestWeightDec },
+                  { label: '-1.0', action: this.weightDec },
+                  { label: '+1.0', action: this.weightInc },
+                  { label: '+0.5', action: this.smallestWeightInc },
+                ]}
+              />
+              <EditSetsInputControls
+                input={reps}
+                label={i18n.t('reps')}
+                onChangeText={this._onChangeRepsInput}
+                controls={[
+                  { label: '-2', action: this.biggestRepsDec },
+                  { label: '-1', action: this.repsDec },
+                  { label: '+1', action: this.repsInc },
+                  { label: '+2', action: this.biggestRepsInc },
+                ]}
+              />
+            </View>
+            <EditSetActionButtons
+              isUpdate={!!selectedId}
+              onAddSet={this._onAddSet}
+              onDeleteSet={this._onDeleteSet}
             />
-            <EditSetsInputControls
-              input={reps}
-              label={i18n.t('reps')}
-              onChangeText={this._onChangeRepsInput}
-              controls={[
-                { label: '-2', action: this.biggestRepsDec },
-                { label: '-1', action: this.repsDec },
-                { label: '+1', action: this.repsInc },
-                { label: '+2', action: this.biggestRepsInc },
-              ]}
-            />
-          </View>
-          <EditSetActionButtons
-            isUpdate={!!selectedId}
-            onAddSet={this._onAddSet}
-            onDeleteSet={this._onDeleteSet}
+          </Card>
+          <FlatList
+            contentContainerStyle={styles.list}
+            data={exercise ? exercise.sets : []}
+            keyExtractor={this._keyExtractor}
+            renderItem={this._renderItem}
+            extraData={this.state.selectedId}
           />
-        </Card>
-        <FlatList
-          contentContainerStyle={styles.list}
-          data={exercise ? exercise.sets : []}
-          keyExtractor={this._keyExtractor}
-          renderItem={this._renderItem}
-          extraData={this.state.selectedId}
-        />
-      </View>
+        </View>
+      </AndroidBackHandler>
     );
   }
 }

@@ -6,6 +6,10 @@ import { shallow } from 'enzyme';
 import EditSetsWithControls from '../EditSetsWithControls';
 import theme from '../../../utils/theme';
 
+jest.mock('react-navigation-backhandler', () => ({
+  AndroidBackHandler: ({ children }) => children,
+}));
+
 describe('EditSetsWithControls', () => {
   const day = '2018-05-01T00:00:00.000Z';
   const dispatch = jest.fn();
@@ -206,10 +210,22 @@ describe('EditSetsWithControls', () => {
     });
   });
 
-  describe('EditSetActionButtons', () => {
+  describe('EditSetActionButtons and back button', () => {
+    const wrapper = shallow(
+      <EditSetsWithControls
+        day={day}
+        dispatch={dispatch}
+        exerciseKey={exerciseKey}
+      />
+    );
+
+    beforeEach(() => {
+      wrapper.setState({ selectedId: '' });
+    });
+
     // eslint-disable-next-line flowtype/no-weak-types
-    const getActionButtons = (wrapper: Object) => {
-      const inputControls = wrapper
+    const getActionButtons = (parent: Object) => {
+      const inputControls = parent
         .find('withTheme(EditSetActionButtons)')
         .dive();
 
@@ -218,14 +234,6 @@ describe('EditSetsWithControls', () => {
     };
 
     it('switches between Add and Update text if a set is selected', () => {
-      const wrapper = shallow(
-        <EditSetsWithControls
-          day={day}
-          dispatch={dispatch}
-          exerciseKey={exerciseKey}
-        />
-      );
-
       expect(
         getActionButtons(wrapper)
           .find('withTheme(Button)')
@@ -245,8 +253,29 @@ describe('EditSetsWithControls', () => {
       ).toEqual('Update');
     });
 
-    it.skip('switches Delete button to enabled/disabled depending on set selection', () => {
-      // TODO needs to be implemented
+    it('switches Delete button to enabled/disabled depending on set selection', () => {
+      const deleteButton = getActionButtons(wrapper)
+        .find('withTheme(Button)')
+        .at(1);
+
+      // Nothing selected
+      expect(deleteButton.props().disabled).toBe(true);
+
+      wrapper.setState({ selectedId: exercise.sets[0].id });
+
+      // Something selected means delete button is enabled
+      expect(deleteButton.props().disabled).toBe(true);
+    });
+
+    it('handles back button if an option is selected', () => {
+      wrapper.setState({ selectedId: exercise.sets[0].id });
+
+      // Something is selected, handle it
+      expect(wrapper.instance().onBackButtonPressAndroid()).toBe(true);
+      expect(wrapper.state().selectedId).toEqual('');
+
+      // Default behavior if nothing is selected
+      expect(wrapper.instance().onBackButtonPressAndroid()).toBe(false);
     });
   });
 });
