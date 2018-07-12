@@ -22,7 +22,7 @@ class EditSetActionButtons extends React.Component<Props> {
       <View style={styles.controls}>
         <Button
           onPress={this.props.onAddSet}
-          raised
+          mode="contained"
           style={[
             styles.button,
             styles.confirm,
@@ -33,6 +33,7 @@ class EditSetActionButtons extends React.Component<Props> {
         </Button>
         <Button
           onPress={this.props.onDeleteSet}
+          mode="contained"
           disabled={!isUpdate}
           raised
           style={[

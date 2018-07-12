@@ -67,6 +67,7 @@ class HomeScreen extends Component<Props, State> {
           selected={this.state.selectedDay}
           currentWeek={this.state.currentWeek}
           onDaySelected={this._onDaySelected}
+          workouts={workouts}
         />
         {workout && (
           <WorkoutList
@@ -83,7 +84,7 @@ class HomeScreen extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   list: {
-    paddingTop: 8,
+    paddingTop: 4,
     paddingHorizontal: 4,
   },
   fab: {

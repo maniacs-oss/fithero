@@ -11,11 +11,13 @@ import {
   getToday,
   isSameDay,
 } from '../../utils/date';
+import type { WorkoutSchemaType } from '../../database/types';
 
 type Props = {
   currentWeek: Array<Date>,
   onDaySelected: string => void,
   selected: string,
+  workouts: { [date: string]: WorkoutSchemaType },
 };
 
 class DayRow extends React.Component<Props> {
@@ -33,6 +35,7 @@ class DayRow extends React.Component<Props> {
           dateString={dateString}
           isSelected={isSelected}
           onDaySelected={this._onDaySelected}
+          isWorkout={!!this.props.workouts[dateString]}
         />
       );
     });

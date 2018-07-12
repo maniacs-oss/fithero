@@ -34,7 +34,10 @@ export default class HomeNavigator extends React.Component<{}, State> {
     return {
       headerRight:
         Platform.OS === 'ios' ? (
-          <Button onPress={navigateToCalendar}>{i18n.t('calendar')}</Button>
+          // TODO replace for iOS style Toolbar button
+          <Button onPress={navigateToCalendar} color="#FFFFFF">
+            {i18n.t('calendar')}
+          </Button>
         ) : (
           <TouchableIcon onPress={navigateToCalendar} name="calendar" />
         ),
@@ -46,7 +49,7 @@ export default class HomeNavigator extends React.Component<{}, State> {
     routes: [
       { key: 'home', title: i18n.t('menu__home'), icon: 'home' },
       // { key: 'calendar', title: i18n.t('menu__calendar'), icon: 'date-range' },
-      // { key: 'progress', title: i18n.t('menu__progress), icon: 'show-chart' },
+      // { key: 'progress', title: i18n.t('menu__progress'), icon: 'show-chart' },
       // { key: 'profile', title: i18n.t('menu__profile'), icon: 'person' },
     ],
   };
@@ -62,14 +65,12 @@ export default class HomeNavigator extends React.Component<{}, State> {
 
   render() {
     return (
-      /* $FlowFixMe theme overriding error */
       <BottomNavigation
         navigationState={this.state}
         onIndexChange={this._handleIndexChange}
         renderScene={this._renderScene}
         shifting={false}
         barStyle={{ backgroundColor: '#212121' }}
-        theme={{ colors: { primary: '#FFFFFF' } }}
       />
     );
   }

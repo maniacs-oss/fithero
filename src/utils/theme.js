@@ -6,6 +6,7 @@ export default {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
+    background: '#333333',
     primary: Colors.red500,
     accent: Colors.red500,
     icon: Colors.white,
