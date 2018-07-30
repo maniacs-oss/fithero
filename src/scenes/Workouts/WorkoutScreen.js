@@ -36,12 +36,12 @@ class WorkoutScreen extends React.Component<Props> {
 
   _onAddExercises = () => {
     const day = getDay(this.props.navigation.state.params.day);
-    this.props.navigation.push('Exercises', { day });
+    this.props.navigation.navigate('Exercises', { day });
   };
 
   _onExercisePress = (exerciseKey: string) => {
     const day = getDay(this.props.navigation.state.params.day);
-    this.props.navigation.push('EditSets', { day, exerciseKey });
+    this.props.navigation.navigate('EditSets', { day, exerciseKey });
   };
 
   render() {

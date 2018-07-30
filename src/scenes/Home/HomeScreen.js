@@ -44,7 +44,7 @@ class HomeScreen extends Component<Props, State> {
 
   _onAddExercises = () => {
     const { selectedDay } = this.state;
-    this.props.navigation.push('Exercises', { day: selectedDay });
+    this.props.navigation.navigate('Exercises', { day: selectedDay });
   };
 
   _onDaySelected = dateString => {
@@ -53,7 +53,10 @@ class HomeScreen extends Component<Props, State> {
 
   _onExercisePress = (exerciseKey: string) => {
     const { selectedDay } = this.state;
-    this.props.navigation.push('EditSets', { day: selectedDay, exerciseKey });
+    this.props.navigation.navigate('EditSets', {
+      day: selectedDay,
+      exerciseKey,
+    });
   };
 
   render() {

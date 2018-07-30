@@ -42,7 +42,7 @@ export class ExercisesScreen extends Component<Props, State> {
 
   _onExerciseToggle = (exerciseKey: string) => {
     const { day } = this.props.navigation.state.params;
-    this.props.navigation.push('EditSets', { day, exerciseKey });
+    this.props.navigation.navigate('EditSets', { day, exerciseKey });
   };
 
   _keyExtractor = item => item.id;
