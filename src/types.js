@@ -4,6 +4,7 @@
 
 import type { SetSchemaType } from './database/types';
 
+// TODO replace this type for flow-typed react-navigation 2
 export type NavigationType<T> = {
   state: {
     params: T,
@@ -12,6 +13,7 @@ export type NavigationType<T> = {
   navigate: (route: string, params?: { [key: string]: mixed }) => void,
   // eslint-disable-next-line flowtype/no-weak-types
   setParams: (params: { [key: string]: any }) => void,
+  goBack: (routeKey?: ?string) => boolean,
 };
 
 export type DispatchType<T> = {
@@ -21,7 +23,13 @@ export type DispatchType<T> = {
 
 export type ExerciseType = {|
   id: string,
-  category: string,
+  primary: Array<string>,
+  secondary: Array<string>,
+|};
+
+export type CategoryType = {|
+  id: string,
+  name: string,
 |};
 
 export type ExerciseLog = {|

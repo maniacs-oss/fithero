@@ -5,21 +5,18 @@ import { StyleSheet, View } from 'react-native';
 import { Paragraph, TouchableRipple, withTheme } from 'react-native-paper';
 
 import type { ExerciseType } from '../../types';
-import {
-  getExerciseName,
-  getExerciseCategoryName,
-} from '../../utils/exercises';
+import { getExerciseName, getExerciseMuscleName } from '../../utils/exercises';
 
 type Props = {
   exercise: ExerciseType,
-  onPress: (exerciseKey: string) => void,
+  onPressItem: (exerciseKey: string) => void,
   // eslint-disable-next-line flowtype/no-weak-types
   theme: Object,
 };
 
 class ExerciseItem extends React.PureComponent<Props> {
   _toggleCheck = () => {
-    this.props.onPress(this.props.exercise.id);
+    this.props.onPressItem(this.props.exercise.id);
   };
 
   render() {
@@ -29,7 +26,7 @@ class ExerciseItem extends React.PureComponent<Props> {
         <View style={styles.row}>
           <Paragraph
             style={styles.firstLine}
-            numberOfLines={1}
+            numberOfLines={2}
             ellipsizeMode="tail"
           >
             {getExerciseName(exercise.id)}
@@ -39,7 +36,7 @@ class ExerciseItem extends React.PureComponent<Props> {
             numberOfLines={1}
             ellipsizeMode="tail"
           >
-            {getExerciseCategoryName(exercise.category)}
+            {exercise.primary.map(m => getExerciseMuscleName(m)).join(', ')}
           </Paragraph>
         </View>
       </TouchableRipple>
@@ -49,10 +46,8 @@ class ExerciseItem extends React.PureComponent<Props> {
 
 const styles = StyleSheet.create({
   row: {
-    flex: 1,
-    height: 48 + 16,
-    justifyContent: 'center',
     paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   firstLine: {
     fontSize: 15,

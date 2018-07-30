@@ -17,6 +17,7 @@ test('remove realm listeners on unmounting', () => {
         setParams: jest.fn(),
         navigate: jest.fn(),
         push: jest.fn(),
+        goBack: jest.fn(),
       }}
       theme={theme}
     />

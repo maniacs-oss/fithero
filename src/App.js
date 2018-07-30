@@ -19,6 +19,10 @@ if (global.__DEV__) {
   ]);
 }
 
+const navigationPersistenceKey = global.__DEV__
+  ? 'DEV_dziku-navigation-key'
+  : null;
+
 export default class App extends React.Component<{}> {
   render() {
     return (
@@ -26,7 +30,7 @@ export default class App extends React.Component<{}> {
         <PaperProvider theme={theme}>
           <React.Fragment>
             {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-            <MainNavigator />
+            <MainNavigator persistenceKey={navigationPersistenceKey} />
           </React.Fragment>
         </PaperProvider>
       </Provider>
