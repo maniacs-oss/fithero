@@ -21,12 +21,15 @@ import {
   updateSet,
 } from '../../database/services/SetService';
 import { addExercise } from '../../database/services/ExerciseService';
+import { toDate } from '../../utils/date';
+import withMaxSet from '../../components/withMaxSet';
 
 type Props = {
   day: string,
   dispatch: () => void,
   exerciseKey: string,
   exercise?: ExerciseSchemaType,
+  maxSetId: string,
 };
 
 type State = {
@@ -37,7 +40,7 @@ type State = {
 
 type ActionIncDec = (property: string, value: number) => void;
 
-class EditSetsWithControls extends React.Component<Props, State> {
+export class EditSetsWithControls extends React.Component<Props, State> {
   smallestWeightDec: ActionIncDec;
   weightDec: ActionIncDec;
   weightInc: ActionIncDec;
@@ -128,9 +131,13 @@ class EditSetsWithControls extends React.Component<Props, State> {
             id: getSetSchemaId(day, exerciseKey, 1),
             weight,
             reps,
+            date: toDate(day),
+            type: exerciseKey,
           },
         ],
         comments: '',
+        date: toDate(day),
+        type: exerciseKey,
       };
       addExercise(dispatch, newExercise);
     } else if (!selectedId) {
@@ -141,12 +148,16 @@ class EditSetsWithControls extends React.Component<Props, State> {
         id: getSetSchemaId(day, exerciseKey, lastIndex + 1),
         weight,
         reps,
+        date: toDate(day),
+        type: exerciseKey,
       });
     } else if (selectedId) {
       updateSet(dispatch, {
         id: selectedId,
         weight,
         reps,
+        date: toDate(day),
+        type: exerciseKey,
       });
     }
 
@@ -168,6 +179,7 @@ class EditSetsWithControls extends React.Component<Props, State> {
       set={item}
       index={index + 1}
       isSelected={this.state.selectedId === item.id}
+      isMaxSet={this.props.maxSetId === item.id}
       onPressItem={this._onPressItem}
     />
   );
@@ -217,7 +229,7 @@ class EditSetsWithControls extends React.Component<Props, State> {
             data={exercise ? exercise.sets : []}
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
-            extraData={this.state.selectedId}
+            extraData={[this.state.selectedId, this.props.maxSetId]}
           />
         </View>
       </AndroidBackHandler>
@@ -234,13 +246,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   cardContent: {
-    paddingTop: 14,
+    paddingTop: 8,
     paddingHorizontal: 16,
-    paddingBottom: 2,
   },
   list: {
     paddingVertical: 12,
   },
 });
 
-export default EditSetsWithControls;
+export default withMaxSet(EditSetsWithControls);

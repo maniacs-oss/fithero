@@ -3,12 +3,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import EditSetsWithControls from '../EditSetsWithControls';
+import { EditSetsWithControls } from '../EditSetsWithControls';
 import theme from '../../../utils/theme';
+import { toDate } from '../../../utils/date';
 
 jest.mock('react-navigation-backhandler', () => ({
   AndroidBackHandler: ({ children }) => children,
 }));
+
+const date = toDate('2018-05-01T00:00:00.000Z');
 
 describe('EditSetsWithControls', () => {
   const day = '2018-05-01T00:00:00.000Z';
@@ -22,13 +25,19 @@ describe('EditSetsWithControls', () => {
         id: '2018-05-01T00:00:00.000Z_bench-press_001',
         reps: 8,
         weight: 100,
+        date,
+        type: 'bench-press',
       },
       {
         id: '2018-05-01T00:00:00.000Z_bench-press_002',
         reps: 6,
         weight: 90,
+        date,
+        type: 'bench-press',
       },
     ],
+    date,
+    type: 'bench-press',
   };
 
   const defaultWeight = 20;
@@ -52,6 +61,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          maxSetId=""
         />
       );
 
@@ -89,6 +99,7 @@ describe('EditSetsWithControls', () => {
           dispatch={dispatch}
           exerciseKey={exerciseKey}
           exercise={exercise}
+          maxSetId=""
         />
       );
       expect(wrapper.state()).toEqual({
@@ -114,6 +125,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          maxSetId=""
         />
       );
       const weightControls = getInputControls(wrapper, 0);
@@ -156,6 +168,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          maxSetId=""
         />
       );
       const weightControls = getInputControls(wrapper, 1);
@@ -188,6 +201,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          maxSetId=""
         />
       );
       const weightControls = getInputControls(wrapper, 0);
@@ -216,6 +230,7 @@ describe('EditSetsWithControls', () => {
         day={day}
         dispatch={dispatch}
         exerciseKey={exerciseKey}
+        maxSetId=""
       />
     );
 

@@ -8,10 +8,12 @@ import { getExerciseName } from '../utils/exercises';
 import type { ExerciseSchemaType, SetSchemaType } from '../database/types';
 import { extractExerciseKeyFromDatabase } from '../database/utils';
 import i18n from '../utils/i18n';
+import withMaxSet from './withMaxSet';
 
 type Props = {
   exercise: ExerciseSchemaType,
   onPressItem: (exerciseKey: string) => void,
+  maxSetId: string,
   // eslint-disable-next-line flowtype/no-weak-types
   theme: Object,
 };
@@ -24,18 +26,21 @@ class WorkoutItem extends React.PureComponent<Props> {
   };
 
   _renderSet = (set: SetSchemaType, index: number) => {
-    const { secondaryText } = this.props.theme.colors;
+    const { colors } = this.props.theme;
+    const isMaxSet = this.props.maxSetId === set.id;
+    const color = isMaxSet ? colors.trophy : colors.secondaryText;
 
     return (
       <View key={set.id} style={styles.setRow}>
-        <Text style={[styles.setIndex, { color: secondaryText }]}>{`${index +
-          1}.`}</Text>
-        <Text style={[styles.setWeight, { color: secondaryText }]}>{`${
-          set.weight
-        } ${i18n.t('kg_unit', { count: set.weight })}`}</Text>
-        <Text style={[styles.setReps, { color: secondaryText }]}>{`${
-          set.reps
-        } ${i18n.t('reps_unit', { count: set.reps })}`}</Text>
+        <Text style={[styles.setIndex, { color }]}>{`${index + 1}.`}</Text>
+        <Text style={[styles.setWeight, { color }]}>{`${set.weight} ${i18n.t(
+          'kg_unit',
+          { count: set.weight }
+        )}`}</Text>
+        <Text style={[styles.setReps, { color }]}>{`${set.reps} ${i18n.t(
+          'reps_unit',
+          { count: set.reps }
+        )}`}</Text>
       </View>
     );
   };
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   setWeight: {
-    flex: 0.25,
+    flex: 0.3,
     textAlign: 'right',
     paddingRight: 8,
   },
@@ -86,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(WorkoutItem);
+export default withTheme(withMaxSet(WorkoutItem));

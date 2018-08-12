@@ -3,12 +3,14 @@
 import * as React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Divider, Text, withTheme } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import i18n from '../../utils/i18n';
 import type { SetSchemaType } from '../../database/types';
 
 type Props = {
   isSelected: boolean,
+  isMaxSet: boolean,
   onPressItem: (setId: string) => void,
   index: number,
   set: SetSchemaType,
@@ -22,7 +24,7 @@ class EditSetItem extends React.PureComponent<Props> {
   };
 
   render() {
-    const { index, isSelected, set, theme } = this.props;
+    const { index, isSelected, isMaxSet, set, theme } = this.props;
 
     return (
       <View>
@@ -34,6 +36,12 @@ class EditSetItem extends React.PureComponent<Props> {
             ]}
           >
             <Text style={[styles.text, styles.index]}>{index}.</Text>
+            <Icon
+              name="trophy"
+              size={24}
+              color={theme.colors.trophy}
+              style={[styles.icon, !isMaxSet && { opacity: 0 }]}
+            />
             <Text style={[styles.text, styles.weight]}>
               {set.weight}{' '}
               <Text
@@ -63,24 +71,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    paddingHorizontal: 16,
+    paddingHorizontal: 36,
   },
   text: {
     fontSize: 18,
   },
   index: {
-    flex: 0.2,
-    paddingLeft: 16,
     textAlign: 'left',
   },
+  icon: {
+    marginHorizontal: 24,
+    height: 24,
+    width: 24,
+  },
   weight: {
-    flex: 0.25,
-    paddingLeft: 16,
+    flex: 0.5,
     textAlign: 'right',
   },
   reps: {
-    flex: 0.25,
-    paddingLeft: 24,
+    flex: 0.5,
+    paddingLeft: 16,
     textAlign: 'right',
   },
   unit: {

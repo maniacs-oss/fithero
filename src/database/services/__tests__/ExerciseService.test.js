@@ -7,11 +7,13 @@ import { getExercise } from '../../../redux/modules/workouts';
 
 jest.mock('realm');
 
+const date = toDate('2018-05-04T00:00:00.000Z');
+
 describe('addExercise', () => {
   const dispatch = jest.fn();
   const mockRealmWorkout = {
     id: '2018-05-04T00:00:00.000Z',
-    date: toDate('2018-05-04T00:00:00.000Z'),
+    date,
     exercises: {
       push: jest.fn(),
     },
@@ -23,8 +25,12 @@ describe('addExercise', () => {
         id: '2018-05-04T00:00:00.000Z_bench-press_001',
         reps: 18,
         weight: 100,
+        date,
+        type: 'bench-press',
       },
     ],
+    date,
+    type: 'bench-press',
   };
 
   beforeEach(() => {

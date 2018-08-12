@@ -14,13 +14,15 @@ import type {
   WorkoutSchemaType,
 } from '../../../database/types';
 
+const date = toDate('2018-05-04T00:00:00.000Z');
+
 describe('workouts reducer', () => {
   const initialState = {};
   const workouts: Array<WorkoutSchemaType> = [
     {
       id: '2018-05-04T00:00:00.000Z',
       comments: 'Test comment',
-      date: toDate('2018-05-04T00:00:00.000Z'),
+      date,
       exercises: [
         {
           id: '2018-05-04T00:00:00.000Z_barbell-squat',
@@ -29,13 +31,19 @@ describe('workouts reducer', () => {
               id: '2018-05-04T00:00:00.000Z_barbell-squat_001',
               reps: 8,
               weight: 120,
+              date,
+              type: 'barbell-squat',
             },
             {
               id: '2018-05-04T00:00:00.000Z_barbell-squat_002',
               reps: 6,
               weight: 120,
+              date,
+              type: 'barbell-squat',
             },
           ],
+          date,
+          type: 'barbell-squat',
         },
         {
           id: '2018-05-04T00:00:00.000Z_barbell-row',
@@ -44,8 +52,12 @@ describe('workouts reducer', () => {
               id: '2018-05-04T00:00:00.000Z_barbell-row_001',
               reps: 8,
               weight: 80,
+              date,
+              type: 'barbell-row',
             },
           ],
+          date,
+          type: 'barbell-row',
         },
       ],
     },
@@ -57,8 +69,12 @@ describe('workouts reducer', () => {
         id: '2018-05-04T00:00:00.000Z_bench-press_001',
         reps: 6,
         weight: 100,
+        date,
+        type: 'bench-press',
       },
     ],
+    date,
+    type: 'bench-press',
   };
 
   it('returns current state by default', () => {
@@ -107,6 +123,8 @@ describe('workouts reducer', () => {
         id: '2018-05-04T00:00:00.000Z_barbell-squat_002',
         reps: 8,
         weight: 110,
+        date,
+        type: 'barbell-squat',
       };
       const newState = reducer(
         { [workouts[0].id]: workouts[0] },
@@ -126,6 +144,8 @@ describe('workouts reducer', () => {
         id: workouts[0].exercises[0].sets[0].id,
         reps: workouts[0].exercises[0].sets[0].reps - 2,
         weight: workouts[0].exercises[0].sets[0].weight + 10,
+        date,
+        type: 'barbell-squat',
       };
       const newState = reducer(
         { [workouts[0].id]: workouts[0] },

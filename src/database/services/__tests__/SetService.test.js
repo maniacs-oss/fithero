@@ -8,13 +8,17 @@ import {
   removeSet,
   UPDATE_SET,
 } from '../../../redux/modules/workouts';
+import { toDate } from '../../../utils/date';
 
 jest.mock('realm');
 
 const dispatch = jest.fn();
+const date = toDate('2018-05-04T00:00:00.000Z');
 
 const mockRealmExercise = {
   id: '2018-05-04T00:00:00.000Z_bench-press',
+  date,
+  type: 'bench-press',
   comments: '',
   sets: {
     push: jest.fn(),
@@ -25,6 +29,8 @@ const mockSet = {
   id: '2018-05-04T00:00:00.000Z_bench-press_001',
   reps: 8,
   weight: 75,
+  date,
+  type: 'bench-press',
 };
 
 beforeEach(() => {
@@ -47,6 +53,8 @@ test('updateSet', () => {
     id: '2018-05-04T00:00:00.000Z_bench-press_001',
     reps: 7,
     weight: 70,
+    date,
+    type: 'bench-press',
   };
   realm.objectForPrimaryKey = jest.fn(() => toBeMutatedByRealmSet);
 
@@ -63,12 +71,16 @@ describe('deleteSet', () => {
     id: '2018-05-04T00:00:00.000Z_bench-press_001',
     reps: 7,
     weight: 70,
+    date,
+    type: 'bench-press',
   };
 
   const secondSet = {
     id: '2018-05-04T00:00:00.000Z_bench-press_002',
     reps: 5,
     weight: 70,
+    date,
+    type: 'bench-press',
   };
 
   const exercise = {

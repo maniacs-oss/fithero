@@ -17,5 +17,6 @@ export default {
     confirm: Colors.teal700,
     delete: Colors.red700,
     toolbar: Colors.grey900,
+    trophy: Colors.yellowA400,
   },
 };

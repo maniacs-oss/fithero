@@ -14,6 +14,12 @@ import {
 } from '../utils';
 import type { DispatchType } from '../../types';
 
+export const getMaxSetByType = (type: string) =>
+  realm
+    .objects('Set')
+    .filtered('type = $0', type)
+    .sorted([['weight', true], 'date']);
+
 export const addSet = (
   dispatch: (DispatchType<SetSchemaType>) => void,
   set: SetSchemaType

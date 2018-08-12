@@ -3,6 +3,7 @@
 import type { ExerciseLog } from '../types';
 import type { SetSchemaType } from '../database/types';
 import { getSetSchemaId } from '../database/utils';
+import { toDate } from './date';
 
 export const parseSummary = (
   exerciseSummary: string,
@@ -31,6 +32,8 @@ export const parseSummary = (
           reps,
           // Weight can be a float (reps cannot)
           weight: parseFloat(set[1]),
+          type: exerciseKey,
+          date: toDate(day),
         });
         setIndex++;
       }

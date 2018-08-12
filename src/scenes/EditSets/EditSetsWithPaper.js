@@ -58,13 +58,16 @@ class EditSetsWithPaper extends React.Component<Props, State> {
         exerciseKey
       );
       const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
+      const date = toDate(day);
 
       const exercise = {
         id: exerciseIdDb,
         comments,
         sets,
+        type: exerciseKey,
+        date,
       };
-      addExercisePaperForWorkout(dispatch, toDate(day), exercise);
+      addExercisePaperForWorkout(dispatch, date, exercise);
     }
   }
 

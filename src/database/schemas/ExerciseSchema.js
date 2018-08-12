@@ -5,6 +5,8 @@ const ExerciseSchema = {
   primaryKey: 'id',
   properties: {
     id: 'string',
+    date: 'date',
+    type: 'string',
     sets: { type: 'list', objectType: 'Set' },
     comments: { type: 'string', optional: true },
   },
