@@ -2,13 +2,14 @@
 
 import * as React from 'react';
 import { Platform } from 'react-native';
-import { BottomNavigation, Button } from 'react-native-paper';
+import { BottomNavigation } from 'react-native-paper';
 
 import i18n from '../utils/i18n';
 import HomeScreen from './Home';
-import TouchableIcon from '../components/TouchableIcon';
 import type { NavigationType } from '../types';
 import { getToday } from '../utils/date';
+import HeaderIconButton from '../components/HeaderIconButton';
+import HeaderButton from '../components/HeaderButton';
 
 type State = {
   index: number,
@@ -34,12 +35,11 @@ export default class HomeNavigator extends React.Component<{}, State> {
     return {
       headerRight:
         Platform.OS === 'ios' ? (
-          // TODO replace for iOS style Toolbar button
-          <Button onPress={navigateToCalendar} color="#FFFFFF">
+          <HeaderButton onPress={navigateToCalendar}>
             {i18n.t('calendar')}
-          </Button>
+          </HeaderButton>
         ) : (
-          <TouchableIcon onPress={navigateToCalendar} name="calendar" />
+          <HeaderIconButton icon="date-range" onPress={navigateToCalendar} />
         ),
     };
   };

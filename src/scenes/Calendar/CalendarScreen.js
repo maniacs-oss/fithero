@@ -7,7 +7,7 @@ import { withTheme } from 'react-native-paper';
 
 import Screen from '../../components/Screen';
 import type { NavigationType, RealmListener } from '../../types';
-import TouchableIcon from '../../components/TouchableIcon';
+import HeaderIconButton from '../../components/HeaderIconButton';
 import { formatDate } from '../../utils/date';
 import { getAllWorkouts } from '../../database/services/WorkoutService';
 import type { WorkoutSchemaType } from '../../database/types';
@@ -45,13 +45,13 @@ export class CalendarScreen extends React.Component<Props, State> {
     const { params = {} } = navigation.state;
     return {
       headerRight: (
-        <TouchableIcon
+        <HeaderIconButton
           onPress={() => {
             if (params.scrollToToday) {
               params.scrollToToday();
             }
           }}
-          name="calendar-blank"
+          icon="today"
         />
       ),
     };
