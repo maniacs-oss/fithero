@@ -1,4 +1,4 @@
-package com.dziku;
+package com.fnp.dziku;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

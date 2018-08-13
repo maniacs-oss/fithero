@@ -1,18 +1,19 @@
-package com.dziku;
+package com.fnp.dziku;
 
 import android.app.Application;
 
-import com.facebook.react.ReactApplication;
-import io.realm.react.RealmReactPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
+import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.oblador.vectoricons.VectorIconsPackage;
 
 import java.util.Arrays;
 import java.util.List;
+
+import io.realm.react.RealmReactPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
