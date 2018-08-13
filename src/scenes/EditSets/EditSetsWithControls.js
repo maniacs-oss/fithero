@@ -232,6 +232,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
             extraData={[this.state.selectedId, this.props.maxSetId]}
+            keyboardShouldPersistTaps="always"
           />
         </View>
       </AndroidBackHandler>

@@ -143,6 +143,7 @@ export class ExercisesScreen extends Component<Props, State> {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           ListHeaderComponent={this._renderHeader}
+          keyboardShouldPersistTaps="always"
         />
       </Screen>
     );
