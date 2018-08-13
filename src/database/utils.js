@@ -31,9 +31,12 @@ export const deserializeWorkout = (
   id: workout.id,
   date: workout.date,
   comments: workout.comments,
-  exercises: Array.from(workout.exercises).map(e =>
-    Object.assign({}, e, {
-      sets: Array.from(e.sets).map(s => Object.assign({}, s)),
-    })
-  ),
+  exercises: Array.from(workout.exercises)
+    // eslint-disable-next-line no-nested-ternary
+    .sort((a, b) => (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0))
+    .map(e =>
+      Object.assign({}, e, {
+        sets: Array.from(e.sets).map(s => Object.assign({}, s)),
+      })
+    ),
 });

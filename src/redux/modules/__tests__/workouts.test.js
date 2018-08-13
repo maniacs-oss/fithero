@@ -44,6 +44,7 @@ describe('workouts reducer', () => {
           ],
           date,
           type: 'barbell-squat',
+          sort: 1,
         },
         {
           id: '2018-05-04T00:00:00.000Z_barbell-row',
@@ -58,6 +59,7 @@ describe('workouts reducer', () => {
           ],
           date,
           type: 'barbell-row',
+          sort: 2,
         },
       ],
     },
@@ -75,6 +77,7 @@ describe('workouts reducer', () => {
     ],
     date,
     type: 'bench-press',
+    sort: 3,
   };
 
   it('returns current state by default', () => {
@@ -203,6 +206,21 @@ describe('workouts reducer', () => {
           workouts[0].exercises[1].sets[0].id,
         ])
       ).toEqual({});
+    });
+
+    it('reassess the sort when removing an exercise', () => {
+      const firstState = reducer(
+        { [workouts[0].id]: workouts[0] },
+        getExercise(exercise)
+      );
+      const setId = workouts[0].exercises[1].sets[0].id;
+      const newState = reducer(firstState, removeSet(setId));
+
+      const newWorkout = newState[workouts[0].id];
+
+      expect(newWorkout.exercises.length).toBe(2);
+      expect(newWorkout.exercises[0].sort).toBe(1);
+      expect(newWorkout.exercises[1].sort).toBe(2);
     });
   });
 });

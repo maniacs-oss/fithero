@@ -53,7 +53,7 @@ export default function reducer(state: State = initialState, action: Action) {
         // Add exercise (first set) to existing workout
         newWorkout = {
           ...workout,
-          ...{ exercises: workout.exercises.concat([exercise]) },
+          exercises: workout.exercises.concat([exercise]),
         };
       }
       return { ...state, [newWorkout.id]: newWorkout };
@@ -71,7 +71,7 @@ export default function reducer(state: State = initialState, action: Action) {
           sets: e.sets.concat(set),
         };
       });
-      const newWorkout = { ...workout, ...{ exercises: newExercises } };
+      const newWorkout = { ...workout, exercises: newExercises };
       return { ...state, [workout.id]: newWorkout };
     }
     case UPDATE_SET: {
@@ -92,7 +92,7 @@ export default function reducer(state: State = initialState, action: Action) {
           }),
         };
       });
-      const newWorkout = { ...workout, ...{ exercises: newExercises } };
+      const newWorkout = { ...workout, exercises: newExercises };
       return { ...state, [workout.id]: newWorkout };
     }
     case REMOVE_SET: {
@@ -106,7 +106,7 @@ export default function reducer(state: State = initialState, action: Action) {
       if (exercise) {
         const newExercise = {
           ...exercise,
-          ...{ sets: exercise.sets.filter(s => s.id !== setId) },
+          sets: exercise.sets.filter(s => s.id !== setId),
         };
 
         let newWorkout = {};
@@ -118,13 +118,22 @@ export default function reducer(state: State = initialState, action: Action) {
             }
             return e;
           });
-          newWorkout = { ...workout, ...{ exercises: newExercises } };
+          newWorkout = { ...workout, exercises: newExercises };
           return { ...state, [workout.id]: newWorkout };
         }
         const newExercises = workout.exercises.filter(e => e.id !== exerciseId);
         if (newExercises.length > 0) {
           // Remove exercise from workout
-          newWorkout = { ...workout, ...{ exercises: newExercises } };
+          newWorkout = {
+            ...workout,
+            ...{
+              // Fix sort of exercises after deleting one
+              exercises: newExercises.map((e, i) => ({
+                ...e,
+                sort: i + 1,
+              })),
+            },
+          };
           return { ...state, [workout.id]: newWorkout };
         }
         // Remove whole workout

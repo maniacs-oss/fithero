@@ -9,6 +9,7 @@ const ExerciseSchema = {
     type: 'string',
     sets: { type: 'list', objectType: 'Set' },
     comments: { type: 'string', optional: true },
+    sort: 'int',
   },
 };
 

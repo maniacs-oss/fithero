@@ -23,6 +23,7 @@ const mockRealmExercise = {
   sets: {
     push: jest.fn(),
   },
+  sort: 1,
 };
 
 const mockSet = {
@@ -114,7 +115,7 @@ describe('deleteSet', () => {
       } else if (name === 'Exercise') {
         return exercise;
       } else if (name === 'Workout') {
-        return { exercises: mockRealmExercise };
+        return { exercises: [mockRealmExercise] };
       }
       return null;
     });
@@ -155,5 +156,35 @@ describe('deleteSet', () => {
     expect(realm.delete).toBeCalledWith(set);
     expect(realm.delete).toBeCalledWith(exercise);
     expect(realm.delete).toBeCalledWith(workout);
+  });
+
+  it('reassess the sort if we delete an exercise', () => {
+    const mockAnotherRealmExercise = {
+      id: '2018-05-04T00:00:00.000Z_barbell-squat',
+      date,
+      type: 'barbell-squat',
+      comments: '',
+      sets: {
+        push: jest.fn(),
+      },
+      sort: 2,
+    };
+
+    let workout = { exercises: [] };
+    realm.objectForPrimaryKey = jest.fn(name => {
+      if (name === 'Set') {
+        return set;
+      } else if (name === 'Exercise') {
+        return exercise;
+      } else if (name === 'Workout') {
+        workout = { exercises: [mockAnotherRealmExercise] };
+        return workout;
+      }
+      return null;
+    });
+
+    deleteSet(dispatch, set.id);
+    // Realm operation is like mutating
+    expect(workout.exercises[0].sort).toEqual(1);
   });
 });

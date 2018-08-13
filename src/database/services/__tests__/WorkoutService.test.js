@@ -35,6 +35,7 @@ const mockExercise = {
   sets: [mockSets],
   date,
   type: 'bench-press',
+  sort: 1,
 };
 
 const mockRealmExercise = {
@@ -44,6 +45,7 @@ const mockRealmExercise = {
     forEach: Array.prototype.forEach,
   },
   type: mockExercise.type,
+  sort: 1,
 };
 
 const mockWorkout = {
@@ -118,6 +120,7 @@ describe('WorkoutService', () => {
         sets: mockSets,
         date,
         type: mockExercise.type,
+        sort: 1,
       });
 
       expect(realm.create).toHaveBeenCalledTimes(1);
@@ -127,10 +130,8 @@ describe('WorkoutService', () => {
       });
       expect(mockRealmWorkout.exercises.push).toHaveBeenCalledTimes(1);
       expect(mockRealmWorkout.exercises.push).toBeCalledWith({
-        id: mockExercise.id,
+        ...mockExercise,
         sets: mockSets,
-        date: mockExercise.date,
-        type: mockExercise.type,
       });
 
       expect(dispatch).toHaveBeenCalledTimes(1);
@@ -148,6 +149,7 @@ describe('WorkoutService', () => {
         sets: mockSets,
         date: mockExercise.date,
         type: mockExercise.type,
+        sort: 1,
       });
 
       expect(realm.create).not.toBeCalled();
@@ -157,6 +159,7 @@ describe('WorkoutService', () => {
         sets: mockSets,
         date: mockExercise.date,
         type: mockExercise.type,
+        sort: 1,
       });
 
       expect(dispatch).toHaveBeenCalledTimes(1);
@@ -190,6 +193,7 @@ describe('WorkoutService', () => {
         sets: mockSets,
         date: mockExercise.date,
         type: mockExercise.type,
+        sort: 1,
       });
 
       expect(workout.exercises.push).not.toBeCalled();

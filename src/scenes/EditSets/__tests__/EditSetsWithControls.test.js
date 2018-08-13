@@ -38,6 +38,7 @@ describe('EditSetsWithControls', () => {
     ],
     date,
     type: 'bench-press',
+    sort: 1,
   };
 
   const defaultWeight = 20;
@@ -61,6 +62,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          exercisesCount={1}
           maxSetId=""
         />
       );
@@ -99,6 +101,7 @@ describe('EditSetsWithControls', () => {
           dispatch={dispatch}
           exerciseKey={exerciseKey}
           exercise={exercise}
+          exercisesCount={1}
           maxSetId=""
         />
       );
@@ -125,6 +128,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          exercisesCount={1}
           maxSetId=""
         />
       );
@@ -168,6 +172,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          exercisesCount={1}
           maxSetId=""
         />
       );
@@ -201,6 +206,7 @@ describe('EditSetsWithControls', () => {
           day={day}
           dispatch={dispatch}
           exerciseKey={exerciseKey}
+          exercisesCount={1}
           maxSetId=""
         />
       );
@@ -230,6 +236,7 @@ describe('EditSetsWithControls', () => {
         day={day}
         dispatch={dispatch}
         exerciseKey={exerciseKey}
+        exercisesCount={1}
         maxSetId=""
       />
     );

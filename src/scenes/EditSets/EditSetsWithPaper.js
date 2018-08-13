@@ -19,6 +19,7 @@ type Props = {
   exerciseKey: string,
   // eslint-disable-next-line react/no-unused-prop-types
   exercise: ?ExerciseSchemaType,
+  exercisesCount: number,
   theme: Theme,
 };
 
@@ -50,7 +51,13 @@ class EditSetsWithPaper extends React.Component<Props, State> {
   componentWillUnmount() {
     // TODO this is too slow here, we need like save button or on press back
     if (this.state.numberOfSets > 0) {
-      const { day, exerciseKey, dispatch } = this.props;
+      const {
+        day,
+        exerciseKey,
+        exercise,
+        dispatch,
+        exercisesCount,
+      } = this.props;
       const { exerciseSummary } = this.state;
       const { comments, sets } = parseSummary(
         exerciseSummary,
@@ -60,14 +67,14 @@ class EditSetsWithPaper extends React.Component<Props, State> {
       const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
       const date = toDate(day);
 
-      const exercise = {
+      addExercisePaperForWorkout(dispatch, date, {
         id: exerciseIdDb,
         comments,
         sets,
         type: exerciseKey,
         date,
-      };
-      addExercisePaperForWorkout(dispatch, date, exercise);
+        sort: exercise ? exercise.sort : exercisesCount + 1,
+      });
     }
   }
 

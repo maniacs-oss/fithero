@@ -17,6 +17,7 @@ type Props = {
   // eslint-disable-next-line react/no-unused-prop-types
   dispatch: () => void,
   exercise?: ExerciseSchemaType,
+  exercisesCount: number,
   navigation: NavigationType<{
     day: string,
     exerciseKey: string,
@@ -29,7 +30,7 @@ class EditSetsScreen extends Component<Props> {
   });
 
   render() {
-    const { dispatch, exercise } = this.props;
+    const { dispatch, exercise, exercisesCount } = this.props;
     const { day, exerciseKey } = this.props.navigation.state.params;
 
     return (
@@ -40,12 +41,14 @@ class EditSetsScreen extends Component<Props> {
           day={day}
           exerciseKey={exerciseKey}
           exercise={exercise}
+          exercisesCount={exercisesCount}
         />
         {/* <EditSetsWithPaper */}
         {/* dispatch={dispatch} */}
         {/* day={day} */}
         {/* exerciseKey={exerciseKey} */}
         {/* exercise={exercise} */}
+        {/* exercisesCount={exercisesCount} */}
         {/* /> */}
       </Screen>
     );
@@ -73,6 +76,7 @@ export default connect(
     }
     return {
       exercise,
+      exercisesCount: workout ? workout.exercises.length : 0,
     };
   },
   null

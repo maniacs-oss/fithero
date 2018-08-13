@@ -13,6 +13,7 @@ export type ExerciseSchemaType = {|
   type: string,
   sets: Array<SetSchemaType>,
   comments?: string,
+  sort: number,
 |};
 
 export type SetSchemaType = {|

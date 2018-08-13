@@ -31,6 +31,7 @@ describe('addExercise', () => {
     ],
     date,
     type: 'bench-press',
+    sort: 1,
   };
 
   beforeEach(() => {

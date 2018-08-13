@@ -29,6 +29,7 @@ type Props = {
   dispatch: () => void,
   exerciseKey: string,
   exercise?: ExerciseSchemaType,
+  exercisesCount: number,
   maxSetId: string,
 };
 
@@ -117,7 +118,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   };
 
   _onAddSet = () => {
-    const { day, dispatch, exerciseKey, exercise } = this.props;
+    const { day, dispatch, exerciseKey, exercise, exercisesCount } = this.props;
     const { reps, selectedId, weight } = this.state;
 
     let newExercise = null;
@@ -138,6 +139,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
         comments: '',
         date: toDate(day),
         type: exerciseKey,
+        sort: exercisesCount + 1,
       };
       addExercise(dispatch, newExercise);
     } else if (!selectedId) {
