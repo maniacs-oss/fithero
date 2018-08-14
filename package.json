@@ -12,6 +12,7 @@
     "ci": "npm test && npm run lint && npm run flow"
   },
   "dependencies": {
+    "bugsnag-react-native": "^2.10.2",
     "left-pad": "^1.3.0",
     "moment": "^2.22.1",
     "react": "16.4.1",
