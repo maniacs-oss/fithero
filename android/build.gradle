@@ -44,6 +44,8 @@ subprojects { subproject ->
 
 ext {
     applicationId = "com.fnp.dziku"
+    versionCode = 1
+    versionName = "0.0.1"
     buildToolsVersion = "27.0.3"
     minSdkVersion = 16
     compileSdkVersion = 27
