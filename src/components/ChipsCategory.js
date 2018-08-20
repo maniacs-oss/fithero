@@ -21,7 +21,11 @@ class ChipsCategory extends React.Component<Props> {
     return (
       <View style={styles.container}>
         {titleKey && <Caption style={styles.title}>{i18n.t(titleKey)}</Caption>}
-        <ScrollView horizontal contentContainerStyle={styles.scrollView}>
+        <ScrollView
+          horizontal
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps="always"
+        >
           <View style={styles.row}>
             {items.map(m => (
               <ChipFilterItem

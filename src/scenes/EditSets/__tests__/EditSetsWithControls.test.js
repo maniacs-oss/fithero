@@ -1,15 +1,27 @@
 /* @flow */
 
 import React from 'react';
+import { Keyboard } from 'react-native';
 import { shallow } from 'enzyme';
 
 import { EditSetsWithControls } from '../EditSetsWithControls';
 import theme from '../../../utils/theme';
 import { toDate } from '../../../utils/date';
+import { deleteSet } from '../../../database/services/SetService';
+
+jest.mock('Keyboard');
 
 jest.mock('react-navigation-backhandler', () => ({
   AndroidBackHandler: ({ children }) => children,
 }));
+
+jest.mock('../../../database/services/SetService', () => ({
+  addSet: jest.fn(),
+  deleteSet: jest.fn(),
+  updateSet: jest.fn(),
+}));
+
+jest.mock('../../../database/services/ExerciseService');
 
 const date = toDate('2018-05-01T00:00:00.000Z');
 
@@ -242,6 +254,7 @@ describe('EditSetsWithControls', () => {
     );
 
     beforeEach(() => {
+      jest.clearAllMocks();
       wrapper.setState({ selectedId: '' });
     });
 
@@ -298,6 +311,25 @@ describe('EditSetsWithControls', () => {
 
       // Default behavior if nothing is selected
       expect(wrapper.instance().onBackButtonPressAndroid()).toBe(false);
+    });
+
+    it.skip('adds a set and dismiss the keyboard', () => {
+      expect(Keyboard.dismiss).not.toBeCalled();
+
+      wrapper.instance()._onAddSet();
+
+      expect(Keyboard.dismiss).toBeCalled();
+
+      // TODO test rest of logic inside here
+    });
+
+    it('deletes a set and dismiss the keyboard', () => {
+      expect(Keyboard.dismiss).not.toBeCalled();
+
+      wrapper.instance()._onDeleteSet();
+
+      expect(Keyboard.dismiss).toBeCalled();
+      expect(deleteSet).toHaveBeenCalledTimes(1);
     });
   });
 });

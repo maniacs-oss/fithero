@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { FlatList, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { Searchbar, withTheme } from 'react-native-paper';
 
 import exercises from '../../data/exercises.json';
@@ -42,6 +42,12 @@ export class ExercisesScreen extends Component<Props, State> {
 
   _onExerciseToggle = (exerciseKey: string) => {
     const { day } = this.props.navigation.state.params;
+
+    if (Platform.OS === 'android') {
+      // It already works on iOS
+      Keyboard.dismiss();
+    }
+
     this.props.navigation.navigate('EditSets', { day, exerciseKey });
   };
 

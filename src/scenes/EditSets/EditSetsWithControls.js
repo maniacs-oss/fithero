@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 
@@ -123,6 +123,8 @@ export class EditSetsWithControls extends React.Component<Props, State> {
 
     let newExercise = null;
 
+    Keyboard.dismiss();
+
     if (!exercise) {
       const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
       newExercise = {
@@ -171,6 +173,8 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   _onDeleteSet = () => {
     const { dispatch } = this.props;
     const { selectedId } = this.state;
+
+    Keyboard.dismiss();
 
     deleteSet(dispatch, selectedId);
     this.setState({ selectedId: '' });

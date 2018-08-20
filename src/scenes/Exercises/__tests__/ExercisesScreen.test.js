@@ -2,10 +2,14 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import { Keyboard } from 'react-native';
 
 import exercises from '../../../data/exercises.json';
 import { ExercisesScreen } from '../ExercisesScreen';
 import theme from '../../../utils/theme';
+
+jest.mock('Platform', () => ({ OS: 'android', select: jest.fn() }));
+jest.mock('Keyboard');
 
 describe('ExercisesScreen', () => {
   const wrapper = shallow(
@@ -126,5 +130,11 @@ describe('ExercisesScreen', () => {
         secondary: ['triceps', 'shoulders'],
       },
     ]);
+  });
+
+  it('pushes a new screen when clicking an exercise and dismiss the keyboard', () => {
+    expect(Keyboard.dismiss).not.toBeCalled();
+    wrapper.instance()._onExerciseToggle('bench-press');
+    expect(Keyboard.dismiss).toBeCalled();
   });
 });
