@@ -1,11 +1,13 @@
 /* @flow */
 
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { Text, TouchableRipple, withTheme } from 'react-native-paper';
 import type { Theme } from 'react-native-paper/src/types';
 
 import { getShortDayInfo } from '../../utils/date';
+
+const { width } = Dimensions.get('window');
 
 type Props = {
   dateString: string,
@@ -51,7 +53,8 @@ class DayItem extends React.PureComponent<Props> {
 const styles = StyleSheet.create({
   container: {
     height: 64,
-    width: 48,
+    // Subtract the padding part on each item
+    width: width / 7 - 16 / 7,
     alignItems: 'center',
     justifyContent: 'center',
   },
