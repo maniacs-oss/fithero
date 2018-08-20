@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 8,
+    paddingBottom: 4,
   },
   title: {
     fontSize: 15,

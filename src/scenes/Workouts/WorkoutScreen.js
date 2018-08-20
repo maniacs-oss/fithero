@@ -48,7 +48,7 @@ class WorkoutScreen extends React.Component<Props> {
     const { workout } = this.props;
 
     return (
-      <Screen style={styles.container}>
+      <Screen>
         {workout && (
           <WorkoutList
             contentContainerStyle={styles.list}
@@ -63,11 +63,10 @@ class WorkoutScreen extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 8,
-  },
   list: {
+    paddingTop: 8,
     paddingHorizontal: 4,
+    paddingBottom: 56 + 32, // Taking FAB into account
   },
   fab: {
     position: 'absolute',

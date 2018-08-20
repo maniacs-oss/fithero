@@ -68,7 +68,8 @@ class WorkoutItem extends React.PureComponent<Props> {
 const styles = StyleSheet.create({
   card: {
     padding: 16,
-    margin: 4,
+    marginVertical: 4,
+    marginHorizontal: 8,
   },
   setsContainer: {
     paddingTop: 12,

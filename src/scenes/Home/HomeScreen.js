@@ -59,6 +59,20 @@ class HomeScreen extends Component<Props, State> {
     });
   };
 
+  _renderHeader = () => {
+    const { workouts } = this.props;
+    const { currentWeek, selectedDay } = this.state;
+
+    return (
+      <DayRow
+        selected={selectedDay}
+        currentWeek={currentWeek}
+        onDaySelected={this._onDaySelected}
+        workouts={workouts}
+      />
+    );
+  };
+
   render() {
     const { workouts } = this.props;
     const { selectedDay } = this.state;
@@ -66,19 +80,12 @@ class HomeScreen extends Component<Props, State> {
 
     return (
       <Screen>
-        <DayRow
-          selected={this.state.selectedDay}
-          currentWeek={this.state.currentWeek}
-          onDaySelected={this._onDaySelected}
-          workouts={workouts}
+        <WorkoutList
+          contentContainerStyle={styles.list}
+          workout={workout}
+          onPressItem={this._onExercisePress}
+          ListHeaderComponent={this._renderHeader}
         />
-        {workout && (
-          <WorkoutList
-            contentContainerStyle={styles.list}
-            workout={workout}
-            onPressItem={this._onExercisePress}
-          />
-        )}
         <FAB icon="add" onPress={this._onAddExercises} style={styles.fab} />
       </Screen>
     );
@@ -87,8 +94,7 @@ class HomeScreen extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   list: {
-    paddingTop: 4,
-    paddingHorizontal: 4,
+    paddingBottom: 56 + 32, // Taking FAB into account
   },
   fab: {
     position: 'absolute',

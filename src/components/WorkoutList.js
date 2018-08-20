@@ -24,14 +24,14 @@ class WorkoutList extends React.Component<Props> {
   );
 
   render() {
-    const { contentContainerStyle } = this.props;
+    const { workout, ...rest } = this.props;
 
     return (
       <FlatList
-        contentContainerStyle={contentContainerStyle}
-        data={this.props.workout.exercises}
+        data={workout ? workout.exercises : []}
         keyExtractor={this._keyExtractor}
         renderItem={this._renderItem}
+        {...rest}
       />
     );
   }
