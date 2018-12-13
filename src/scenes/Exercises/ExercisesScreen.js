@@ -141,7 +141,7 @@ export class ExercisesScreen extends Component<Props, State> {
             placeholder={i18n.t('search')}
             icon={Platform.OS === 'android' ? 'arrow-back' : 'search'}
             value={searchQuery}
-            onIconPress={Platform.OS === 'android' ? this._goBack : null}
+            onIconPress={Platform.OS === 'android' ? this._goBack : undefined}
           />
         </View>
         <FlatList

@@ -20,8 +20,6 @@
 .*/node_modules/metro/.*
 
 [untyped]
-; Ignore Paper till the issues are resolved
-.*/node_modules/react-native-paper
 
 [include]
 
@@ -32,6 +30,8 @@ node_modules/react-native/flow-github/
 
 [options]
 emoji=true
+
+esproposal.optional_chaining=enable
 
 module.system=haste
 module.system.haste.use_name_reducers=true
@@ -56,6 +56,8 @@ module.file_ext=.js
 module.file_ext=.jsx
 module.file_ext=.json
 module.file_ext=.native.js
+module.file_ext=.android.js
+module.file_ext=.ios.js
 
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe
@@ -67,5 +69,8 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(<VERSION>\\)? *\\(site=[a-z,_]*
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
 suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
+[lints]
+unnecessary-optional-chain=error
+
 [version]
-^0.75.0
+^0.78.0

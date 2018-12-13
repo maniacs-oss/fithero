@@ -35,7 +35,6 @@ class EditSetActionButtons extends React.Component<Props> {
           onPress={this.props.onDeleteSet}
           mode="contained"
           disabled={!isUpdate}
-          raised
           style={[
             styles.button,
             styles.delete,
