@@ -20,6 +20,7 @@ class WorkoutList extends React.Component<Props> {
   };
 
   _renderItem = ({ item }) => (
+    // $FlowFixMe withMaxSet + withTheme problems
     <WorkoutItem exercise={item} onPressItem={this._onPressItem} />
   );
 

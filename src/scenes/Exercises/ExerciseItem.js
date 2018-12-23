@@ -2,16 +2,17 @@
 
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Paragraph, TouchableRipple, withTheme } from 'react-native-paper';
+import { Paragraph, TouchableRipple } from 'react-native-paper';
 
 import type { ExerciseType } from '../../types';
 import { getExerciseName, getExerciseMuscleName } from '../../utils/exercises';
+import type { ThemeType } from '../../utils/theme/withTheme';
+import withTheme from '../../utils/theme/withTheme';
 
 type Props = {
   exercise: ExerciseType,
   onPressItem: (exerciseKey: string) => void,
-  // eslint-disable-next-line flowtype/no-weak-types
-  theme: Object,
+  theme: ThemeType,
 };
 
 class ExerciseItem extends React.PureComponent<Props> {

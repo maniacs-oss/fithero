@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import { BottomNavigation } from 'react-native-paper';
 
 import i18n from '../utils/i18n';
+import theme from '../utils/theme';
 import HomeScreen from './Home';
 import type { NavigationType } from '../types';
 import { getToday } from '../utils/date';
@@ -70,7 +71,7 @@ export default class HomeNavigator extends React.Component<{}, State> {
         onIndexChange={this._handleIndexChange}
         renderScene={this._renderScene}
         shifting={false}
-        barStyle={{ backgroundColor: '#212121' }}
+        barStyle={{ backgroundColor: theme.colors.toolbar }}
       />
     );
   }

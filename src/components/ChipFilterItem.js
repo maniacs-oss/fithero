@@ -2,8 +2,9 @@
 
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { Chip, withTheme } from 'react-native-paper';
+import { Chip } from 'react-native-paper';
 import type { CategoryType } from '../types';
+import withTheme from '../utils/theme/withTheme';
 
 type Props = {
   item: CategoryType,

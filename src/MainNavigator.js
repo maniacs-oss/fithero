@@ -1,9 +1,9 @@
 /* @flow */
 
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-import { Colors } from 'react-native-paper';
 
 import i18n from './utils/i18n';
+import theme from './utils/theme';
 
 import HomeNavigator from './scenes/HomeNavigator';
 import ExercisesScreen from './scenes/Exercises';
@@ -44,14 +44,15 @@ export default createAppContainer(
       defaultNavigationOptions: {
         title: 'Dziku',
         headerStyle: {
-          backgroundColor: Colors.grey900,
-          borderBottomColor: Colors.grey900,
+          elevation: 0,
+          backgroundColor: theme.colors.toolbar,
+          borderBottomColor: theme.colors.toolbar,
         },
-        headerTintColor: Colors.white,
+        headerTintColor: theme.colors.toolbarTint,
         headerPressColorAndroid: 'rgba(255, 255, 255, .20)',
       },
       cardStyle: {
-        backgroundColor: Colors.grey900,
+        backgroundColor: theme.colors.background,
       },
     }
   )

@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { InteractionManager } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
-import { withTheme } from 'react-native-paper';
 
 import Screen from '../../components/Screen';
 import type { NavigationType, RealmListener } from '../../types';
@@ -11,6 +10,8 @@ import HeaderIconButton from '../../components/HeaderIconButton';
 import { formatDate } from '../../utils/date';
 import { getAllWorkouts } from '../../database/services/WorkoutService';
 import type { WorkoutSchemaType } from '../../database/types';
+import withTheme from '../../utils/theme/withTheme';
+import type { ThemeType } from '../../utils/theme/withTheme';
 
 type NavigationOptions = {
   navigation: NavigationType<{
@@ -20,8 +21,7 @@ type NavigationOptions = {
 };
 
 type Props = NavigationOptions & {
-  // eslint-disable-next-line flowtype/no-weak-types
-  theme: Object,
+  theme: ThemeType,
 };
 
 type State = {
@@ -127,9 +127,10 @@ export class CalendarScreen extends React.Component<Props, State> {
               todayTextColor: colors.text,
               monthTextColor: colors.text,
               textSectionTitleColor: colors.secondaryText,
-              selectedDayTextColor: colors.text,
-              selectedDayBackgroundColor: colors.primary,
-              dotColor: colors.primary,
+              selectedDayTextColor: colors.calendarSelectedDayTextColor,
+              selectedDayBackgroundColor: colors.accent,
+              selectedDotColor: colors.calendarSelectedDotColor,
+              dotColor: colors.accent,
             }}
           />
         )}

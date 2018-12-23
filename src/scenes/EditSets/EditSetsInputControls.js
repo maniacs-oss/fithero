@@ -2,8 +2,9 @@
 
 import * as React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { Caption, Text, TouchableRipple, withTheme } from 'react-native-paper';
-import type { Theme } from 'react-native-paper/src/types';
+import { Caption, Text, TouchableRipple } from 'react-native-paper';
+import type { ThemeType } from '../../utils/theme/withTheme';
+import withTheme from '../../utils/theme/withTheme';
 
 type Props = {
   controls: Array<{
@@ -13,7 +14,7 @@ type Props = {
   input: number,
   label: string,
   onChangeText: (value: string) => void,
-  theme: Theme,
+  theme: ThemeType,
 };
 
 class EditSetsInputControls extends React.Component<Props> {
@@ -40,7 +41,7 @@ class EditSetsInputControls extends React.Component<Props> {
               onChangeText={onChangeText}
               keyboardType="numeric"
               underlineColorAndroid="transparent"
-              selectionColor={theme.colors.primary}
+              selectionColor={theme.colors.textSelection}
               style={[
                 {
                   color: theme.colors.text,

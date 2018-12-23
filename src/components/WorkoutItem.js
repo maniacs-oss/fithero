@@ -2,20 +2,21 @@
 
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Card, Text, withTheme } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
 
 import { getExerciseName } from '../utils/exercises';
 import type { ExerciseSchemaType, SetSchemaType } from '../database/types';
 import { extractExerciseKeyFromDatabase } from '../database/utils';
 import i18n from '../utils/i18n';
 import withMaxSet from './withMaxSet';
+import type { ThemeType } from '../utils/theme/withTheme';
+import withTheme from '../utils/theme/withTheme';
 
 type Props = {
   exercise: ExerciseSchemaType,
   onPressItem: (exerciseKey: string) => void,
   maxSetId: string,
-  // eslint-disable-next-line flowtype/no-weak-types
-  theme: Object,
+  theme: ThemeType,
 };
 
 class WorkoutItem extends React.PureComponent<Props> {

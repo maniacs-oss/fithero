@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import { Platform, StyleSheet, TextInput, View } from 'react-native';
-import { Subheading, Title, withTheme } from 'react-native-paper';
-import type { Theme } from 'react-native-paper/src/types';
+import { Subheading, Title } from 'react-native-paper';
 
 import i18n from '../../utils/i18n';
 import { generateSummary, parseSummary } from '../../utils/exercisePaper';
@@ -12,6 +11,8 @@ import { getExerciseName } from '../../utils/exercises';
 import { getExerciseSchemaId } from '../../database/utils';
 import { toDate } from '../../utils/date';
 import { addExercisePaperForWorkout } from '../../database/services/WorkoutService';
+import withTheme from '../../utils/theme/withTheme';
+import type { ThemeType } from '../../utils/theme/withTheme';
 
 type Props = {
   dispatch: () => void,
@@ -20,7 +21,7 @@ type Props = {
   // eslint-disable-next-line react/no-unused-prop-types
   exercise: ?ExerciseSchemaType,
   exercisesCount: number,
-  theme: Theme,
+  theme: ThemeType,
 };
 
 type State = {
@@ -100,7 +101,7 @@ class EditSetsWithPaper extends React.Component<Props, State> {
           autoCorrect={false}
           multiline
           underlineColorAndroid="transparent"
-          selectionColor={theme.colors.primary}
+          selectionColor={theme.colors.textSelection}
           style={[
             { color: theme.colors.text, textAlignVertical: 'top' },
             styles.textArea,

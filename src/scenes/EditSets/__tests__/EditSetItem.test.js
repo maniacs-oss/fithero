@@ -4,7 +4,6 @@ import React from 'react';
 import { View } from 'react-native';
 import TestRenderer from 'react-test-renderer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Colors } from 'react-native-paper';
 
 import EditSetItem from '../EditSetItem';
 import { toDate } from '../../../utils/date';
@@ -33,11 +32,11 @@ describe('EditSetItem', () => {
   it('shows the set selected if is set is isSelected', () => {
     expect(
       getWrapper({ isSelected: true }).findAllByType(View)[1].props.style
-    ).toContainEqual({ backgroundColor: Colors.teal700 });
+    ).toContainEqual({ backgroundColor: theme.colors.selected });
 
     expect(
       getWrapper({ isSelected: false }).findAllByType(View)[1].props.style
-    ).not.toContainEqual({ backgroundColor: Colors.teal700 });
+    ).not.toContainEqual({ backgroundColor: theme.colors.selected });
   });
 
   it('shows a trophy if set is maxSetId', () => {

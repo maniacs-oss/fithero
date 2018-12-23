@@ -2,10 +2,11 @@
 
 import * as React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { Text, TouchableRipple, withTheme } from 'react-native-paper';
-import type { Theme } from 'react-native-paper/src/types';
+import { Text, TouchableRipple } from 'react-native-paper';
 
 import { getShortDayInfo } from '../../utils/date';
+import withTheme from '../../utils/theme/withTheme';
+import type { ThemeType } from '../../utils/theme/withTheme';
 
 const { width } = Dimensions.get('window');
 
@@ -14,7 +15,7 @@ type Props = {
   onDaySelected: (dateString: string) => void,
   isSelected: boolean,
   isWorkout: boolean,
-  theme: Theme,
+  theme: ThemeType,
 };
 
 class DayItem extends React.PureComponent<Props> {
@@ -40,7 +41,7 @@ class DayItem extends React.PureComponent<Props> {
           <View style={styles.dots}>
             {isWorkout && (
               <View
-                style={[styles.dot, { backgroundColor: theme.colors.primary }]}
+                style={[styles.dot, { backgroundColor: theme.colors.accent }]}
               />
             )}
           </View>

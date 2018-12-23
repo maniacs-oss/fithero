@@ -22,7 +22,7 @@
                                                       moduleName:@"Dziku"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:0.19f green:0.19f blue:0.19f alpha:1];
+  rootView.backgroundColor = [[UIColor alloc] initWithRed:0.25f green:0.36f blue:0.46f alpha:1];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];

@@ -10,6 +10,8 @@ type InjectedProps = {|
   maxSetId: string,
 |};
 
+// In the future this should be a React Hook
+// Right now mixing this with withTheme give Flow problems
 function withMaxSet<Props: {}>(
   WrappedComponent: React.ComponentType<Props>
 ): React.ComponentType<$Diff<Props, InjectedProps>> {

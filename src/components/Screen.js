@@ -2,15 +2,15 @@
 
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { withTheme } from 'react-native-paper';
 
-import type { Theme } from 'react-native-paper/src/types';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type { ThemeType } from '../utils/theme/withTheme';
+import withTheme from '../utils/theme/withTheme';
 
 type Props = {
   children?: React.Node,
   style?: ViewStyleProp,
-  theme: Theme,
+  theme: ThemeType,
 };
 
 class Screen extends React.Component<Props> {

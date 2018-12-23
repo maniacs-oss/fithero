@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { FlatList, Keyboard, Platform, StyleSheet, View } from 'react-native';
-import { Searchbar, withTheme } from 'react-native-paper';
+import { Searchbar } from 'react-native-paper';
 
 import exercises from '../../data/exercises.json';
 import Screen from '../../components/Screen';
@@ -13,11 +13,12 @@ import ChipsCategory from '../../components/ChipsCategory';
 import { mapCategories, mainCategories } from '../../utils/muscles';
 import i18n from '../../utils/i18n';
 import { getExerciseName } from '../../utils/exercises';
+import type { ThemeType } from '../../utils/theme/withTheme';
+import withTheme from '../../utils/theme/withTheme';
 
 type Props = {
   navigation: NavigationType<{ day: string }>,
-  // eslint-disable-next-line flowtype/no-weak-types
-  theme: Object,
+  theme: ThemeType,
 };
 
 type State = {
@@ -135,6 +136,7 @@ export class ExercisesScreen extends Component<Props, State> {
         <View
           style={[styles.searchToolbar, { backgroundColor: colors.toolbar }]}
         >
+          {/* $FlowFixMe problems with the theme from Paper */}
           <Searchbar
             style={styles.searchBar}
             onChangeText={this._onSearchChange}
@@ -142,6 +144,7 @@ export class ExercisesScreen extends Component<Props, State> {
             icon={Platform.OS === 'android' ? 'arrow-back' : 'search'}
             value={searchQuery}
             onIconPress={Platform.OS === 'android' ? this._goBack : undefined}
+            theme={{ colors: { primary: colors.textSelection } }}
           />
         </View>
         <FlatList
@@ -162,7 +165,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   searchToolbar: {
-    elevation: 4,
+    elevation: 0,
   },
   searchBar: {
     margin: 8,

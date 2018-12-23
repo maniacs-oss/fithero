@@ -2,16 +2,17 @@
 
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, withTheme } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 
 import i18n from '../../utils/i18n';
+import type { ThemeType } from '../../utils/theme/withTheme';
+import withTheme from '../../utils/theme/withTheme';
 
 type Props = {
   isUpdate: boolean,
   onAddSet: () => void,
   onDeleteSet: () => void,
-  // eslint-disable-next-line flowtype/no-weak-types
-  theme: Object,
+  theme: ThemeType,
 };
 
 class EditSetActionButtons extends React.Component<Props> {
@@ -22,24 +23,16 @@ class EditSetActionButtons extends React.Component<Props> {
       <View style={styles.controls}>
         <Button
           onPress={this.props.onAddSet}
-          mode="contained"
-          style={[
-            styles.button,
-            styles.confirm,
-            { backgroundColor: theme.colors.confirm },
-          ]}
+          color={theme.colors.text}
+          style={[styles.button, styles.confirm]}
         >
           {i18n.t(isUpdate ? 'update' : 'add')}
         </Button>
         <Button
           onPress={this.props.onDeleteSet}
-          mode="contained"
+          color={theme.colors.text}
           disabled={!isUpdate}
-          style={[
-            styles.button,
-            styles.delete,
-            { backgroundColor: theme.colors.delete },
-          ]}
+          style={[styles.button, styles.delete]}
         >
           {i18n.t('delete')}
         </Button>

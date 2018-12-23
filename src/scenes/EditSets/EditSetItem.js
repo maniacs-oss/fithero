@@ -2,11 +2,13 @@
 
 import * as React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Divider, Text, withTheme } from 'react-native-paper';
+import { Divider, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import i18n from '../../utils/i18n';
 import type { SetSchemaType } from '../../database/types';
+import type { ThemeType } from '../../utils/theme/withTheme';
+import withTheme from '../../utils/theme/withTheme';
 
 type Props = {
   isSelected: boolean,
@@ -14,8 +16,7 @@ type Props = {
   onPressItem: (setId: string) => void,
   index: number,
   set: SetSchemaType,
-  // eslint-disable-next-line flowtype/no-weak-types
-  theme: Object,
+  theme: ThemeType,
 };
 
 class EditSetItem extends React.PureComponent<Props> {
