@@ -1,11 +1,11 @@
 /* @flow */
 
+import { muscles, exercisesTitles } from 'dziku-exercises';
+
 import en from './en';
-import exercises from './exercises';
-import muscles from './muscles';
 
 export default {
   ...en,
-  ...exercises,
+  ...exercisesTitles,
   ...muscles,
 };

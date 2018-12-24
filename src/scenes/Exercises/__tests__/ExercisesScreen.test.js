@@ -3,8 +3,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Keyboard } from 'react-native';
+import { exercises } from 'dziku-exercises';
 
-import exercises from '../../../data/exercises.json';
 import { ExercisesScreen } from '../ExercisesScreen';
 import theme from '../../../utils/theme';
 

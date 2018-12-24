@@ -2371,6 +2371,11 @@ domutils@^1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
+dziku-exercises@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/dziku-exercises/-/dziku-exercises-0.1.4.tgz#36eff82a5f6f0e4d07c192cfe95a2bc0ff3917c0"
+  integrity sha512-z7tucr9hU11KvLL7YEJ6miE9Hl/huk16RVCuGLWUatcZu7Uelhw8rUJZOP1QMlMuJK/VDpgLepBwVIVR4tSBqw==
+
 ecc-jsbn@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"

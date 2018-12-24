@@ -3,8 +3,8 @@
 import React, { Component } from 'react';
 import { FlatList, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
+import { exercises } from 'dziku-exercises';
 
-import exercises from '../../data/exercises.json';
 import Screen from '../../components/Screen';
 import ExerciseItem from './ExerciseItem';
 import ExerciseHeader from './ExerciseHeader';
