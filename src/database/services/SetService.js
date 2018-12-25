@@ -78,3 +78,9 @@ export const deleteSet = (
     }
   });
 };
+
+export const getLastSetByType = (type: ?string) =>
+  realm
+    .objects('Set')
+    .filtered('type = $0', type)
+    .sorted([['date', true], ['id', true]]);

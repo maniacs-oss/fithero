@@ -7,7 +7,10 @@ import { shallow } from 'enzyme';
 import { EditSetsWithControls } from '../EditSetsWithControls';
 import theme from '../../../utils/theme';
 import { toDate } from '../../../utils/date';
-import { deleteSet } from '../../../database/services/SetService';
+import {
+  deleteSet,
+  getLastSetByType,
+} from '../../../database/services/SetService';
 
 jest.mock('Keyboard');
 
@@ -18,6 +21,7 @@ jest.mock('react-navigation-backhandler', () => ({
 jest.mock('../../../database/services/SetService', () => ({
   addSet: jest.fn(),
   deleteSet: jest.fn(),
+  getLastSetByType: jest.fn(() => []),
   updateSet: jest.fn(),
 }));
 
@@ -134,6 +138,44 @@ describe('EditSetsWithControls', () => {
       );
     });
 
+    it('has values of last set (from another day) if no exercise', () => {
+      const mockLastSet = {
+        id: '2018-05-01T00:00:00.000Z_bench-press_002',
+        reps: 6,
+        weight: 90,
+        date: toDate('2018-05-01T00:00:00.000Z'),
+        type: 'bench-press',
+      };
+
+      // $FlowFixMe Flow does not now this is a mock
+      getLastSetByType.mockImplementation(() => [mockLastSet]);
+
+      const wrapper = shallow(
+        <EditSetsWithControls
+          day={day}
+          dispatch={dispatch}
+          exerciseKey={exerciseKey}
+          exercisesCount={0}
+          maxSetId=""
+        />
+      );
+      expect(wrapper.state()).toEqual({
+        weight: mockLastSet.weight,
+        reps: mockLastSet.reps,
+        selectedId: '',
+      });
+
+      const weightControls = getInputControls(wrapper, 0);
+      const repsControls = getInputControls(wrapper, 1);
+
+      expect(weightControls.find('TextInput').props().value).toEqual(
+        mockLastSet.weight.toString()
+      );
+      expect(repsControls.find('TextInput').props().value).toEqual(
+        mockLastSet.reps.toString()
+      );
+    });
+
     it('changes input(s) state using the TextInput', () => {
       const wrapper = shallow(
         <EditSetsWithControls
@@ -172,6 +214,9 @@ describe('EditSetsWithControls', () => {
     });
 
     it('uses -2, -1, +1, +2 buttons for reps', () => {
+      // $FlowFixMe Flow does not now this is a mock
+      getLastSetByType.mockImplementation(() => []);
+
       const changeRepsValue = (buttons, buttonIndex) => {
         buttons
           .at(buttonIndex)
@@ -206,6 +251,9 @@ describe('EditSetsWithControls', () => {
     });
 
     it('uses -1.0, -0.5, +0.5, +1.0 buttons for weight', () => {
+      // $FlowFixMe Flow does not now this is a mock
+      getLastSetByType.mockImplementation(() => []);
+
       const changeWeightValue = (buttons, buttonIndex) => {
         buttons
           .at(buttonIndex)

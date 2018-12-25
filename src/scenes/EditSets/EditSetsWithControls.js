@@ -18,6 +18,7 @@ import {
 import {
   addSet,
   deleteSet,
+  getLastSetByType,
   updateSet,
 } from '../../database/services/SetService';
 import { addExercise } from '../../database/services/ExerciseService';
@@ -66,6 +67,13 @@ export class EditSetsWithControls extends React.Component<Props, State> {
     let lastSet = null;
     if (props.exercise) {
       lastSet = props.exercise.sets[props.exercise.sets.length - 1];
+    } else {
+      const sets = getLastSetByType(
+        this.props.exerciseKey || this.props.exercise?.type
+      );
+      if (sets.length > 0) {
+        lastSet = sets[0];
+      }
     }
 
     this.state = {
