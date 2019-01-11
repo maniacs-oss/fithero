@@ -1,59 +1,37 @@
 /* @flow */
 
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-import i18n from './utils/i18n';
 import theme from './utils/theme';
 
+import tabBarIcon from './components/tabBarIcon';
+import i18n from './utils/i18n';
 import HomeNavigator from './scenes/HomeNavigator';
-import ExercisesScreen from './scenes/Exercises';
-import EditSetsScreen from './scenes/EditSets';
-import CalendarScreen from './scenes/Calendar';
-import WorkoutScreen from './scenes/Workouts';
+import SettingsNavigator from './scenes/SettingsNavigator';
 
 export default createAppContainer(
-  createStackNavigator(
+  createMaterialBottomTabNavigator(
     {
       Home: {
         screen: HomeNavigator,
-      },
-      Calendar: {
-        screen: CalendarScreen,
         navigationOptions: {
-          title: i18n.t('calendar'),
+          tabBarIcon: tabBarIcon('home'),
+          title: i18n.t('menu__home'),
         },
       },
-      Exercises: {
-        screen: ExercisesScreen,
+      Settings: {
+        screen: SettingsNavigator,
         navigationOptions: {
-          title: i18n.t('exercises'),
+          tabBarIcon: tabBarIcon('settings'),
+          title: i18n.t('menu__settings'),
         },
-      },
-      EditSets: {
-        screen: EditSetsScreen,
-        navigationOptions: {
-          title: i18n.t('sets'),
-        },
-      },
-      Workouts: {
-        screen: WorkoutScreen,
       },
     },
     {
       initialRouteName: 'Home',
-      defaultNavigationOptions: {
-        title: 'Dziku',
-        headerStyle: {
-          elevation: 0,
-          backgroundColor: theme.colors.toolbar,
-          borderBottomColor: theme.colors.toolbar,
-        },
-        headerTintColor: theme.colors.toolbarTint,
-        headerPressColorAndroid: 'rgba(255, 255, 255, .20)',
-      },
-      cardStyle: {
-        backgroundColor: theme.colors.background,
-      },
+      barStyle: { backgroundColor: theme.colors.toolbar },
+      shifting: false,
     }
   )
 );

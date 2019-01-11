@@ -2,9 +2,8 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
-import { withNavigation } from 'react-navigation';
 
 import Screen from '../../components/Screen';
 import type { NavigationType } from '../../types';
@@ -13,6 +12,9 @@ import { dateToString, getCurrentWeek, getToday } from '../../utils/date';
 import { getWorkoutsByRange } from '../../database/services/WorkoutService';
 import WorkoutList from '../../components/WorkoutList';
 import type { WorkoutSchemaType } from '../../database/types';
+import HeaderButton from '../../components/HeaderButton';
+import i18n from '../../utils/i18n';
+import HeaderIconButton from '../../components/HeaderIconButton';
 
 type Props = {
   dispatch: () => void,
@@ -26,6 +28,29 @@ type State = {
 };
 
 class HomeScreen extends Component<Props, State> {
+  static navigationOptions = ({
+    navigation,
+  }: {
+    // eslint-disable-next-line react/no-unused-prop-types
+    navigation: NavigationType<{}>,
+  }) => {
+    const navigateToCalendar = () => {
+      navigation.navigate('Calendar', {
+        today: getToday().format('YYYY-MM-DD'),
+      });
+    };
+    return {
+      headerRight:
+        Platform.OS === 'ios' ? (
+          <HeaderButton onPress={navigateToCalendar}>
+            {i18n.t('calendar')}
+          </HeaderButton>
+        ) : (
+          <HeaderIconButton icon="date-range" onPress={navigateToCalendar} />
+        ),
+    };
+  };
+
   constructor(props: Props) {
     super(props);
     const today = getToday();
@@ -103,9 +128,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(
-  connect(
-    state => ({ workouts: state.workouts }),
-    null
-  )(HomeScreen)
-);
+export default connect(
+  state => ({ workouts: state.workouts }),
+  null
+)(HomeScreen);

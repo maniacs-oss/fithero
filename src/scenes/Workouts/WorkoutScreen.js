@@ -3,7 +3,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
-import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
@@ -75,14 +74,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(
-  connect(
-    (state, ownProps) => {
-      const day = getDay(ownProps.navigation.state.params.day);
-      return {
-        workout: state.workouts[day],
-      };
-    },
-    null
-  )(WorkoutScreen)
-);
+export default connect(
+  (state, ownProps) => {
+    const day = getDay(ownProps.navigation.state.params.day);
+    return {
+      workout: state.workouts[day],
+    };
+  },
+  null
+)(WorkoutScreen);

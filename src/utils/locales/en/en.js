@@ -13,6 +13,7 @@ export default {
     zero: 'kgs',
   },
   menu__home: 'Home',
+  menu__settings: 'Settings',
   reps: 'Reps',
   reps_unit: {
     one: 'rep',
