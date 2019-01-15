@@ -10,6 +10,7 @@ const background = '#333333';
 const ThemeColors: ThemeColorsType = {
   accent: primary,
   background,
+  borderColor: 'transparent',
   calendarSelectedDayTextColor: background,
   calendarSelectedDotColor: background,
   chip: '#424242',

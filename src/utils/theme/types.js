@@ -3,6 +3,7 @@
 export type ThemeColorsType = {|
   +accent: string,
   +background: string,
+  +borderColor: string,
   +calendarSelectedDayTextColor: string,
   +calendarSelectedDotColor: string,
   +chip: string,

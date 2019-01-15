@@ -1,5 +1,6 @@
 /* @flow */
 
+import { StyleSheet } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
@@ -30,7 +31,11 @@ export default createAppContainer(
     },
     {
       initialRouteName: 'Home',
-      barStyle: { backgroundColor: theme.colors.toolbar },
+      barStyle: {
+        backgroundColor: theme.colors.toolbar,
+        borderColor: theme.colors.borderColor,
+        borderTopWidth: StyleSheet.hairlineWidth,
+      },
       shifting: false,
     }
   )
