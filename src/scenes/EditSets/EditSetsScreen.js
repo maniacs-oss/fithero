@@ -10,12 +10,15 @@ import type { ExerciseSchemaType } from '../../database/types';
 import { getExerciseSchemaId } from '../../database/utils';
 import EditSetsWithControls from './EditSetsWithControls';
 import ExerciseHeader from '../Exercises/ExerciseHeader';
-// import EditSetsWithPaper from './EditSetsWithPaper';
+import EditSetsWithPaper from './EditSetsWithPaper';
 import { getExerciseName } from '../../utils/exercises';
+import type { EditSetsScreenType } from '../../redux/modules/settings';
+import EditSetsTypeIcon from './EditSetsTypeIcon';
 
 type Props = {
   // eslint-disable-next-line react/no-unused-prop-types
   dispatch: () => void,
+  editSetsScreenType: EditSetsScreenType,
   exercise?: ExerciseSchemaType,
   exercisesCount: number,
   navigation: NavigationType<{
@@ -27,29 +30,36 @@ type Props = {
 class EditSetsScreen extends Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: getExerciseName(navigation.state.params.exerciseKey),
+    headerRight: <EditSetsTypeIcon />,
   });
 
   render() {
-    const { dispatch, exercise, exercisesCount } = this.props;
+    const { dispatch, exercise, exercisesCount, navigation } = this.props;
     const { day, exerciseKey } = this.props.navigation.state.params;
 
     return (
       <Screen style={styles.container}>
         <ExerciseHeader day={day} style={styles.header} />
-        <EditSetsWithControls
-          dispatch={dispatch}
-          day={day}
-          exerciseKey={exerciseKey}
-          exercise={exercise}
-          exercisesCount={exercisesCount}
-        />
-        {/* <EditSetsWithPaper */}
-        {/* dispatch={dispatch} */}
-        {/* day={day} */}
-        {/* exerciseKey={exerciseKey} */}
-        {/* exercise={exercise} */}
-        {/* exercisesCount={exercisesCount} */}
-        {/* /> */}
+        {this.props.editSetsScreenType === 'list' ? (
+          <EditSetsWithControls
+            testID="edit-sets-with-controls"
+            dispatch={dispatch}
+            day={day}
+            exerciseKey={exerciseKey}
+            exercise={exercise}
+            exercisesCount={exercisesCount}
+          />
+        ) : (
+          <EditSetsWithPaper
+            testID="edit-sets-with-paper"
+            dispatch={dispatch}
+            day={day}
+            exerciseKey={exerciseKey}
+            exercise={exercise}
+            exercisesCount={exercisesCount}
+            navigation={navigation}
+          />
+        )}
       </Screen>
     );
   }
@@ -75,6 +85,7 @@ export default connect(
       );
     }
     return {
+      editSetsScreenType: state.settings.editSetsScreenType,
       exercise,
       exercisesCount: workout ? workout.exercises.length : 0,
     };

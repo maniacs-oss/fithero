@@ -12,6 +12,9 @@ function Realm(): {
     objects: jest.fn(() => ({
       addListener: jest.fn(),
       removeAllListeners: jest.fn(),
+      filtered: jest.fn(() => ({
+        sorted: jest.fn(),
+      })),
     })),
     write: jest.fn(f => f()),
   };

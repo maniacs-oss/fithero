@@ -1,5 +1,5 @@
 {
-  "name": "Dziku",
+  "name": "com.dziku.fnp",
   "version": "0.0.3",
   "private": true,
   "scripts": {
@@ -26,9 +26,10 @@
     "react-navigation": "^3.0.8",
     "react-navigation-backhandler": "^1.1.1",
     "react-navigation-material-bottom-tabs": "^1.0.0",
-    "react-redux": "^5.1.1",
+    "react-redux": "^6.0.0",
     "realm": "^2.21.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
@@ -38,13 +39,19 @@
     "eslint": "^5.9.0",
     "eslint-config-callstack-io": "^1.1.2",
     "flow-bin": "0.78.0",
-    "jest": "^23.6.0",
+    "jest": "^24.0.0-alpha.12",
     "metro-react-native-babel-preset": "^0.50.0",
     "react-dom": "^16.3.1",
+    "react-native-testing-library": "^1.5.0",
     "react-test-renderer": "16.6.3"
   },
   "jest": {
     "preset": "react-native",
-    "setupTestFrameworkScriptFile": "<rootDir>/config/setupTests.js"
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/setupTests.js"
+    ],
+    "testMatch": [
+      "**/__tests__/**/?(*.)+(spec|test).[tj]s?(x)"
+    ]
   }
 }

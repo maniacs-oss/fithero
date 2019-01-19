@@ -14,10 +14,6 @@ import {
 
 jest.mock('Keyboard');
 
-jest.mock('react-navigation-backhandler', () => ({
-  AndroidBackHandler: ({ children }) => children,
-}));
-
 jest.mock('../../../database/services/SetService', () => ({
   addSet: jest.fn(),
   deleteSet: jest.fn(),

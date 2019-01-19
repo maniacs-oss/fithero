@@ -9,6 +9,12 @@ export type NavigationType<T> = {
   state: {
     params: T,
   },
+  addListener: (
+    type: 'willBlur',
+    () => void
+  ) => {
+    remove: () => void,
+  },
   push: (route: string, params?: { [key: string]: mixed }) => void,
   navigate: (route: string, params?: { [key: string]: mixed }) => void,
   // eslint-disable-next-line flowtype/no-weak-types

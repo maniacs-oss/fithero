@@ -15,6 +15,7 @@ describe('ExercisesScreen', () => {
   const wrapper = shallow(
     <ExercisesScreen
       navigation={{
+        addListener: jest.fn(),
         state: { params: { day: '21/10/2018' } },
         goBack: jest.fn(),
         setParams: jest.fn(),

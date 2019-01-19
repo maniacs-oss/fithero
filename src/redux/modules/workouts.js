@@ -16,6 +16,7 @@ export const ADD_SET = 'dziku/workouts/ADD_SET';
 export const ADD_EXERCISE = 'dziku/workouts/ADD_EXERCISE';
 export const UPDATE_SET = 'dziku/workouts/UPDATE_SET';
 export const REMOVE_SET = 'dziku/workouts/REMOVE_SET';
+export const UPDATE_EXERCISE = 'dziku/workouts/UPDATE_EXERCISE';
 
 type State = { [date: string]: WorkoutSchemaType };
 type Action =
@@ -23,7 +24,8 @@ type Action =
   | { type: typeof ADD_EXERCISE, payload: ExerciseSchemaType }
   | { type: typeof ADD_SET, payload: SetSchemaType }
   | { type: typeof UPDATE_SET, payload: SetSchemaType }
-  | { type: typeof REMOVE_SET, payload: string };
+  | { type: typeof REMOVE_SET, payload: string }
+  | { type: typeof UPDATE_EXERCISE, payload: ExerciseSchemaType };
 
 const initialState: State = {};
 
@@ -102,45 +104,62 @@ export default function reducer(state: State = initialState, action: Action) {
       const exerciseId = getExerciseSchemaIdFromSet(setId);
       const exercise = workout.exercises.find(e => e.id === exerciseId);
 
-      // Just for Flow
-      if (exercise) {
-        const newExercise = {
-          ...exercise,
-          sets: exercise.sets.filter(s => s.id !== setId),
-        };
+      const newExercise = {
+        ...exercise,
+        // $FlowFixMe we always have an exercise here, if not we wouldn't be able to delete it
+        sets: exercise.sets.filter(s => s.id !== setId),
+      };
 
-        let newWorkout = {};
-        if (newExercise.sets.length > 0) {
-          // Merge exercise
-          const newExercises = workout.exercises.map(e => {
-            if (e.id === exerciseId) {
-              return newExercise;
-            }
-            return e;
-          });
-          newWorkout = { ...workout, exercises: newExercises };
-          return { ...state, [workout.id]: newWorkout };
-        }
-        const newExercises = workout.exercises.filter(e => e.id !== exerciseId);
-        if (newExercises.length > 0) {
-          // Remove exercise from workout
-          newWorkout = {
-            ...workout,
-            ...{
-              // Fix sort of exercises after deleting one
-              exercises: newExercises.map((e, i) => ({
-                ...e,
-                sort: i + 1,
-              })),
-            },
-          };
-          return { ...state, [workout.id]: newWorkout };
-        }
-        // Remove whole workout
-        const { [workoutId]: _, ...rest } = state;
+      let newWorkout = {};
+      if (newExercise.sets.length > 0) {
+        // Merge exercise
+        const newExercises = workout.exercises.map(e => {
+          if (e.id === exerciseId) {
+            return newExercise;
+          }
+          return e;
+        });
+        newWorkout = { ...workout, exercises: newExercises };
+        return { ...state, [workout.id]: newWorkout };
+      }
+      const newExercises = workout.exercises.filter(e => e.id !== exerciseId);
+      if (newExercises.length > 0) {
+        // Remove exercise from workout
+        newWorkout = {
+          ...workout,
+          ...{
+            // Fix sort of exercises after deleting one
+            exercises: newExercises.map((e, i) => ({
+              ...e,
+              sort: i + 1,
+            })),
+          },
+        };
+        return { ...state, [workout.id]: newWorkout };
+      }
+      // Remove whole workout
+      const { [workoutId]: _, ...rest } = state;
+      return rest;
+    }
+    case UPDATE_EXERCISE: {
+      const exercise: ExerciseSchemaType = action.payload;
+      const workout = state[extractWorkoutKeyFromDatabase(exercise.id)];
+      if (exercise.sets.length > 0) {
+        const newExercises = workout.exercises.map(
+          e => (e.id !== exercise.id ? e : exercise)
+        );
+        const newWorkout = { ...workout, exercises: newExercises };
+        return { ...state, [workout.id]: newWorkout };
+      }
+      const newExercises = workout.exercises.filter(e => e.id !== exercise.id);
+      if (newExercises.length === 0) {
+        // Delete the whole workout
+        const { [workout.id]: _, ...rest } = state;
         return rest;
       }
-      return state;
+      // Delete just the exercise from the workout
+      const newWorkout = { ...workout, exercises: newExercises };
+      return { ...state, [workout.id]: newWorkout };
     }
     default: {
       return state;
@@ -169,4 +188,9 @@ export const getSet = (
 export const removeSet = (setId: string) => ({
   type: REMOVE_SET,
   payload: setId,
+});
+
+export const updateExercise = (exercise: ExerciseSchemaType) => ({
+  type: UPDATE_EXERCISE,
+  payload: exercise,
 });

@@ -1,13 +1,15 @@
 /* @flow */
 
 import * as React from 'react';
-import { Platform, StatusBar, YellowBox } from 'react-native';
+import { AsyncStorage, Platform, StatusBar, YellowBox } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
 
 import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
 import theme from './utils/theme';
+import { Settings } from './utils/constants';
+import { setEditSetsScreenType } from './redux/modules/settings';
 
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
@@ -24,6 +26,16 @@ const navigationPersistenceKey = global.__DEV__
   : null;
 
 export default class App extends React.Component<{}> {
+  componentDidMount() {
+    this._loadSettings();
+  }
+
+  _loadSettings = async () => {
+    // TODO do it in better place and make sure its loaded (SplashScreen)
+    const type = await AsyncStorage.getItem(Settings.editSetsScreen);
+    store.dispatch(setEditSetsScreenType(type || 'list'));
+  };
+
   render() {
     return (
       <Provider store={store}>

@@ -10,9 +10,13 @@ import type { ExerciseSchemaType } from '../../database/types';
 import { getExerciseName } from '../../utils/exercises';
 import { getExerciseSchemaId } from '../../database/utils';
 import { toDate } from '../../utils/date';
-import { addExercisePaperForWorkout } from '../../database/services/WorkoutService';
+import {
+  addExercise,
+  updateExercisePaperForWorkout,
+} from '../../database/services/ExerciseService';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
+import type { NavigationType } from '../../types';
 
 type Props = {
   dispatch: () => void,
@@ -21,6 +25,10 @@ type Props = {
   // eslint-disable-next-line react/no-unused-prop-types
   exercise: ?ExerciseSchemaType,
   exercisesCount: number,
+  navigation: NavigationType<{
+    day: string,
+    exerciseKey: string,
+  }>,
   theme: ThemeType,
 };
 
@@ -29,7 +37,12 @@ type State = {
   numberOfSets: number,
 };
 
-class EditSetsWithPaper extends React.Component<Props, State> {
+export class EditSetsWithPaper extends React.Component<Props, State> {
+  setsAreSaved: boolean;
+  willBlurSubscription: {
+    remove: () => void,
+  };
+
   state = {
     exerciseSummary: '',
     numberOfSets: 0,
@@ -47,37 +60,52 @@ class EditSetsWithPaper extends React.Component<Props, State> {
         numberOfSets: exercise.sets.length,
       };
     }
+    this.setsAreSaved = false;
+  }
+
+  componentDidMount() {
+    this.willBlurSubscription = this.props.navigation.addListener(
+      'willBlur',
+      () => {
+        this.setsAreSaved = true;
+        this._saveSets();
+      }
+    );
   }
 
   componentWillUnmount() {
-    // TODO this is too slow here, we need like save button or on press back
-    if (this.state.numberOfSets > 0) {
-      const {
-        day,
-        exerciseKey,
-        exercise,
-        dispatch,
-        exercisesCount,
-      } = this.props;
-      const { exerciseSummary } = this.state;
-      const { comments, sets } = parseSummary(
-        exerciseSummary,
-        day,
-        exerciseKey
-      );
-      const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
-      const date = toDate(day);
-
-      addExercisePaperForWorkout(dispatch, date, {
-        id: exerciseIdDb,
-        comments,
-        sets,
-        type: exerciseKey,
-        date,
-        sort: exercise ? exercise.sort : exercisesCount + 1,
-      });
+    this.willBlurSubscription.remove();
+    if (!this.setsAreSaved) {
+      // This case is only for the swipe gesture on iOS
+      this._saveSets();
     }
   }
+
+  _saveSets = () => {
+    const { day, exerciseKey, exercise, dispatch, exercisesCount } = this.props;
+    const { exerciseSummary } = this.state;
+    const { comments, sets } = parseSummary(exerciseSummary, day, exerciseKey);
+    const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
+    const date = toDate(day);
+
+    const newExercise = {
+      id: exerciseIdDb,
+      comments,
+      sets,
+      type: exerciseKey,
+      date,
+      sort: exercise ? exercise.sort : exercisesCount + 1,
+    };
+
+    if (!exercise && newExercise.sets.length > 0) {
+      // New one recently added
+      addExercise(dispatch, newExercise);
+    }
+
+    if (exercise) {
+      updateExercisePaperForWorkout(dispatch, newExercise);
+    }
+  };
 
   _onValueChange = (value: string) => {
     const { day, exerciseKey } = this.props;
@@ -97,7 +125,7 @@ class EditSetsWithPaper extends React.Component<Props, State> {
           .t(numberOfSets === 1 ? 'set' : 'sets')
           .toLowerCase()}`}</Subheading>
         <TextInput
-          autoFocus
+          autoFocus={false}
           autoCorrect={false}
           multiline
           underlineColorAndroid="transparent"

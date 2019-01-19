@@ -13,6 +13,7 @@ test('remove realm listeners on unmounting', () => {
   const wrapper = shallow(
     <CalendarScreen
       navigation={{
+        addListener: jest.fn(),
         state: { params: { today: '07/10/2018' } },
         setParams: jest.fn(),
         navigate: jest.fn(),

@@ -8,11 +8,9 @@ import {
   UPDATE_SET,
 } from '../../redux/modules/workouts';
 import realm from '../index';
-import {
-  extractWorkoutKeyFromDatabase,
-  getExerciseSchemaIdFromSet,
-} from '../utils';
+import { getExerciseSchemaIdFromSet } from '../utils';
 import type { DispatchType } from '../../types';
+import { deleteExercise } from './ExerciseService';
 
 export const getMaxSetByType = (type: string) =>
   realm
@@ -63,18 +61,7 @@ export const deleteSet = (
     const exerciseId = getExerciseSchemaIdFromSet(setId);
     const exercise = realm.objectForPrimaryKey('Exercise', exerciseId);
     if (exercise.sets.length === 0) {
-      realm.delete(exercise);
-      // Now we check if workout needs to be deleted too
-      const workoutId = extractWorkoutKeyFromDatabase(setId);
-      const workout = realm.objectForPrimaryKey('Workout', workoutId);
-      if (workout.exercises.length > 0) {
-        // If workout was not deleted, but one exercise yes, let's fix the sort
-        workout.exercises.forEach((e, i) => {
-          e.sort = i + 1;
-        });
-      } else {
-        realm.delete(workout);
-      }
+      deleteExercise(exercise);
     }
   });
 };

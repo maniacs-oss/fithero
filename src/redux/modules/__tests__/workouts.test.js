@@ -7,6 +7,7 @@ import reducer, {
   getWorkouts,
   removeSet,
   UPDATE_SET,
+  updateExercise,
 } from '../workouts';
 import { toDate } from '../../../utils/date';
 import type {
@@ -18,50 +19,52 @@ const date = toDate('2018-05-04T00:00:00.000Z');
 
 describe('workouts reducer', () => {
   const initialState = {};
+
+  const barbellSquatExercise: ExerciseSchemaType = {
+    id: '2018-05-04T00:00:00.000Z_barbell-squat',
+    sets: [
+      {
+        id: '2018-05-04T00:00:00.000Z_barbell-squat_001',
+        reps: 8,
+        weight: 120,
+        date,
+        type: 'barbell-squat',
+      },
+      {
+        id: '2018-05-04T00:00:00.000Z_barbell-squat_002',
+        reps: 6,
+        weight: 120,
+        date,
+        type: 'barbell-squat',
+      },
+    ],
+    date,
+    type: 'barbell-squat',
+    sort: 1,
+  };
+
+  const barbellRowExercise: ExerciseSchemaType = {
+    id: '2018-05-04T00:00:00.000Z_barbell-row',
+    sets: [
+      {
+        id: '2018-05-04T00:00:00.000Z_barbell-row_001',
+        reps: 8,
+        weight: 80,
+        date,
+        type: 'barbell-row',
+      },
+    ],
+    date,
+    type: 'barbell-row',
+    sort: 2,
+  };
+
   const workouts: Array<WorkoutSchemaType> = [
     {
       id: '2018-05-04T00:00:00.000Z',
       comments: 'Test comment',
       date,
-      exercises: [
-        {
-          id: '2018-05-04T00:00:00.000Z_barbell-squat',
-          sets: [
-            {
-              id: '2018-05-04T00:00:00.000Z_barbell-squat_001',
-              reps: 8,
-              weight: 120,
-              date,
-              type: 'barbell-squat',
-            },
-            {
-              id: '2018-05-04T00:00:00.000Z_barbell-squat_002',
-              reps: 6,
-              weight: 120,
-              date,
-              type: 'barbell-squat',
-            },
-          ],
-          date,
-          type: 'barbell-squat',
-          sort: 1,
-        },
-        {
-          id: '2018-05-04T00:00:00.000Z_barbell-row',
-          sets: [
-            {
-              id: '2018-05-04T00:00:00.000Z_barbell-row_001',
-              reps: 8,
-              weight: 80,
-              date,
-              type: 'barbell-row',
-            },
-          ],
-          date,
-          type: 'barbell-row',
-          sort: 2,
-        },
-      ],
+      exercises: [barbellSquatExercise, barbellRowExercise],
     },
   ];
   const exercise: ExerciseSchemaType = {
@@ -221,6 +224,66 @@ describe('workouts reducer', () => {
       expect(newWorkout.exercises.length).toBe(2);
       expect(newWorkout.exercises[0].sort).toBe(1);
       expect(newWorkout.exercises[1].sort).toBe(2);
+    });
+  });
+
+  describe('UPDATE_EXERCISE', () => {
+    const firsState = reducer(initialState, getWorkouts(workouts));
+    expect(Object.keys(firsState)).toHaveLength(1);
+    expect(firsState[workouts[0].id].exercises[0].sets).toHaveLength(2);
+
+    it('updates the whole exercise', () => {
+      const updatedSet = {
+        ...barbellSquatExercise.sets[0],
+        reps: barbellSquatExercise.sets[0].reps + 4,
+      };
+
+      const newState = reducer(
+        firsState,
+        updateExercise({
+          ...barbellSquatExercise,
+          // We delete one set and update the other
+          sets: [updatedSet],
+        })
+      );
+
+      expect(newState[workouts[0].id].exercises[0].sets).toHaveLength(1);
+      expect(newState[workouts[0].id].exercises[0].sets[0]).toEqual(updatedSet);
+    });
+
+    it('deletes the whole exercise because we deleted all the sets', () => {
+      const newState = reducer(
+        firsState,
+        updateExercise({
+          ...barbellSquatExercise,
+          sets: [],
+        })
+      );
+
+      expect(newState[workouts[0].id].exercises).toHaveLength(1);
+      expect(newState[workouts[0].id].exercises[0].id).not.toEqual(
+        barbellSquatExercise.id
+      );
+    });
+
+    it('deletes the whole workout because no more exercises are left', () => {
+      const secondState = reducer(
+        firsState,
+        updateExercise({
+          ...barbellSquatExercise,
+          sets: [],
+        })
+      );
+
+      const newState = reducer(
+        secondState,
+        updateExercise({
+          ...barbellRowExercise,
+          sets: [],
+        })
+      );
+
+      expect(Object.keys(newState)).toHaveLength(0);
     });
   });
 });
