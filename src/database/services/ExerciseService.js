@@ -4,7 +4,12 @@ import realm from '../index';
 import type { ExerciseSchemaType } from '../types';
 import type { DispatchType } from '../../types';
 import { extractWorkoutKeyFromDatabase } from '../utils';
-import { dateToString, toDate } from '../../utils/date';
+import {
+  dateToString,
+  getFirstAndLastWeekday,
+  getToday,
+  toDate,
+} from '../../utils/date';
 import { getExercise, updateExercise } from '../../redux/modules/workouts';
 
 export const addExercise = (
@@ -87,4 +92,11 @@ export const updateExercisePaperForWorkout = (
       deleteExercise(existingExercise);
     }
   });
+};
+
+export const getExercisesThisWeek = () => {
+  const [start, end] = getFirstAndLastWeekday(getToday());
+  return realm
+    .objects('Exercise')
+    .filtered(`date >= $0 AND date <= $1`, start, end);
 };

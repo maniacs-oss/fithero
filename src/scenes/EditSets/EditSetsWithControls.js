@@ -210,7 +210,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
               <EditSetsInputControls
                 input={weight}
                 label={i18n.t('weight_label', {
-                  w: i18n.t('kg_unit', { count: 10 }),
+                  w: i18n.t('kg.unit', { count: 10 }),
                 })}
                 onChangeText={this._onChangeWeightInput}
                 controls={[
@@ -222,7 +222,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
               />
               <EditSetsInputControls
                 input={reps}
-                label={i18n.t('reps')}
+                label={i18n.t('reps.title')}
                 onChangeText={this._onChangeRepsInput}
                 controls={[
                   { label: '-2', action: this.biggestRepsDec },

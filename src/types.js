@@ -44,6 +44,6 @@ export type ExerciseLog = {|
 |};
 
 export type RealmListener<T> = {|
-  addListener: (data: T) => void,
+  addListener: (data: (T) => void) => void,
   removeAllListeners: () => void,
 |};

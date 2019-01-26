@@ -73,3 +73,19 @@ export const getDay = (day: string) =>
 
 export const formatDate = (date: Date, format: string) =>
   moment(date).format(format);
+
+export const getFirstAndLastWeekday = (date: Date) => {
+  const now = moment(date);
+  const start = now.startOf('week');
+  const end = now.clone().endOf('week');
+
+  return [start.toDate(), end.toDate()];
+};
+
+export const getFirstAndLastMonthDay = (date: Date) => {
+  const now = moment(date);
+  const start = now.startOf('month');
+  const end = now.clone().endOf('month');
+
+  return [start.toDate(), end.toDate()];
+};

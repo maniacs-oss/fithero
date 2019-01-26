@@ -34,14 +34,12 @@ class WorkoutItem extends React.PureComponent<Props> {
     return (
       <View key={set.id} style={styles.setRow}>
         <Text style={[styles.setIndex, { color }]}>{`${index + 1}.`}</Text>
-        <Text style={[styles.setWeight, { color }]}>{`${set.weight} ${i18n.t(
-          'kg_unit',
-          { count: set.weight }
-        )}`}</Text>
-        <Text style={[styles.setReps, { color }]}>{`${set.reps} ${i18n.t(
-          'reps_unit',
-          { count: set.reps }
-        )}`}</Text>
+        <Text style={[styles.setWeight, { color }]}>{`${i18n.t('kg.value', {
+          count: set.weight,
+        })}`}</Text>
+        <Text style={[styles.setReps, { color }]}>{`${i18n.t('reps.value', {
+          count: set.reps,
+        })}`}</Text>
       </View>
     );
   };

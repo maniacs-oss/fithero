@@ -10,6 +10,8 @@ import {
   getToday,
   isSameDay,
   getDay,
+  getFirstAndLastMonthDay,
+  getFirstAndLastWeekday,
 } from '../date';
 
 beforeEach(() => {
@@ -121,4 +123,39 @@ describe('getDatePrettyFormat', () => {
 
 test('getDay', () => {
   expect(getDay('2018-06-23')).toEqual('2018-06-22T22:00:00.000Z');
+});
+
+describe('getFirstAndLastWeekday', () => {
+  test('the week is in the same month', () => {
+    const date = moment(new Date('2019-01-19T00:00:00.000')).utc();
+    const [first, last] = getFirstAndLastWeekday(date);
+
+    expect(first).toEqual(new Date('2019-01-13T00:00:00.000Z'));
+    expect(last).toEqual(new Date('2019-01-19T23:59:59.999Z'));
+  });
+
+  test('the week is in different month', () => {
+    const date = moment(new Date('2019-02-02T00:00:00.000')).utc();
+    const [first, last] = getFirstAndLastWeekday(date);
+
+    expect(first).toEqual(new Date('2019-01-27T00:00:00.000Z'));
+    expect(last).toEqual(new Date('2019-02-02T23:59:59.999Z'));
+  });
+});
+
+describe('getFirstAndLastMonthDay', () => {
+  test('first month of the year', () => {
+    const date = moment(new Date('2019-01-19T00:00:00.000')).utc();
+    const [first, last] = getFirstAndLastMonthDay(date);
+
+    expect(first).toEqual(new Date('2019-01-01T00:00:00.000Z'));
+    expect(last).toEqual(new Date('2019-01-31T23:59:59.999Z'));
+  });
+  test('February', () => {
+    const date = moment(new Date('2019-02-19T00:00:00.000')).utc();
+    const [first, last] = getFirstAndLastMonthDay(date);
+
+    expect(first).toEqual(new Date('2019-02-01T00:00:00.000Z'));
+    expect(last).toEqual(new Date('2019-02-28T23:59:59.999Z'));
+  });
 });

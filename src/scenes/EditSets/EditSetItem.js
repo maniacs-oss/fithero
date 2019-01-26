@@ -48,7 +48,7 @@ class EditSetItem extends React.PureComponent<Props> {
               <Text
                 style={[styles.unit, { color: theme.colors.secondaryText }]}
               >
-                {i18n.t('kg_unit', { count: set.weight })}{' '}
+                {i18n.t('kg.unit', { count: set.weight })}{' '}
               </Text>
             </Text>
             <Text style={[styles.text, styles.reps]}>
@@ -56,7 +56,7 @@ class EditSetItem extends React.PureComponent<Props> {
               <Text
                 style={[styles.unit, { color: theme.colors.secondaryText }]}
               >
-                {i18n.t('reps_unit', { count: set.reps })}{' '}
+                {i18n.t('reps.unit', { count: set.reps })}{' '}
               </Text>
             </Text>
           </View>
