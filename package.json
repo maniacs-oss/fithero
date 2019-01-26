@@ -1,6 +1,6 @@
 {
   "name": "com.dziku.fnp",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -27,7 +27,7 @@
     "react-navigation-backhandler": "^1.1.1",
     "react-navigation-material-bottom-tabs": "^1.0.0",
     "react-redux": "^6.0.0",
-    "realm": "^2.21.0",
+    "realm": "^2.22.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },

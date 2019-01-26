@@ -6701,10 +6701,10 @@ readdirp@^2.0.0:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-realm@^2.21.0:
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-2.21.0.tgz#fd70067ffede61e3749ffa4cb32d827585d0b735"
-  integrity sha512-2XxkVogKOObhwBUcP7NPvyA9kU/HIeopVbAGgKanJWYw5z09J+I+q1CN2gCVR5EC4+H55Ht4loEhjDud5+LEYQ==
+realm@^2.22.0:
+  version "2.22.0"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-2.22.0.tgz#608e55d562b2ddca03f70a3617befad130202efc"
+  integrity sha512-KPIxqFBOZxXxXD+pH2a43Bfmmp3lu7eK5Bf0aXQv970hyciRoJfzwMj0W+8GlNNLqtApWRtfEGtFlQHfPv1gFg==
   dependencies:
     command-line-args "^4.0.6"
     decompress "^4.2.0"
