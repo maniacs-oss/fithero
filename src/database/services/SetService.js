@@ -11,6 +11,7 @@ import realm from '../index';
 import { getExerciseSchemaIdFromSet } from '../utils';
 import type { DispatchType } from '../../types';
 import { deleteExercise } from './ExerciseService';
+import { getFirstAndLastWeekday, getToday } from '../../utils/date';
 
 export const getMaxSetByType = (type: string) =>
   realm
@@ -71,3 +72,8 @@ export const getLastSetByType = (type: ?string) =>
     .objects('Set')
     .filtered('type = $0', type)
     .sorted([['date', true], ['id', true]]);
+
+export const getSetsThisWeek = () => {
+  const [start, end] = getFirstAndLastWeekday(getToday());
+  return realm.objects('Set').filtered(`date >= $0 AND date <= $1`, start, end);
+};

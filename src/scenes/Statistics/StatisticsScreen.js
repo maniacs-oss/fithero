@@ -11,11 +11,8 @@ import {
   getWorkoutsThisWeek,
 } from '../../database/services/WorkoutService';
 import i18n from '../../utils/i18n';
-import type {
-  ExerciseSchemaType,
-  WorkoutSchemaType,
-} from '../../database/types';
-import { getExercisesThisWeek } from '../../database/services/ExerciseService';
+import type { SetSchemaType, WorkoutSchemaType } from '../../database/types';
+import { getSetsThisWeek } from '../../database/services/SetService';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 
@@ -71,19 +68,13 @@ class StatisticsScreen extends React.Component<Props> {
           <Card style={[styles.last, styles.singleCard]}>
             <Text style={styles.singleTitle}>{i18n.t('week_volume')}</Text>
             <DataProvider
-              dataQuery={getExercisesThisWeek}
-              dataParse={(data: ?Array<ExerciseSchemaType>) => {
-                if (!data) {
-                  return 0;
-                }
-                let volume = 0;
-                data.forEach(e => {
-                  e.sets.forEach(s => {
-                    volume += s.reps * s.weight;
-                  });
-                });
-                return volume;
-              }}
+              dataQuery={getSetsThisWeek}
+              dataParse={(data: Array<SetSchemaType>) =>
+                data.reduce(
+                  (previousValue, s) => previousValue + s.reps * s.weight,
+                  0
+                )
+              }
               render={(data: number) => {
                 const unit = i18n.t('kg.unit', { count: Math.floor(data) });
                 return (
