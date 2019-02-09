@@ -2,46 +2,103 @@
 
 import React, { Component } from 'react';
 import { FlatList, Keyboard, Platform, StyleSheet, View } from 'react-native';
-import { Searchbar } from 'react-native-paper';
-import { exercises } from 'dziku-exercises';
+import { IconButton, Searchbar } from 'react-native-paper';
+import { exercises as dzikuExercises } from 'dziku-exercises';
+import sortBy from 'lodash/sortBy';
 
 import Screen from '../../components/Screen';
 import ExerciseItem from './ExerciseItem';
 import ExerciseHeader from './ExerciseHeader';
-import type { NavigationType } from '../../types';
+import type { NavigationType, RealmResults } from '../../types';
 import ChipsCategory from '../../components/ChipsCategory';
 import { mapCategories, mainCategories } from '../../utils/muscles';
 import i18n from '../../utils/i18n';
 import { getExerciseName } from '../../utils/exercises';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
+import HeaderIconButton from '../../components/HeaderIconButton';
+import type { ExerciseSchemaType } from '../../database/types';
+import { getAllExercises } from '../../database/services/ExerciseService';
+import { insertInSortedList, updateInSortedList } from '../../utils/lists';
 
-type Props = {
+type NavigationOptions = {
   navigation: NavigationType<{ day: string }>,
+};
+
+type Props = NavigationOptions & {
   theme: ThemeType,
 };
 
 type State = {
+  exercises: Array<ExerciseSchemaType>,
   searchQuery: string,
   tagSelection: { [key: string]: boolean },
 };
 
 export class ExercisesScreen extends Component<Props, State> {
-  static navigationOptions = {
+  realmExercises: RealmResults<ExerciseSchemaType>;
+
+  static navigationOptions = ({ navigation }: NavigationOptions) => ({
     ...Platform.select({
       android: { header: null },
     }),
-  };
-
-  state = {
-    searchQuery: '',
-    tagSelection: Object.assign(
-      {},
-      ...mainCategories.map(item => ({ [item.id]: false }))
+    headerRight: (
+      <HeaderIconButton
+        onPress={() => navigation.navigate('EditExercise')}
+        icon="add"
+      />
     ),
-  };
+  });
 
-  _onExerciseToggle = (exerciseKey: string) => {
+  constructor(props: Props) {
+    super(props);
+    this.realmExercises = getAllExercises();
+    this.state = {
+      exercises: sortBy([...this.realmExercises, ...dzikuExercises], e =>
+        getExerciseName(e.id, e.name)
+      ),
+      searchQuery: '',
+      tagSelection: Object.assign(
+        {},
+        ...mainCategories.map(item => ({ [item.id]: false }))
+      ),
+    };
+  }
+
+  componentDidMount() {
+    this.realmExercises.addListener((exercises, changes) => {
+      changes.insertions.forEach(i => {
+        this.setState(prevState => ({
+          exercises: insertInSortedList(prevState.exercises, exercises[i], e =>
+            getExerciseName(e.id, e.name)
+          ),
+        }));
+      });
+
+      changes.modifications.forEach(i => {
+        this.setState(prevState => ({
+          exercises: updateInSortedList(
+            prevState.exercises,
+            exercises[i],
+            e => e.id === exercises[i].id,
+            e => getExerciseName(e.id, e.name)
+          ),
+        }));
+      });
+
+      changes.deletions.forEach(i => {
+        this.setState(prevState => ({
+          exercises: prevState.exercises.filter(e => e.id !== exercises[i].id),
+        }));
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.realmExercises.removeAllListeners();
+  }
+
+  _onExercisePress = (exercise: ExerciseSchemaType) => {
     const { day } = this.props.navigation.state.params;
 
     if (Platform.OS === 'android') {
@@ -49,13 +106,17 @@ export class ExercisesScreen extends Component<Props, State> {
       Keyboard.dismiss();
     }
 
-    this.props.navigation.navigate('EditSets', { day, exerciseKey });
+    this.props.navigation.navigate('EditSets', {
+      day,
+      exerciseKey: exercise.id,
+      exerciseName: exercise.name,
+    });
   };
 
   _keyExtractor = item => item.id;
 
   _renderItem = ({ item }) => (
-    <ExerciseItem exercise={item} onPressItem={this._onExerciseToggle} />
+    <ExerciseItem exercise={item} onPressItem={this._onExercisePress} />
   );
 
   _onSelectCategory = (id: string) => {
@@ -74,7 +135,7 @@ export class ExercisesScreen extends Component<Props, State> {
   _getData(searchQuery, tagSelection) {
     const hasTagsSelected = !!Object.values(tagSelection).find(t => t === true);
     if (!searchQuery && !hasTagsSelected) {
-      return exercises;
+      return this.state.exercises;
     }
     return this._getFilterData(searchQuery, tagSelection, hasTagsSelected);
   }
@@ -84,7 +145,7 @@ export class ExercisesScreen extends Component<Props, State> {
       return regex.replace(/([()[{*+.$^\\|?])/g, '\\$1');
     }
 
-    return exercises.filter(e => {
+    return this.state.exercises.filter(e => {
       const exerciseName = getExerciseName(e.id);
       const matchesSearch =
         exerciseName
@@ -125,6 +186,10 @@ export class ExercisesScreen extends Component<Props, State> {
     );
   };
 
+  _onAddExercise = () => {
+    this.props.navigation.navigate('EditExercise');
+  };
+
   render() {
     const { searchQuery, tagSelection } = this.state;
     const {
@@ -134,7 +199,7 @@ export class ExercisesScreen extends Component<Props, State> {
     return (
       <Screen>
         <View
-          style={[styles.searchToolbar, { backgroundColor: colors.toolbar }]}
+          style={[styles.searchToolbar, { backgroundColor: colors.surface }]}
         >
           {/* $FlowFixMe problems with the theme from Paper */}
           <Searchbar
@@ -146,6 +211,9 @@ export class ExercisesScreen extends Component<Props, State> {
             onIconPress={Platform.OS === 'android' ? this._goBack : undefined}
             theme={{ colors: { primary: colors.textSelection } }}
           />
+          {Platform.OS === 'android' && (
+            <IconButton onPress={this._onAddExercise} icon="add" />
+          )}
         </View>
         <FlatList
           data={this._getData(searchQuery, tagSelection)}
@@ -153,6 +221,7 @@ export class ExercisesScreen extends Component<Props, State> {
           renderItem={this._renderItem}
           ListHeaderComponent={this._renderHeader}
           keyboardShouldPersistTaps="always"
+          contentContainerStyle={styles.list}
         />
       </Screen>
     );
@@ -165,13 +234,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   searchToolbar: {
-    elevation: 0,
+    marginHorizontal: 8,
+    ...Platform.select({
+      android: {
+        elevation: 4,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 8,
+      },
+      ios: { marginTop: 4 },
+    }),
   },
   searchBar: {
-    margin: 8,
+    elevation: 0,
+    paddingHorizontal: 4,
     ...Platform.select({
-      ios: { height: 40, marginTop: 4 },
+      ios: { height: 44 },
+      android: { flex: 1, height: 48 },
     }),
+  },
+  list: {
+    paddingTop: 4,
   },
 });
 

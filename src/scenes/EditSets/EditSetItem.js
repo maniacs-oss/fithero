@@ -6,7 +6,7 @@ import { Divider, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import i18n from '../../utils/i18n';
-import type { SetSchemaType } from '../../database/types';
+import type { WorkoutSetSchemaType } from '../../database/types';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
 
@@ -15,7 +15,7 @@ type Props = {
   isMaxSet: boolean,
   onPressItem: (setId: string) => void,
   index: number,
-  set: SetSchemaType,
+  set: WorkoutSetSchemaType,
   theme: ThemeType,
 };
 

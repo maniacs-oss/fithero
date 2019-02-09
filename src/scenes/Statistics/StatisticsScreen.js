@@ -11,8 +11,11 @@ import {
   getWorkoutsThisWeek,
 } from '../../database/services/WorkoutService';
 import i18n from '../../utils/i18n';
-import type { SetSchemaType, WorkoutSchemaType } from '../../database/types';
-import { getSetsThisWeek } from '../../database/services/SetService';
+import type {
+  WorkoutSetSchemaType,
+  WorkoutSchemaType,
+} from '../../database/types';
+import { getSetsThisWeek } from '../../database/services/WorkoutSetService';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 
@@ -30,8 +33,8 @@ class StatisticsScreen extends React.Component<Props> {
           <Card style={[styles.first, styles.singleCard]}>
             <Text style={styles.singleTitle}>{i18n.t('total_workouts')}</Text>
             <DataProvider
-              dataQuery={getAllWorkouts}
-              dataParse={(data: Array<WorkoutSchemaType>) =>
+              query={getAllWorkouts}
+              parse={(data: Array<WorkoutSchemaType>) =>
                 data ? data.length : 0
               }
               render={(data: number) => (
@@ -42,8 +45,8 @@ class StatisticsScreen extends React.Component<Props> {
           <Card style={[styles.last, styles.singleCard]}>
             <Text style={styles.singleTitle}>{i18n.t('this_month')}</Text>
             <DataProvider
-              dataQuery={getWorkoutsThisMonth}
-              dataParse={(data: Array<WorkoutSchemaType>) =>
+              query={getWorkoutsThisMonth}
+              parse={(data: Array<WorkoutSchemaType>) =>
                 data ? data.length : 0
               }
               render={(data: number) => (
@@ -56,8 +59,8 @@ class StatisticsScreen extends React.Component<Props> {
           <Card style={[styles.first, styles.singleCard]}>
             <Text style={styles.singleTitle}>{i18n.t('this_week')}</Text>
             <DataProvider
-              dataQuery={getWorkoutsThisWeek}
-              dataParse={(data: Array<WorkoutSchemaType>) =>
+              query={getWorkoutsThisWeek}
+              parse={(data: Array<WorkoutSchemaType>) =>
                 data ? data.length : 0
               }
               render={(data: number) => (
@@ -68,8 +71,8 @@ class StatisticsScreen extends React.Component<Props> {
           <Card style={[styles.last, styles.singleCard]}>
             <Text style={styles.singleTitle}>{i18n.t('week_volume')}</Text>
             <DataProvider
-              dataQuery={getSetsThisWeek}
-              dataParse={(data: Array<SetSchemaType>) =>
+              query={getSetsThisWeek}
+              parse={(data: Array<WorkoutSetSchemaType>) =>
                 data.reduce(
                   (previousValue, s) => previousValue + s.reps * s.weight,
                   0

@@ -6,14 +6,14 @@ import { Subheading, Title } from 'react-native-paper';
 
 import i18n from '../../utils/i18n';
 import { generateSummary, parseSummary } from '../../utils/exercisePaper';
-import type { ExerciseSchemaType } from '../../database/types';
+import type { WorkoutExerciseSchemaType } from '../../database/types';
 import { getExerciseName } from '../../utils/exercises';
 import { getExerciseSchemaId } from '../../database/utils';
 import { toDate } from '../../utils/date';
 import {
   addExercise,
   updateExercisePaperForWorkout,
-} from '../../database/services/ExerciseService';
+} from '../../database/services/WorkoutExerciseService';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import type { NavigationType } from '../../types';
@@ -22,12 +22,14 @@ type Props = {
   dispatch: () => void,
   day: string,
   exerciseKey: string,
+  exerciseName?: string,
   // eslint-disable-next-line react/no-unused-prop-types
-  exercise: ?ExerciseSchemaType,
+  exercise: ?WorkoutExerciseSchemaType,
   exercisesCount: number,
   navigation: NavigationType<{
     day: string,
     exerciseKey: string,
+    exerciseName?: string,
   }>,
   theme: ThemeType,
 };
@@ -115,12 +117,14 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
   };
 
   render() {
-    const { exerciseKey, theme } = this.props;
+    const { exerciseKey, exerciseName, theme } = this.props;
     const { exerciseSummary, numberOfSets } = this.state;
 
     return (
       <View style={styles.container}>
-        <Title style={styles.title}>{getExerciseName(exerciseKey)}</Title>
+        <Title style={styles.title}>
+          {getExerciseName(exerciseKey, exerciseName)}
+        </Title>
         <Subheading>{`${numberOfSets} ${i18n
           .t(numberOfSets === 1 ? 'set' : 'sets')
           .toLowerCase()}`}</Subheading>

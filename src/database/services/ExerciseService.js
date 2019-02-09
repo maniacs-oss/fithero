@@ -1,90 +1,40 @@
 /* @flow */
 
+import leftPad from 'left-pad';
+
 import realm from '../index';
-import type { ExerciseSchemaType } from '../types';
-import type { DispatchType } from '../../types';
-import { extractWorkoutKeyFromDatabase } from '../utils';
-import { dateToString, toDate } from '../../utils/date';
-import { getExercise, updateExercise } from '../../redux/modules/workouts';
+import type { AddExerciseType, ExerciseSchemaType } from '../types';
+import type { RealmResults } from '../../types';
+import { EXERCISE_SCHEMA_NAME } from '../schemas/ExerciseSchema';
 
-export const addExercise = (
-  dispatch: (fn: DispatchType<ExerciseSchemaType>) => void,
-  exercise: ExerciseSchemaType
-) => {
-  // Optimistic update to Redux
-  dispatch(getExercise(exercise));
+export const userExerciseIdPrefix = 'user-exercise--';
 
-  realm.write(() => {
-    const workoutId = extractWorkoutKeyFromDatabase(exercise.id);
-    let workout = realm.objectForPrimaryKey('Workout', workoutId);
-    if (!workout) {
-      workout = realm.create('Workout', {
-        id: workoutId,
-        date: toDate(workoutId),
-      });
-    }
-    workout.exercises.push(exercise);
-  });
-};
+export const isCustomExercise = (id: string) =>
+  id.includes(userExerciseIdPrefix);
 
-export const deleteExercise = (exercise: ExerciseSchemaType) => {
-  const workoutId = extractWorkoutKeyFromDatabase(exercise.id);
-  realm.delete(exercise);
-  // Now we check if workout needs to be deleted too
-  const workout = realm.objectForPrimaryKey('Workout', workoutId);
-  if (workout.exercises.length > 0) {
-    // If workout was not deleted, but one exercise yes, let's fix the sort
-    workout.exercises.forEach((e, i) => {
-      e.sort = i + 1;
-    });
-  } else {
-    realm.delete(workout);
+const _generateId = () => {
+  const exercises = realm.objects(EXERCISE_SCHEMA_NAME).sorted('id', true);
+  let max = 1;
+  if (exercises.length > 0) {
+    max = parseInt(exercises[0].id.split(userExerciseIdPrefix)[1], 10) + 1;
   }
+  // The user can create a max of 100000 exercises :)
+  return `${userExerciseIdPrefix}${leftPad(max.toString(), 6, 0)}`;
 };
 
-export const updateExercisePaperForWorkout = (
-  dispatch: (fn: DispatchType<ExerciseSchemaType>) => void,
-  exercise: ExerciseSchemaType
-) => {
+export const addExercise = (exercise: AddExerciseType) => {
   realm.write(() => {
-    dispatch(updateExercise(exercise));
+    const id = _generateId();
 
-    const workoutId = dateToString(exercise.date);
-    const workout = realm.objectForPrimaryKey('Workout', workoutId);
-    const existingExercise = workout.exercises.filtered(
-      `id = "${exercise.id}"`
-    )[0];
-    const existingSets = existingExercise.sets;
-
-    // Check for sets that have been deleted first
-    const setsToDelete = [];
-    existingSets.forEach(existingSet => {
-      const set = exercise.sets.find(s => s.id === existingSet.id);
-      if (!set) {
-        setsToDelete.push(existingSet);
-      }
+    realm.create(EXERCISE_SCHEMA_NAME, {
+      id,
+      ...exercise,
     });
-
-    if (setsToDelete.length > 0) {
-      realm.delete(setsToDelete);
-    }
-
-    if (exercise.sets.length > 0) {
-      existingExercise.comments = exercise.comments || null;
-      exercise.sets.forEach(s => {
-        const set = existingSets.filtered(`id = "${s.id}"`)[0];
-        if (set) {
-          // Update set
-          set.reps = s.reps;
-          set.weight = s.weight;
-        } else {
-          // Add new set
-          existingSets.push(s);
-        }
-      });
-    } else {
-      // Delete exercise
-      deleteExercise(existingExercise);
-    }
   });
 };
+
+export const getAllExercises = (): RealmResults<ExerciseSchemaType> =>
+  realm.objects(EXERCISE_SCHEMA_NAME);
+
+export const getExerciseById = (id: string): RealmResults<ExerciseSchemaType> =>
+  realm.objects(EXERCISE_SCHEMA_NAME).filtered(`id = $0`, id);

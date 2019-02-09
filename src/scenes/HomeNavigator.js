@@ -6,10 +6,10 @@ import i18n from '../utils/i18n';
 import theme from '../utils/theme';
 import { defaultNavigationOptions } from '../utils/navigation';
 import HomeScreen from './Home';
-import CalendarScreen from './Calendar/CalendarScreen';
-import ExercisesScreen from './Exercises/ExercisesScreen';
-import EditSetsScreen from './EditSets/EditSetsScreen';
-import WorkoutScreen from './Workouts/WorkoutScreen';
+import CalendarScreen from './Calendar';
+import ExercisesScreen from './Exercises';
+import EditSetsScreen from './EditSets';
+import WorkoutScreen from './Workouts';
 
 export default createStackNavigator(
   {

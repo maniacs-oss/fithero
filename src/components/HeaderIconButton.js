@@ -9,7 +9,7 @@ import type { ThemeType } from '../utils/theme/withTheme';
 
 type Props = {
   icon: string,
-  onPress: () => void,
+  onPress: () => mixed,
   theme: ThemeType,
 };
 

@@ -5,7 +5,7 @@ import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 
-import type { ExerciseSchemaType } from '../../database/types';
+import type { WorkoutExerciseSchemaType } from '../../database/types';
 import EditSetsInputControls from './EditSetsInputControls';
 import i18n from '../../utils/i18n';
 import EditSetItem from './EditSetItem';
@@ -20,8 +20,8 @@ import {
   deleteSet,
   getLastSetByType,
   updateSet,
-} from '../../database/services/SetService';
-import { addExercise } from '../../database/services/ExerciseService';
+} from '../../database/services/WorkoutSetService';
+import { addExercise } from '../../database/services/WorkoutExerciseService';
 import { toDate } from '../../utils/date';
 import withMaxSet from '../../components/withMaxSet';
 
@@ -29,7 +29,7 @@ type Props = {
   day: string,
   dispatch: () => void,
   exerciseKey: string,
-  exercise?: ExerciseSchemaType,
+  exercise?: WorkoutExerciseSchemaType,
   exercisesCount: number,
   maxSetId: string,
 };

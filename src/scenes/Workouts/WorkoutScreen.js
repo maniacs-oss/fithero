@@ -38,9 +38,13 @@ class WorkoutScreen extends React.Component<Props> {
     this.props.navigation.navigate('Exercises', { day });
   };
 
-  _onExercisePress = (exerciseKey: string) => {
+  _onExercisePress = (exerciseKey: string, customExerciseName?: string) => {
     const day = getDay(this.props.navigation.state.params.day);
-    this.props.navigation.navigate('EditSets', { day, exerciseKey });
+    this.props.navigation.navigate('EditSets', {
+      day,
+      exerciseKey,
+      exerciseName: customExerciseName,
+    });
   };
 
   render() {

@@ -4,20 +4,20 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Paragraph, TouchableRipple } from 'react-native-paper';
 
-import type { ExerciseType } from '../../types';
 import { getExerciseName, getExerciseMuscleName } from '../../utils/exercises';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
+import type { ExerciseSchemaType } from '../../database/types';
 
 type Props = {
-  exercise: ExerciseType,
-  onPressItem: (exerciseKey: string) => void,
+  exercise: ExerciseSchemaType,
+  onPressItem: (exercise: ExerciseSchemaType) => void,
   theme: ThemeType,
 };
 
 class ExerciseItem extends React.PureComponent<Props> {
   _toggleCheck = () => {
-    this.props.onPressItem(this.props.exercise.id);
+    this.props.onPressItem(this.props.exercise);
   };
 
   render() {
@@ -30,7 +30,7 @@ class ExerciseItem extends React.PureComponent<Props> {
             numberOfLines={2}
             ellipsizeMode="tail"
           >
-            {getExerciseName(exercise.id)}
+            {getExerciseName(exercise.id, exercise.name)}
           </Paragraph>
           <Paragraph
             style={{ color: theme.colors.secondaryText }}

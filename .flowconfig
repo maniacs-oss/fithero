@@ -22,6 +22,7 @@
 [untyped]
 ; Bunch of errors (uses to new version of Flow?)
 .*/node_modules/react-native-testing-library/.*
+.*/node_modules/react-native-safe-area-view/.*
 
 [include]
 

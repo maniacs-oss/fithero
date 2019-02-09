@@ -1,7 +1,7 @@
 /* @flow */
 
 import realm from '../../index';
-import { addSet, deleteSet, updateSet } from '../SetService';
+import { addSet, deleteSet, updateSet } from '../WorkoutSetService';
 import {
   ADD_SET,
   getSet,
@@ -9,6 +9,8 @@ import {
   UPDATE_SET,
 } from '../../../redux/modules/workouts';
 import { toDate } from '../../../utils/date';
+import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../../schemas/WorkoutExerciseSchema';
+import { WORKOUT_SET_SCHEMA_NAME } from '../../schemas/WorkoutSetSchema';
 
 jest.mock('realm');
 
@@ -91,9 +93,9 @@ describe('deleteSet', () => {
 
   it('deletes only the set', () => {
     realm.objectForPrimaryKey = jest.fn(name => {
-      if (name === 'Set') {
+      if (name === WORKOUT_SET_SCHEMA_NAME) {
         return set;
-      } else if (name === 'Exercise') {
+      } else if (name === WORKOUT_EXERCISE_SCHEMA_NAME) {
         return { sets: [secondSet] };
       }
       return null;
@@ -110,9 +112,9 @@ describe('deleteSet', () => {
 
   it('deletes the set and the exercise', () => {
     realm.objectForPrimaryKey = jest.fn(name => {
-      if (name === 'Set') {
+      if (name === WORKOUT_SET_SCHEMA_NAME) {
         return set;
-      } else if (name === 'Exercise') {
+      } else if (name === WORKOUT_EXERCISE_SCHEMA_NAME) {
         return exercise;
       } else if (name === 'Workout') {
         return { exercises: [mockRealmExercise] };
@@ -137,9 +139,9 @@ describe('deleteSet', () => {
     };
 
     realm.objectForPrimaryKey = jest.fn(name => {
-      if (name === 'Set') {
+      if (name === WORKOUT_SET_SCHEMA_NAME) {
         return set;
-      } else if (name === 'Exercise') {
+      } else if (name === WORKOUT_EXERCISE_SCHEMA_NAME) {
         return exercise;
       } else if (name === 'Workout') {
         return workout;
@@ -172,9 +174,9 @@ describe('deleteSet', () => {
 
     let workout = { exercises: [] };
     realm.objectForPrimaryKey = jest.fn(name => {
-      if (name === 'Set') {
+      if (name === WORKOUT_SET_SCHEMA_NAME) {
         return set;
-      } else if (name === 'Exercise') {
+      } else if (name === WORKOUT_EXERCISE_SCHEMA_NAME) {
         return exercise;
       } else if (name === 'Workout') {
         workout = { exercises: [mockAnotherRealmExercise] };

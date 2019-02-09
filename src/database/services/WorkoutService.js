@@ -3,7 +3,7 @@
 import realm from '../index';
 
 import type { WorkoutSchemaType } from '../types';
-import type { DispatchType, RealmListener } from '../../types';
+import type { DispatchType, RealmResults } from '../../types';
 import { getWorkouts } from '../../redux/modules/workouts';
 import { deserializeWorkout } from '../utils';
 import {
@@ -12,7 +12,7 @@ import {
   getToday,
 } from '../../utils/date';
 
-export const getAllWorkouts = (): RealmListener<Array<WorkoutSchemaType>> =>
+export const getAllWorkouts = (): RealmResults<WorkoutSchemaType> =>
   realm.objects('Workout');
 
 const _getWorkoutRanges = (start: Date, end: Date) =>

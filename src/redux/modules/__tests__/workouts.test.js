@@ -11,7 +11,7 @@ import reducer, {
 } from '../workouts';
 import { toDate } from '../../../utils/date';
 import type {
-  ExerciseSchemaType,
+  WorkoutExerciseSchemaType,
   WorkoutSchemaType,
 } from '../../../database/types';
 
@@ -20,7 +20,7 @@ const date = toDate('2018-05-04T00:00:00.000Z');
 describe('workouts reducer', () => {
   const initialState = {};
 
-  const barbellSquatExercise: ExerciseSchemaType = {
+  const barbellSquatExercise: WorkoutExerciseSchemaType = {
     id: '2018-05-04T00:00:00.000Z_barbell-squat',
     sets: [
       {
@@ -43,7 +43,7 @@ describe('workouts reducer', () => {
     sort: 1,
   };
 
-  const barbellRowExercise: ExerciseSchemaType = {
+  const barbellRowExercise: WorkoutExerciseSchemaType = {
     id: '2018-05-04T00:00:00.000Z_barbell-row',
     sets: [
       {
@@ -67,7 +67,7 @@ describe('workouts reducer', () => {
       exercises: [barbellSquatExercise, barbellRowExercise],
     },
   ];
-  const exercise: ExerciseSchemaType = {
+  const exercise: WorkoutExerciseSchemaType = {
     id: '2018-05-04T00:00:00.000Z_bench-press',
     sets: [
       {

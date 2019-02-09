@@ -76,11 +76,12 @@ class HomeScreen extends Component<Props, State> {
     this.setState({ selectedDay: dateString });
   };
 
-  _onExercisePress = (exerciseKey: string) => {
+  _onExercisePress = (exerciseKey: string, customExerciseName?: string) => {
     const { selectedDay } = this.state;
     this.props.navigation.navigate('EditSets', {
       day: selectedDay,
       exerciseKey,
+      exerciseName: customExerciseName,
     });
   };
 

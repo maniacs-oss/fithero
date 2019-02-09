@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 
-import { getMaxSetByType } from '../database/services/SetService';
-import type { SetSchemaType } from '../database/types';
-import type { RealmListener } from '../types';
+import { getMaxSetByType } from '../database/services/WorkoutSetService';
+import type { WorkoutSetSchemaType } from '../database/types';
+import type { RealmResults } from '../types';
 
 type InjectedProps = {|
   maxSetId: string,
@@ -16,7 +16,7 @@ function withMaxSet<Props: {}>(
   WrappedComponent: React.ComponentType<Props>
 ): React.ComponentType<$Diff<Props, InjectedProps>> {
   return class WithMaxSet extends React.Component<*, InjectedProps> {
-    realmListener: RealmListener<SetSchemaType>;
+    realmListener: RealmResults<WorkoutSetSchemaType>;
 
     state = {
       maxSetId: '',

@@ -2,10 +2,20 @@
 
 import Realm from 'realm';
 
-import { ExerciseSchema, SetSchema, WorkoutSchema } from './schemas';
+import {
+  WorkoutExerciseSchema,
+  WorkoutSetSchema,
+  WorkoutSchema,
+  ExerciseSchema,
+} from './schemas';
 
 const realm = new Realm({
-  schema: [ExerciseSchema, SetSchema, WorkoutSchema],
+  schema: [
+    WorkoutExerciseSchema,
+    WorkoutSetSchema,
+    WorkoutSchema,
+    ExerciseSchema,
+  ],
 });
 
 export default realm;

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
 import type { NavigationType } from '../../types';
-import type { ExerciseSchemaType } from '../../database/types';
+import type { WorkoutExerciseSchemaType } from '../../database/types';
 import { getExerciseSchemaId } from '../../database/utils';
 import EditSetsWithControls from './EditSetsWithControls';
 import ExerciseHeader from '../Exercises/ExerciseHeader';
@@ -19,23 +19,31 @@ type Props = {
   // eslint-disable-next-line react/no-unused-prop-types
   dispatch: () => void,
   editSetsScreenType: EditSetsScreenType,
-  exercise?: ExerciseSchemaType,
+  exercise?: WorkoutExerciseSchemaType,
   exercisesCount: number,
   navigation: NavigationType<{
     day: string,
     exerciseKey: string,
+    exerciseName?: string,
   }>,
 };
 
 class EditSetsScreen extends Component<Props> {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: getExerciseName(navigation.state.params.exerciseKey),
+    headerTitle: getExerciseName(
+      navigation.state.params.exerciseKey,
+      navigation.state.params.exerciseName
+    ),
     headerRight: <EditSetsTypeIcon />,
   });
 
   render() {
     const { dispatch, exercise, exercisesCount, navigation } = this.props;
-    const { day, exerciseKey } = this.props.navigation.state.params;
+    const {
+      day,
+      exerciseKey,
+      exerciseName,
+    } = this.props.navigation.state.params;
 
     return (
       <Screen style={styles.container}>
@@ -55,6 +63,7 @@ class EditSetsScreen extends Component<Props> {
             dispatch={dispatch}
             day={day}
             exerciseKey={exerciseKey}
+            exerciseName={exerciseName}
             exercise={exercise}
             exercisesCount={exercisesCount}
             navigation={navigation}

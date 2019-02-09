@@ -1,8 +1,12 @@
 /* @flow */
+/* eslint-disable camelcase */
+
+import { type ____DangerouslyImpreciseStyleProp_Internal } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+
+import type { WorkoutSetSchemaType } from './database/types';
 
 // Shared types
-
-import type { SetSchemaType } from './database/types';
+export type StylePropType = ____DangerouslyImpreciseStyleProp_Internal;
 
 // TODO replace this type for flow-typed react-navigation 2
 export type NavigationType<T> = {
@@ -27,23 +31,26 @@ export type DispatchType<T> = {
   payload: T,
 };
 
-export type ExerciseType = {|
-  id: string,
-  primary: Array<string>,
-  secondary: Array<string>,
-|};
-
 export type CategoryType = {|
   id: string,
   name: string,
 |};
 
 export type ExerciseLog = {|
-  sets: Array<SetSchemaType>,
+  sets: Array<WorkoutSetSchemaType>,
   comments?: string,
 |};
 
-export type RealmListener<T> = {|
-  addListener: (data: (T) => void) => void,
-  removeAllListeners: () => void,
-|};
+export interface RealmResults<T> extends Array<T> {
+  addListener: (
+    fn: (
+      data: RealmResults<T>,
+      changes: {
+        insertions: number[],
+        modifications: number[],
+        deletions: number[],
+      }
+    ) => void
+  ) => void;
+  removeAllListeners: () => void;
+}

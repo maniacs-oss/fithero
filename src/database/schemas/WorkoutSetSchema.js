@@ -1,7 +1,9 @@
 /* @flow */
 
-const SetSchema = {
-  name: 'Set',
+export const WORKOUT_SET_SCHEMA_NAME = 'WorkoutSet';
+
+const WorkoutSetSchema = {
+  name: WORKOUT_SET_SCHEMA_NAME,
   primaryKey: 'id',
   properties: {
     id: 'string',
@@ -12,4 +14,4 @@ const SetSchema = {
   },
 };
 
-export default SetSchema;
+export default WorkoutSetSchema;

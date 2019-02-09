@@ -8,8 +8,18 @@ import { exercises } from 'dziku-exercises';
 import { ExercisesScreen } from '../ExercisesScreen';
 import theme from '../../../utils/theme';
 
+class RealmResults extends Array<*> {
+  addListener = jest.fn();
+  removeAllListeners = jest.fn();
+}
+
+const mockRealmResults = new RealmResults();
+
 jest.mock('Platform', () => ({ OS: 'android', select: jest.fn() }));
 jest.mock('Keyboard');
+jest.mock('../../../database/services/ExerciseService', () => ({
+  getAllExercises: () => mockRealmResults,
+}));
 
 describe('ExercisesScreen', () => {
   const wrapper = shallow(
@@ -135,7 +145,7 @@ describe('ExercisesScreen', () => {
 
   it('pushes a new screen when clicking an exercise and dismiss the keyboard', () => {
     expect(Keyboard.dismiss).not.toBeCalled();
-    wrapper.instance()._onExerciseToggle('bench-press');
+    wrapper.instance()._onExercisePress('bench-press');
     expect(Keyboard.dismiss).toBeCalled();
   });
 });

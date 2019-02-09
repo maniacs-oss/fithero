@@ -5,7 +5,10 @@ import { StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
 import { getExerciseName } from '../utils/exercises';
-import type { ExerciseSchemaType, SetSchemaType } from '../database/types';
+import type {
+  WorkoutExerciseSchemaType,
+  WorkoutSetSchemaType,
+} from '../database/types';
 import { extractExerciseKeyFromDatabase } from '../database/utils';
 import i18n from '../utils/i18n';
 import withMaxSet from './withMaxSet';
@@ -13,8 +16,9 @@ import type { ThemeType } from '../utils/theme/withTheme';
 import withTheme from '../utils/theme/withTheme';
 
 type Props = {
-  exercise: ExerciseSchemaType,
-  onPressItem: (exerciseKey: string) => void,
+  exercise: WorkoutExerciseSchemaType,
+  customExerciseName?: string,
+  onPressItem: (exerciseKey: string, customExerciseName?: string) => void,
   maxSetId: string,
   theme: ThemeType,
 };
@@ -22,11 +26,12 @@ type Props = {
 class WorkoutItem extends React.PureComponent<Props> {
   _onPressItem = () => {
     this.props.onPressItem(
-      extractExerciseKeyFromDatabase(this.props.exercise.id)
+      extractExerciseKeyFromDatabase(this.props.exercise.id),
+      this.props.customExerciseName
     );
   };
 
-  _renderSet = (set: SetSchemaType, index: number) => {
+  _renderSet = (set: WorkoutSetSchemaType, index: number) => {
     const { colors } = this.props.theme;
     const isMaxSet = this.props.maxSetId === set.id;
     const color = isMaxSet ? colors.trophy : colors.secondaryText;
@@ -45,13 +50,16 @@ class WorkoutItem extends React.PureComponent<Props> {
   };
 
   render() {
-    const { exercise } = this.props;
+    const { exercise, customExerciseName } = this.props;
 
     return (
       <Card style={styles.card} onPress={this._onPressItem}>
         <View>
           <Text>
-            {getExerciseName(extractExerciseKeyFromDatabase(exercise.id))}
+            {getExerciseName(
+              extractExerciseKeyFromDatabase(exercise.id),
+              customExerciseName
+            )}
           </Text>
           {exercise.sets.length > 0 && (
             <View style={styles.setsContainer}>

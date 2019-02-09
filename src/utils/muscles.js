@@ -30,10 +30,13 @@ const getMainCategories = () =>
   }));
 
 const getMuscleCategories = () =>
-  muscles.map(id => ({
-    id,
-    name: getExerciseMuscleName(id),
-  }));
+  muscles
+    .map(id => ({
+      id,
+      name: getExerciseMuscleName(id),
+    }))
+    // eslint-disable-next-line no-nested-ternary
+    .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 
 export const muscleCategories: Array<CategoryType> = getMuscleCategories();
 

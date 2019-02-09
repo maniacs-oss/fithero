@@ -1,7 +1,7 @@
 /* @flow */
 
 import type { ExerciseLog } from '../types';
-import type { SetSchemaType } from '../database/types';
+import type { WorkoutSetSchemaType } from '../database/types';
 import { getSetSchemaId } from '../database/utils';
 import { toDate } from './date';
 
@@ -10,7 +10,7 @@ export const parseSummary = (
   day: string,
   exerciseKey: string
 ): ExerciseLog => {
-  const sets: Array<SetSchemaType> = [];
+  const sets: Array<WorkoutSetSchemaType> = [];
   let comments = '';
 
   const lines = exerciseSummary

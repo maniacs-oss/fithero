@@ -13,9 +13,9 @@ import { toDate } from '../../../utils/date';
 import {
   addExercise,
   updateExercisePaperForWorkout,
-} from '../../../database/services/ExerciseService';
+} from '../../../database/services/WorkoutExerciseService';
 
-import type { ExerciseSchemaType } from '../../../database/types';
+import type { WorkoutExerciseSchemaType } from '../../../database/types';
 import { generateSummary } from '../../../utils/exercisePaper';
 
 const dateString = '2018-05-04T00:00:00.000Z';
@@ -27,9 +27,9 @@ const addListener = jest.fn(() => ({
 }));
 const dispatch = jest.fn();
 
-jest.mock('../../../database/services/ExerciseService');
+jest.mock('../../../database/services/WorkoutExerciseService');
 
-const getComponent = (exercise: ?ExerciseSchemaType) => (
+const getComponent = (exercise: ?WorkoutExerciseSchemaType) => (
   <EditSetsWithPaper
     dispatch={dispatch}
     day={dateString}

@@ -1,15 +1,16 @@
 /* @flow */
 
+export const EXERCISE_SCHEMA_NAME = 'Exercise';
+
 const ExerciseSchema = {
-  name: 'Exercise',
+  name: EXERCISE_SCHEMA_NAME,
   primaryKey: 'id',
   properties: {
     id: 'string',
-    date: 'date',
-    type: 'string',
-    sets: { type: 'list', objectType: 'Set' },
-    comments: { type: 'string', optional: true },
-    sort: 'int',
+    name: { type: 'string', optional: true },
+    notes: { type: 'string', optional: true },
+    primary: 'string[]',
+    secondary: { type: 'string[]', optional: true },
   },
 };
 

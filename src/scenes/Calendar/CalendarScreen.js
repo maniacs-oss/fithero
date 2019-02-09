@@ -5,7 +5,7 @@ import { InteractionManager } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 
 import Screen from '../../components/Screen';
-import type { NavigationType, RealmListener } from '../../types';
+import type { NavigationType, RealmResults } from '../../types';
 import HeaderIconButton from '../../components/HeaderIconButton';
 import { formatDate } from '../../utils/date';
 import { getAllWorkouts } from '../../database/services/WorkoutService';
@@ -39,7 +39,7 @@ export class CalendarScreen extends React.Component<Props, State> {
     scrollToDay: (day: string, offset?: number, animation?: boolean) => void,
   } | null;
 
-  workoutsListener: RealmListener<Array<WorkoutSchemaType>>;
+  workoutsListener: RealmResults<WorkoutSchemaType>;
 
   static navigationOptions = ({ navigation }: NavigationOptions) => {
     const { params = {} } = navigation.state;

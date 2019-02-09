@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { SetSchemaType } from '../types';
+import type { WorkoutSetSchemaType } from '../types';
 import {
   ADD_SET,
   getSet,
@@ -10,38 +10,46 @@ import {
 import realm from '../index';
 import { getExerciseSchemaIdFromSet } from '../utils';
 import type { DispatchType } from '../../types';
-import { deleteExercise } from './ExerciseService';
+import { deleteExercise } from './WorkoutExerciseService';
 import { getFirstAndLastWeekday, getToday } from '../../utils/date';
+import { WORKOUT_SET_SCHEMA_NAME } from '../schemas/WorkoutSetSchema';
+import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
 
 export const getMaxSetByType = (type: string) =>
   realm
-    .objects('Set')
+    .objects(WORKOUT_SET_SCHEMA_NAME)
     .filtered('type = $0', type)
     .sorted([['weight', true], 'date', 'id']);
 
 export const addSet = (
-  dispatch: (DispatchType<SetSchemaType>) => void,
-  set: SetSchemaType
+  dispatch: (DispatchType<WorkoutSetSchemaType>) => void,
+  set: WorkoutSetSchemaType
 ) => {
   // Optimistic update to Redux
   dispatch(getSet(ADD_SET, set));
 
   realm.write(() => {
     const exerciseId = getExerciseSchemaIdFromSet(set.id);
-    const exercise = realm.objectForPrimaryKey('Exercise', exerciseId);
+    const exercise = realm.objectForPrimaryKey(
+      WORKOUT_EXERCISE_SCHEMA_NAME,
+      exerciseId
+    );
     exercise.sets.push(set);
   });
 };
 
 export const updateSet = (
-  dispatch: (DispatchType<SetSchemaType>) => void,
-  updatedSet: SetSchemaType
+  dispatch: (DispatchType<WorkoutSetSchemaType>) => void,
+  updatedSet: WorkoutSetSchemaType
 ) => {
   // Optimistic update to Redux
   dispatch(getSet(UPDATE_SET, updatedSet));
 
   realm.write(() => {
-    const set = realm.objectForPrimaryKey('Set', updatedSet.id);
+    const set = realm.objectForPrimaryKey(
+      WORKOUT_SET_SCHEMA_NAME,
+      updatedSet.id
+    );
     set.weight = updatedSet.weight;
     set.reps = updatedSet.reps;
   });
@@ -56,11 +64,17 @@ export const deleteSet = (
 
   // Database, if last set, delete exercise, if last exercise, delete workout
   realm.write(() => {
-    const setToDelete = realm.objectForPrimaryKey('Set', setId);
+    const setToDelete = realm.objectForPrimaryKey(
+      WORKOUT_SET_SCHEMA_NAME,
+      setId
+    );
     realm.delete(setToDelete);
     // After deleting set, check if we need to delete the whole exercise
     const exerciseId = getExerciseSchemaIdFromSet(setId);
-    const exercise = realm.objectForPrimaryKey('Exercise', exerciseId);
+    const exercise = realm.objectForPrimaryKey(
+      WORKOUT_EXERCISE_SCHEMA_NAME,
+      exerciseId
+    );
     if (exercise.sets.length === 0) {
       deleteExercise(exercise);
     }
@@ -69,11 +83,13 @@ export const deleteSet = (
 
 export const getLastSetByType = (type: ?string) =>
   realm
-    .objects('Set')
+    .objects(WORKOUT_SET_SCHEMA_NAME)
     .filtered('type = $0', type)
     .sorted([['date', true], ['id', true]]);
 
 export const getSetsThisWeek = () => {
   const [start, end] = getFirstAndLastWeekday(getToday());
-  return realm.objects('Set').filtered(`date >= $0 AND date <= $1`, start, end);
+  return realm
+    .objects(WORKOUT_SET_SCHEMA_NAME)
+    .filtered(`date >= $0 AND date <= $1`, start, end);
 };

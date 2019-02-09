@@ -10,18 +10,18 @@ import { toDate } from '../../../utils/date';
 import {
   deleteSet,
   getLastSetByType,
-} from '../../../database/services/SetService';
+} from '../../../database/services/WorkoutSetService';
 
 jest.mock('Keyboard');
 
-jest.mock('../../../database/services/SetService', () => ({
+jest.mock('../../../database/services/WorkoutSetService', () => ({
   addSet: jest.fn(),
   deleteSet: jest.fn(),
   getLastSetByType: jest.fn(() => []),
   updateSet: jest.fn(),
 }));
 
-jest.mock('../../../database/services/ExerciseService');
+jest.mock('../../../database/services/WorkoutExerciseService');
 
 const date = toDate('2018-05-01T00:00:00.000Z');
 

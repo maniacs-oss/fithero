@@ -1,11 +1,12 @@
 /* @flow */
 
 import * as React from 'react';
-import type { RealmListener } from '../types';
+import type { RealmResults } from '../types';
 
-type Props<T> = {
-  dataQuery: () => RealmListener<*>,
-  dataParse: (*) => T,
+type Props<T, A> = {
+  args?: Array<A>,
+  query: (...args: Array<A>) => RealmResults<*>,
+  parse: (*) => T,
   render: (*) => React.Node,
 };
 
@@ -13,17 +14,22 @@ type State<R> = {
   data: ?R,
 };
 
-class DataProvider<T> extends React.Component<Props<T>, State<*>> {
-  dataListener: RealmListener<*>;
+class DataProvider<T, A> extends React.Component<Props<T, A>, State<*>> {
+  dataListener: RealmResults<*>;
 
-  state = {
-    data: null,
-  };
+  constructor(props: Props<T, A>) {
+    super(props);
+    const { args, query, parse } = props;
+    this.dataListener = args ? query(...args) : query();
+    this.state = {
+      data: parse(this.dataListener),
+    };
+  }
 
   componentDidMount() {
-    this.dataListener = this.props.dataQuery();
+    const { parse } = this.props;
     this.dataListener.addListener(data => {
-      const newData = this.props.dataParse(data);
+      const newData = parse(data);
       if (newData !== this.state.data) {
         this.setState({ data: newData });
       }

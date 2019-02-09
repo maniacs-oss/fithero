@@ -22,6 +22,10 @@ export default {
   menu__home: 'Home',
   menu__settings: 'Settings',
   menu__statistics: 'Statistics',
+  name: 'Name',
+  new_exercise: 'New exercise',
+  notes: 'Notes',
+  primary_muscle: 'Primary muscle',
   reps: {
     title: 'Reps',
     unit: {
@@ -35,6 +39,7 @@ export default {
       zero: '{{count}} reps',
     },
   },
+  save: 'Save',
   search: 'Search',
   set: 'set',
   sets: 'Sets',

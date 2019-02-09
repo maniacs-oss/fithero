@@ -1,8 +1,8 @@
 /* @flow */
 
 import type {
-  ExerciseSchemaType,
-  SetSchemaType,
+  WorkoutExerciseSchemaType,
+  WorkoutSetSchemaType,
   WorkoutSchemaType,
 } from '../../database/types';
 import {
@@ -21,11 +21,11 @@ export const UPDATE_EXERCISE = 'dziku/workouts/UPDATE_EXERCISE';
 type State = { [date: string]: WorkoutSchemaType };
 type Action =
   | { type: typeof GET_WORKOUT, payload: Array<WorkoutSchemaType> }
-  | { type: typeof ADD_EXERCISE, payload: ExerciseSchemaType }
-  | { type: typeof ADD_SET, payload: SetSchemaType }
-  | { type: typeof UPDATE_SET, payload: SetSchemaType }
+  | { type: typeof ADD_EXERCISE, payload: WorkoutExerciseSchemaType }
+  | { type: typeof ADD_SET, payload: WorkoutSetSchemaType }
+  | { type: typeof UPDATE_SET, payload: WorkoutSetSchemaType }
   | { type: typeof REMOVE_SET, payload: string }
-  | { type: typeof UPDATE_EXERCISE, payload: ExerciseSchemaType };
+  | { type: typeof UPDATE_EXERCISE, payload: WorkoutExerciseSchemaType };
 
 const initialState: State = {};
 
@@ -39,7 +39,7 @@ export default function reducer(state: State = initialState, action: Action) {
       return { ...state, ...workouts };
     }
     case ADD_EXERCISE: {
-      const exercise: ExerciseSchemaType = action.payload;
+      const exercise: WorkoutExerciseSchemaType = action.payload;
       const workoutId = extractWorkoutKeyFromDatabase(exercise.id);
       const workout = state[workoutId];
       let newWorkout;
@@ -61,7 +61,7 @@ export default function reducer(state: State = initialState, action: Action) {
       return { ...state, [newWorkout.id]: newWorkout };
     }
     case ADD_SET: {
-      const set: SetSchemaType = action.payload;
+      const set: WorkoutSetSchemaType = action.payload;
       const workout = state[extractWorkoutKeyFromDatabase(set.id)];
       const exerciseId = getExerciseSchemaIdFromSet(set.id);
       const newExercises = workout.exercises.map(e => {
@@ -77,7 +77,7 @@ export default function reducer(state: State = initialState, action: Action) {
       return { ...state, [workout.id]: newWorkout };
     }
     case UPDATE_SET: {
-      const set: SetSchemaType = action.payload;
+      const set: WorkoutSetSchemaType = action.payload;
       const workout = state[extractWorkoutKeyFromDatabase(set.id)];
       const exerciseId = getExerciseSchemaIdFromSet(set.id);
       const newExercises = workout.exercises.map(e => {
@@ -142,7 +142,7 @@ export default function reducer(state: State = initialState, action: Action) {
       return rest;
     }
     case UPDATE_EXERCISE: {
-      const exercise: ExerciseSchemaType = action.payload;
+      const exercise: WorkoutExerciseSchemaType = action.payload;
       const workout = state[extractWorkoutKeyFromDatabase(exercise.id)];
       if (exercise.sets.length > 0) {
         const newExercises = workout.exercises.map(
@@ -172,14 +172,14 @@ export const getWorkouts = (workouts: Array<WorkoutSchemaType>) => ({
   payload: workouts,
 });
 
-export const getExercise = (exercise: ExerciseSchemaType) => ({
+export const getExercise = (exercise: WorkoutExerciseSchemaType) => ({
   type: ADD_EXERCISE,
   payload: exercise,
 });
 
 export const getSet = (
   type: typeof ADD_SET | typeof UPDATE_SET,
-  set: SetSchemaType
+  set: WorkoutSetSchemaType
 ) => ({
   type,
   payload: set,
@@ -190,7 +190,7 @@ export const removeSet = (setId: string) => ({
   payload: setId,
 });
 
-export const updateExercise = (exercise: ExerciseSchemaType) => ({
+export const updateExercise = (exercise: WorkoutExerciseSchemaType) => ({
   type: UPDATE_EXERCISE,
   payload: exercise,
 });
