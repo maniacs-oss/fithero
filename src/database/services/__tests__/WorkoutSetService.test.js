@@ -2,19 +2,12 @@
 
 import realm from '../../index';
 import { addSet, deleteSet, updateSet } from '../WorkoutSetService';
-import {
-  ADD_SET,
-  getSet,
-  removeSet,
-  UPDATE_SET,
-} from '../../../redux/modules/workouts';
 import { toDate } from '../../../utils/date';
 import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../../schemas/WorkoutExerciseSchema';
 import { WORKOUT_SET_SCHEMA_NAME } from '../../schemas/WorkoutSetSchema';
 
 jest.mock('realm');
 
-const dispatch = jest.fn();
 const date = toDate('2018-05-04T00:00:00.000Z');
 
 const mockRealmExercise = {
@@ -42,10 +35,7 @@ beforeEach(() => {
 
 test('addSet', () => {
   realm.objectForPrimaryKey = jest.fn(() => mockRealmExercise);
-  addSet(dispatch, mockSet);
-
-  expect(dispatch).toHaveBeenCalledTimes(1);
-  expect(dispatch).toBeCalledWith(getSet(ADD_SET, mockSet));
+  addSet(mockSet);
 
   expect(mockRealmExercise.sets.push).toHaveBeenCalledTimes(1);
   expect(mockRealmExercise.sets.push).toBeCalledWith(mockSet);
@@ -61,10 +51,7 @@ test('updateSet', () => {
   };
   realm.objectForPrimaryKey = jest.fn(() => toBeMutatedByRealmSet);
 
-  updateSet(dispatch, mockSet);
-
-  expect(dispatch).toHaveBeenCalledTimes(1);
-  expect(dispatch).toBeCalledWith(getSet(UPDATE_SET, mockSet));
+  updateSet(mockSet);
 
   expect(toBeMutatedByRealmSet).toEqual(mockSet);
 });
@@ -101,10 +88,7 @@ describe('deleteSet', () => {
       return null;
     });
 
-    deleteSet(dispatch, set.id);
-
-    expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toBeCalledWith(removeSet(set.id));
+    deleteSet(set.id);
 
     expect(realm.delete).toHaveBeenCalledTimes(1);
     expect(realm.delete).toBeCalledWith(set);
@@ -122,10 +106,7 @@ describe('deleteSet', () => {
       return null;
     });
 
-    deleteSet(dispatch, set.id);
-
-    expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toBeCalledWith(removeSet(set.id));
+    deleteSet(set.id);
 
     expect(realm.delete).toHaveBeenCalledTimes(2);
     expect(realm.delete).toBeCalledWith(set);
@@ -149,10 +130,7 @@ describe('deleteSet', () => {
       return null;
     });
 
-    deleteSet(dispatch, set.id);
-
-    expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toBeCalledWith(removeSet(set.id));
+    deleteSet(set.id);
 
     expect(realm.delete).toHaveBeenCalledTimes(3);
     expect(realm.delete).toBeCalledWith(set);
@@ -185,7 +163,7 @@ describe('deleteSet', () => {
       return null;
     });
 
-    deleteSet(dispatch, set.id);
+    deleteSet(set.id);
     // Realm operation is like mutating
     expect(workout.exercises[0].sort).toEqual(1);
   });

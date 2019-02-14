@@ -15,7 +15,7 @@ import { extractExerciseKeyFromDatabase } from '../database/utils';
 type Props = {
   contentContainerStyle?: View.propTypes.style,
   onPressItem: (exerciseKey: string, customExerciseName?: string) => void,
-  workout: WorkoutSchemaType,
+  workout: ?WorkoutSchemaType,
 };
 
 class WorkoutList extends React.Component<Props> {
@@ -42,7 +42,6 @@ class WorkoutList extends React.Component<Props> {
         />
       );
     }
-    // $FlowFixMe withMaxSet + withTheme problems
     return <WorkoutItem exercise={item} onPressItem={this._onPressItem} />;
   };
 

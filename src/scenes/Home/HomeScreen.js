@@ -1,7 +1,6 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Platform, StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
 
@@ -15,12 +14,13 @@ import type { WorkoutSchemaType } from '../../database/types';
 import HeaderButton from '../../components/HeaderButton';
 import i18n from '../../utils/i18n';
 import HeaderIconButton from '../../components/HeaderIconButton';
+import DataProvider from '../../components/DataProvider';
 
-type Props = {
-  dispatch: () => void,
+type NavigationOptions = {
   navigation: NavigationType<{}>,
-  workouts: { [date: string]: WorkoutSchemaType },
 };
+
+type Props = NavigationOptions & {};
 
 type State = {
   currentWeek: Array<Date>,
@@ -28,12 +28,7 @@ type State = {
 };
 
 class HomeScreen extends Component<Props, State> {
-  static navigationOptions = ({
-    navigation,
-  }: {
-    // eslint-disable-next-line react/no-unused-prop-types
-    navigation: NavigationType<{}>,
-  }) => {
+  static navigationOptions = ({ navigation }: NavigationOptions) => {
     const navigateToCalendar = () => {
       navigation.navigate('Calendar', {
         today: getToday().format('YYYY-MM-DD'),
@@ -60,13 +55,6 @@ class HomeScreen extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    const { currentWeek } = this.state;
-
-    getWorkoutsByRange(dispatch, currentWeek[0], currentWeek[6]);
-  }
-
   _onAddExercises = () => {
     const { selectedDay } = this.state;
     this.props.navigation.navigate('Exercises', { day: selectedDay });
@@ -85,8 +73,7 @@ class HomeScreen extends Component<Props, State> {
     });
   };
 
-  _renderHeader = () => {
-    const { workouts } = this.props;
+  _renderHeader = (workouts: { [key: string]: WorkoutSchemaType }) => {
     const { currentWeek, selectedDay } = this.state;
 
     return (
@@ -100,17 +87,31 @@ class HomeScreen extends Component<Props, State> {
   };
 
   render() {
-    const { workouts } = this.props;
-    const { selectedDay } = this.state;
-    const workout = workouts[selectedDay];
+    const { currentWeek, selectedDay } = this.state;
 
     return (
       <Screen>
-        <WorkoutList
-          contentContainerStyle={styles.list}
-          workout={workout}
-          onPressItem={this._onExercisePress}
-          ListHeaderComponent={this._renderHeader}
+        <DataProvider
+          query={getWorkoutsByRange}
+          args={[currentWeek[0], currentWeek[6]]}
+          parse={(data: Array<WorkoutSchemaType>) => {
+            if (!data) {
+              return null;
+            }
+            return data.reduce((obj, item) => {
+              // eslint-disable-next-line no-param-reassign
+              obj[item.id] = item;
+              return obj;
+            }, {});
+          }}
+          render={(workouts: { [key: string]: WorkoutSchemaType }) => (
+            <WorkoutList
+              contentContainerStyle={styles.list}
+              workout={workouts ? workouts[selectedDay] : null}
+              onPressItem={this._onExercisePress}
+              ListHeaderComponent={() => this._renderHeader(workouts)}
+            />
+          )}
         />
         <FAB icon="add" onPress={this._onAddExercises} style={styles.fab} />
       </Screen>
@@ -129,7 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(
-  state => ({ workouts: state.workouts }),
-  null
-)(HomeScreen);
+export default HomeScreen;

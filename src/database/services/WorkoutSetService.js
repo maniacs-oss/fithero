@@ -1,16 +1,9 @@
 /* @flow */
 
 import type { WorkoutSetSchemaType } from '../types';
-import {
-  ADD_SET,
-  getSet,
-  removeSet,
-  UPDATE_SET,
-} from '../../redux/modules/workouts';
 import realm from '../index';
 import { getExerciseSchemaIdFromSet } from '../utils';
-import type { DispatchType } from '../../types';
-import { deleteExercise } from './WorkoutExerciseService';
+import { deleteWorkoutExercise } from './WorkoutExerciseService';
 import { getFirstAndLastWeekday, getToday } from '../../utils/date';
 import { WORKOUT_SET_SCHEMA_NAME } from '../schemas/WorkoutSetSchema';
 import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
@@ -21,13 +14,7 @@ export const getMaxSetByType = (type: string) =>
     .filtered('type = $0', type)
     .sorted([['weight', true], 'date', 'id']);
 
-export const addSet = (
-  dispatch: (DispatchType<WorkoutSetSchemaType>) => void,
-  set: WorkoutSetSchemaType
-) => {
-  // Optimistic update to Redux
-  dispatch(getSet(ADD_SET, set));
-
+export const addSet = (set: WorkoutSetSchemaType) => {
   realm.write(() => {
     const exerciseId = getExerciseSchemaIdFromSet(set.id);
     const exercise = realm.objectForPrimaryKey(
@@ -38,13 +25,7 @@ export const addSet = (
   });
 };
 
-export const updateSet = (
-  dispatch: (DispatchType<WorkoutSetSchemaType>) => void,
-  updatedSet: WorkoutSetSchemaType
-) => {
-  // Optimistic update to Redux
-  dispatch(getSet(UPDATE_SET, updatedSet));
-
+export const updateSet = (updatedSet: WorkoutSetSchemaType) => {
   realm.write(() => {
     const set = realm.objectForPrimaryKey(
       WORKOUT_SET_SCHEMA_NAME,
@@ -55,13 +36,7 @@ export const updateSet = (
   });
 };
 
-export const deleteSet = (
-  dispatch: (DispatchType<string>) => void,
-  setId: string
-) => {
-  // Optimistic update to Redux
-  dispatch(removeSet(setId));
-
+export const deleteSet = (setId: string) => {
   // Database, if last set, delete exercise, if last exercise, delete workout
   realm.write(() => {
     const setToDelete = realm.objectForPrimaryKey(
@@ -76,7 +51,7 @@ export const deleteSet = (
       exerciseId
     );
     if (exercise.sets.length === 0) {
-      deleteExercise(exercise);
+      deleteWorkoutExercise(exercise);
     }
   });
 };

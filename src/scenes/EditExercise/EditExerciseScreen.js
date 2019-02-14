@@ -8,22 +8,21 @@ import i18n from '../../utils/i18n';
 import withTheme from '../../utils/theme/withTheme';
 import MuscleSelector from './MuscleSelector';
 import type { ThemeType } from '../../utils/theme/withTheme';
-import type { ExerciseSchemaType } from '../../database/types';
-import { addExercise } from '../../database/services/ExerciseService';
+import {
+  addExercise,
+  editExercise,
+  getExerciseById,
+} from '../../database/services/ExerciseService';
 import HeaderButton from '../../components/HeaderButton';
 import HeaderIconButton from '../../components/HeaderIconButton';
 import type { NavigationType } from '../../types';
 
 type NavigationOptions = {
-  navigation: NavigationType<{ onSave: () => void }>,
+  navigation: NavigationType<{ id?: string, onSave: () => void }>,
 };
 
-type Props = {
-  exercise: ?ExerciseSchemaType,
+type Props = NavigationOptions & {
   theme: ThemeType,
-  navigation: NavigationType<{
-    onSave: () => void,
-  }>,
 };
 
 type State = {
@@ -37,7 +36,7 @@ export class EditExerciseScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: NavigationOptions) => {
     const { params = {} } = navigation.state;
     return {
-      title: params.title || i18n.t('new_exercise'),
+      title: params.id ? i18n.t('edit_exercise') : i18n.t('new_exercise'),
       headerLeft: (
         <HeaderIconButton icon="close" onPress={() => navigation.goBack()} />
       ),
@@ -47,23 +46,19 @@ export class EditExerciseScreen extends React.Component<Props, State> {
     };
   };
 
-  state = {
-    name: '',
-    notes: '',
-    primary: {},
-    saveWasPressed: false,
-  };
-
   constructor(props: Props) {
     super(props);
-    const { exercise } = props;
-    if (exercise) {
-      this.setState({
-        name: exercise.name,
-        notes: exercise.notes,
-        primary: { [exercise.primary[0]]: true },
-      });
-    }
+    const { params = {} } = props.navigation.state;
+    const { id } = params;
+
+    const exercise = id ? getExerciseById(id)[0] : null;
+
+    this.state = {
+      name: exercise ? exercise.name : '',
+      notes: exercise ? exercise.notes : '',
+      primary: exercise ? { [exercise.primary[0]]: true } : {},
+      saveWasPressed: false,
+    };
 
     props.navigation.setParams({
       onSave: this._onSave,
@@ -74,16 +69,19 @@ export class EditExerciseScreen extends React.Component<Props, State> {
     const primary = Object.keys(this.state.primary);
 
     if (this.state.name && primary.length > 0) {
-      const exerciseForDb = Object.assign(
-        {},
-        {
-          name: this.state.name,
-          primary,
-        },
-        this.state.notes ? { notes: this.state.notes } : {}
-      );
+      const exerciseForDb = {
+        name: this.state.name,
+        primary,
+        notes: this.state.notes || null,
+        secondary: [],
+      };
 
-      addExercise(exerciseForDb);
+      const { params = {} } = this.props.navigation.state;
+      if (params.id) {
+        editExercise({ id: params.id, ...exerciseForDb });
+      } else {
+        addExercise(exerciseForDb);
+      }
       this.props.navigation.goBack();
     } else {
       this.setState({ saveWasPressed: true });
@@ -148,7 +146,6 @@ export class EditExerciseScreen extends React.Component<Props, State> {
             }}
             onChangeText={this._onNotesChange}
             value={notes}
-            autoCorrect={false}
             selectionColor={colors.textSelection}
             style={styles.inputRow}
           />

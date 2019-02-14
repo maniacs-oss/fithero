@@ -15,7 +15,7 @@ import {
   updateExercisePaperForWorkout,
 } from '../../../database/services/WorkoutExerciseService';
 
-import type { WorkoutExerciseSchemaType } from '../../../database/types';
+import type { AddWorkoutExerciseSchemaType } from '../../../database/types';
 import { generateSummary } from '../../../utils/exercisePaper';
 
 const dateString = '2018-05-04T00:00:00.000Z';
@@ -25,16 +25,14 @@ const remove = jest.fn();
 const addListener = jest.fn(() => ({
   remove,
 }));
-const dispatch = jest.fn();
 
 jest.mock('../../../database/services/WorkoutExerciseService');
 
-const getComponent = (exercise: ?WorkoutExerciseSchemaType) => (
+const getComponent = (exercise: ?AddWorkoutExerciseSchemaType) => (
   <EditSetsWithPaper
-    dispatch={dispatch}
     day={dateString}
     exerciseKey={'bench-press'}
-    exercise={exercise}
+    exercise={exercise ? { sort: 1, isValid: jest.fn(), ...exercise } : null}
     exercisesCount={0}
     navigation={{
       addListener,
@@ -68,7 +66,6 @@ const mockExercise = {
   ],
   date,
   type: 'bench-press',
-  sort: 1,
 };
 
 it('handles willBlur subscription properly', () => {
@@ -119,7 +116,7 @@ describe('saving sets', () => {
 
     component.getInstance()._saveSets();
     expect(addExercise).not.toBeCalled();
-    expect(updateExercisePaperForWorkout).toBeCalledWith(dispatch, {
+    expect(updateExercisePaperForWorkout).toBeCalledWith({
       ...mockExercise,
       comments: '',
     });
@@ -137,7 +134,7 @@ describe('saving sets', () => {
     });
 
     component.getInstance()._saveSets();
-    expect(addExercise).toBeCalledWith(dispatch, {
+    expect(addExercise).toBeCalledWith({
       ...mockExercise,
       comments: 'Some comment',
     });

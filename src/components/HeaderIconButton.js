@@ -15,12 +15,17 @@ type Props = {
 
 class HeaderIconButton extends React.Component<Props> {
   render() {
-    const { icon, onPress } = this.props;
-    const { toolbarTint } = this.props.theme.colors;
+    const { icon, onPress, theme, ...rest } = this.props;
+    const { toolbarTint } = theme.colors;
 
     if (Platform.OS === 'android') {
       return (
-        <Appbar.Action onPress={onPress} icon={icon} color={toolbarTint} />
+        <Appbar.Action
+          onPress={onPress}
+          icon={icon}
+          color={toolbarTint}
+          {...rest}
+        />
       );
     }
 

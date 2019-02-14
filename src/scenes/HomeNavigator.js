@@ -10,6 +10,7 @@ import CalendarScreen from './Calendar';
 import ExercisesScreen from './Exercises';
 import EditSetsScreen from './EditSets';
 import WorkoutScreen from './Workouts';
+import ExerciseDetailsScreen from './ExerciseDetails';
 
 export default createStackNavigator(
   {
@@ -26,6 +27,12 @@ export default createStackNavigator(
       screen: ExercisesScreen,
       navigationOptions: {
         title: i18n.t('exercises'),
+      },
+    },
+    ExerciseDetails: {
+      screen: ExerciseDetailsScreen,
+      navigationOptions: {
+        title: null,
       },
     },
     EditSets: {

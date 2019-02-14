@@ -1,5 +1,9 @@
 /* @flow */
 
+interface RealmObject {
+  isValid: () => boolean;
+}
+
 export type WorkoutSchemaType = {|
   id: string,
   date: Date,
@@ -7,14 +11,18 @@ export type WorkoutSchemaType = {|
   exercises: Array<WorkoutExerciseSchemaType>,
 |};
 
-export type WorkoutExerciseSchemaType = {|
+export type AddWorkoutExerciseSchemaType = {
   id: string,
   date: Date,
   type: string,
   sets: Array<WorkoutSetSchemaType>,
   comments?: string,
-  sort: number,
-|};
+};
+
+export type WorkoutExerciseSchemaType = RealmObject &
+  AddWorkoutExerciseSchemaType & {
+    sort: number,
+  };
 
 export type WorkoutSetSchemaType = {|
   id: string,
@@ -25,12 +33,16 @@ export type WorkoutSetSchemaType = {|
 |};
 
 export type AddExerciseType = {|
-  name?: string,
-  notes?: string,
+  name: string,
+  notes?: ?string,
   primary: Array<string>,
-  secondary?: ?Array<string>,
+  secondary?: Array<string>,
 |};
 
 export type ExerciseSchemaType = {|
   id: string,
-|} & AddExerciseType;
+  name: string,
+  notes: ?string,
+  primary: Array<string>,
+  secondary: Array<string>,
+|};

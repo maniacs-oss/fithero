@@ -2,9 +2,17 @@
 
 import leftPad from 'left-pad';
 
-import { addExercise, userExerciseIdPrefix } from '../ExerciseService';
+import {
+  addExercise,
+  deleteExercise,
+  userExerciseIdPrefix,
+} from '../ExerciseService';
 import realm from '../../index';
 import { EXERCISE_SCHEMA_NAME } from '../../schemas/ExerciseSchema';
+import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../../schemas/WorkoutExerciseSchema';
+import { mockWorkouts } from './helpers/databaseMocks';
+import { WORKOUT_SET_SCHEMA_NAME } from '../../schemas/WorkoutSetSchema';
+import { WORKOUT_SCHEMA_NAME } from '../../schemas/WorkoutSchema';
 
 describe('addExercise', () => {
   let current = 0;
@@ -36,5 +44,41 @@ describe('addExercise', () => {
         ...exercise,
       });
     });
+  });
+});
+
+describe('deleteExercise', () => {
+  it('calls the necessary deletes operation in order', () => {
+    const mockWorkout = mockWorkouts[0];
+    const mockWorkoutExercise = mockWorkout.exercises[0];
+    const mockExercise = {
+      id: mockWorkoutExercise.type,
+      name: 'Some name',
+      primary: ['Abs'],
+      secondary: [],
+    };
+
+    realm.objects = jest.fn((schemaName: string) => ({
+      filtered: jest.fn(() => {
+        if (schemaName === WORKOUT_EXERCISE_SCHEMA_NAME) {
+          return [mockWorkoutExercise];
+        } else if (schemaName === WORKOUT_SET_SCHEMA_NAME) {
+          return mockWorkoutExercise.sets;
+        } else if (schemaName === WORKOUT_SCHEMA_NAME) {
+          return [mockWorkout];
+        }
+        return [];
+      }),
+    }));
+
+    realm.objectForPrimaryKey = jest.fn(() => mockExercise);
+
+    deleteExercise(mockExercise.id);
+
+    expect(realm.delete).toHaveBeenCalledTimes(4);
+    expect(realm.delete.mock.calls[0][0]).toEqual(mockWorkoutExercise.sets);
+    expect(realm.delete.mock.calls[1][0]).toEqual([mockWorkoutExercise]);
+    expect(realm.delete.mock.calls[2][0]).toEqual([mockWorkout]);
+    expect(realm.delete.mock.calls[3][0]).toEqual(mockExercise);
   });
 });

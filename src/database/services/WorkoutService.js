@@ -3,9 +3,7 @@
 import realm from '../index';
 
 import type { WorkoutSchemaType } from '../types';
-import type { DispatchType, RealmResults } from '../../types';
-import { getWorkouts } from '../../redux/modules/workouts';
-import { deserializeWorkout } from '../utils';
+import type { RealmResults } from '../../types';
 import {
   getFirstAndLastMonthDay,
   getFirstAndLastWeekday,
@@ -15,35 +13,18 @@ import {
 export const getAllWorkouts = (): RealmResults<WorkoutSchemaType> =>
   realm.objects('Workout');
 
-const _getWorkoutRanges = (start: Date, end: Date) =>
+export const getWorkoutsByRange = (start: Date, end: Date) =>
   realm.objects('Workout').filtered(`date >= $0 AND date <= $1`, start, end);
 
-export const getWorkoutsByRange = (
-  dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
-  startDate: Date,
-  endDate: Date
-) => {
-  const workouts = _getWorkoutRanges(startDate, endDate);
-
-  dispatch(getWorkouts(workouts.map(w => deserializeWorkout(w))));
-};
-
-export const getWorkout = (
-  dispatch: (fn: DispatchType<Array<WorkoutSchemaType>>) => void,
-  date: Date
-) => {
-  const workouts = realm.objects('Workout').filtered(`date = $0`, date);
-  if (workouts.length > 0) {
-    dispatch(getWorkouts([deserializeWorkout(workouts[0])]));
-  }
-};
+export const getWorkoutById = (id: string): RealmResults<WorkoutSchemaType> =>
+  realm.objects('Workout').filtered(`id = $0`, id);
 
 export const getWorkoutsThisWeek = () => {
   const [start, end] = getFirstAndLastWeekday(getToday());
-  return _getWorkoutRanges(start, end);
+  return getWorkoutsByRange(start, end);
 };
 
 export const getWorkoutsThisMonth = () => {
   const [start, end] = getFirstAndLastMonthDay(getToday());
-  return _getWorkoutRanges(start, end);
+  return getWorkoutsByRange(start, end);
 };

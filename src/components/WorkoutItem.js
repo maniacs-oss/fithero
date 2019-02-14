@@ -11,15 +11,16 @@ import type {
 } from '../database/types';
 import { extractExerciseKeyFromDatabase } from '../database/utils';
 import i18n from '../utils/i18n';
-import withMaxSet from './withMaxSet';
 import type { ThemeType } from '../utils/theme/withTheme';
 import withTheme from '../utils/theme/withTheme';
+import { getMaxSetByType } from '../database/services/WorkoutSetService';
+import type { RealmResults } from '../types';
+import DataProvider from './DataProvider';
 
 type Props = {
   exercise: WorkoutExerciseSchemaType,
   customExerciseName?: string,
   onPressItem: (exerciseKey: string, customExerciseName?: string) => void,
-  maxSetId: string,
   theme: ThemeType,
 };
 
@@ -31,23 +32,33 @@ class WorkoutItem extends React.PureComponent<Props> {
     );
   };
 
-  _renderSet = (set: WorkoutSetSchemaType, index: number) => {
-    const { colors } = this.props.theme;
-    const isMaxSet = this.props.maxSetId === set.id;
-    const color = isMaxSet ? colors.trophy : colors.secondaryText;
+  _renderSet = (set: WorkoutSetSchemaType, index: number) => (
+    <DataProvider
+      key={set.id}
+      query={getMaxSetByType}
+      args={[extractExerciseKeyFromDatabase(this.props.exercise.id)]}
+      parse={(sets: RealmResults<WorkoutSetSchemaType>) =>
+        sets.length > 0 ? sets[0].id : null
+      }
+      render={(maxSetId: string) => {
+        const { colors } = this.props.theme;
+        const isMaxSet = maxSetId === set.id;
+        const color = isMaxSet ? colors.trophy : colors.secondaryText;
 
-    return (
-      <View key={set.id} style={styles.setRow}>
-        <Text style={[styles.setIndex, { color }]}>{`${index + 1}.`}</Text>
-        <Text style={[styles.setWeight, { color }]}>{`${i18n.t('kg.value', {
-          count: set.weight,
-        })}`}</Text>
-        <Text style={[styles.setReps, { color }]}>{`${i18n.t('reps.value', {
-          count: set.reps,
-        })}`}</Text>
-      </View>
-    );
-  };
+        return (
+          <View style={styles.setRow}>
+            <Text style={[styles.setIndex, { color }]}>{`${index + 1}.`}</Text>
+            <Text style={[styles.setWeight, { color }]}>{`${i18n.t('kg.value', {
+              count: set.weight,
+            })}`}</Text>
+            <Text style={[styles.setReps, { color }]}>{`${i18n.t('reps.value', {
+              count: set.reps,
+            })}`}</Text>
+          </View>
+        );
+      }}
+    />
+  );
 
   render() {
     const { exercise, customExerciseName } = this.props;
@@ -99,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(withMaxSet(WorkoutItem));
+export default withTheme(WorkoutItem);

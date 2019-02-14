@@ -1,37 +1,41 @@
 /* @flow */
 
 import realm from '../index';
-import type { WorkoutExerciseSchemaType } from '../types';
-import type { DispatchType } from '../../types';
+import type { AddWorkoutExerciseSchemaType } from '../types';
 import { extractWorkoutKeyFromDatabase } from '../utils';
 import { dateToString, toDate } from '../../utils/date';
-import { getExercise, updateExercise } from '../../redux/modules/workouts';
+import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
+import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
 
-export const addExercise = (
-  dispatch: (fn: DispatchType<WorkoutExerciseSchemaType>) => void,
-  exercise: WorkoutExerciseSchemaType
-) => {
-  // Optimistic update to Redux
-  dispatch(getExercise(exercise));
+export const getWorkoutExerciseById = (id: string) =>
+  realm.objects(WORKOUT_EXERCISE_SCHEMA_NAME).filtered(`id = $0`, id);
 
+export const addExercise = (exercise: AddWorkoutExerciseSchemaType) => {
   realm.write(() => {
     const workoutId = extractWorkoutKeyFromDatabase(exercise.id);
-    let workout = realm.objectForPrimaryKey('Workout', workoutId);
+    let workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
+
     if (!workout) {
-      workout = realm.create('Workout', {
+      workout = realm.create(WORKOUT_SCHEMA_NAME, {
         id: workoutId,
         date: toDate(workoutId),
       });
     }
-    workout.exercises.push(exercise);
+
+    workout.exercises.push({
+      ...exercise,
+      sort: workout ? workout.exercises.length + 1 : 0,
+    });
   });
 };
 
-export const deleteExercise = (exercise: WorkoutExerciseSchemaType) => {
+export const deleteWorkoutExercise = (
+  exercise: AddWorkoutExerciseSchemaType
+) => {
   const workoutId = extractWorkoutKeyFromDatabase(exercise.id);
   realm.delete(exercise);
   // Now we check if workout needs to be deleted too
-  const workout = realm.objectForPrimaryKey('Workout', workoutId);
+  const workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
   if (workout.exercises.length > 0) {
     // If workout was not deleted, but one exercise yes, let's fix the sort
     workout.exercises.forEach((e, i) => {
@@ -43,14 +47,11 @@ export const deleteExercise = (exercise: WorkoutExerciseSchemaType) => {
 };
 
 export const updateExercisePaperForWorkout = (
-  dispatch: (fn: DispatchType<WorkoutExerciseSchemaType>) => void,
-  exercise: WorkoutExerciseSchemaType
+  exercise: AddWorkoutExerciseSchemaType
 ) => {
   realm.write(() => {
-    dispatch(updateExercise(exercise));
-
     const workoutId = dateToString(exercise.date);
-    const workout = realm.objectForPrimaryKey('Workout', workoutId);
+    const workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
     const existingExercise = workout.exercises.filtered(
       `id = "${exercise.id}"`
     )[0];
@@ -84,7 +85,7 @@ export const updateExercisePaperForWorkout = (
       });
     } else {
       // Delete exercise
-      deleteExercise(existingExercise);
+      deleteWorkoutExercise(existingExercise);
     }
   });
 };

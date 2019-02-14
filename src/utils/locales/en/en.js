@@ -2,8 +2,12 @@
 
 export default {
   add: 'Add',
+  cancel: 'Cancel',
   calendar: 'Calendar',
   delete: 'Delete',
+  delete__exercise_title: 'Delete exercise',
+  delete__exercise_description:
+    'Deleting an exercise will delete any reference to it in every workout. Are you sure?',
   exercises: 'Exercises',
   'exercise__paper-placeholder':
     'Each line represents a set. You can type using the format repetitions x weight (RxW), e.g:\n\n8x120\n7x130\n6x140\n\nThis last line can be an optional comment.',
@@ -23,6 +27,7 @@ export default {
   menu__settings: 'Settings',
   menu__statistics: 'Statistics',
   name: 'Name',
+  edit_exercise: 'Edit exercise',
   new_exercise: 'New exercise',
   notes: 'Notes',
   primary_muscle: 'Primary muscle',
@@ -40,6 +45,10 @@ export default {
     },
   },
   save: 'Save',
+  secondary_muscle: {
+    one: 'Secondary muscle',
+    other: 'Secondary muscles',
+  },
   search: 'Search',
   set: 'set',
   sets: 'Sets',

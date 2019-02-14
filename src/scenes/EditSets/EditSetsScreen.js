@@ -14,13 +14,11 @@ import EditSetsWithPaper from './EditSetsWithPaper';
 import { getExerciseName } from '../../utils/exercises';
 import type { EditSetsScreenType } from '../../redux/modules/settings';
 import EditSetsTypeIcon from './EditSetsTypeIcon';
+import { getWorkoutExerciseById } from '../../database/services/WorkoutExerciseService';
+import DataProvider from '../../components/DataProvider';
 
 type Props = {
-  // eslint-disable-next-line react/no-unused-prop-types
-  dispatch: () => void,
   editSetsScreenType: EditSetsScreenType,
-  exercise?: WorkoutExerciseSchemaType,
-  exercisesCount: number,
   navigation: NavigationType<{
     day: string,
     exerciseKey: string,
@@ -38,37 +36,44 @@ class EditSetsScreen extends Component<Props> {
   });
 
   render() {
-    const { dispatch, exercise, exercisesCount, navigation } = this.props;
+    const { navigation } = this.props;
     const {
       day,
       exerciseKey,
       exerciseName,
     } = this.props.navigation.state.params;
 
+    const id = getExerciseSchemaId(day, exerciseKey);
+
     return (
       <Screen style={styles.container}>
         <ExerciseHeader day={day} style={styles.header} />
-        {this.props.editSetsScreenType === 'list' ? (
-          <EditSetsWithControls
-            testID="edit-sets-with-controls"
-            dispatch={dispatch}
-            day={day}
-            exerciseKey={exerciseKey}
-            exercise={exercise}
-            exercisesCount={exercisesCount}
-          />
-        ) : (
-          <EditSetsWithPaper
-            testID="edit-sets-with-paper"
-            dispatch={dispatch}
-            day={day}
-            exerciseKey={exerciseKey}
-            exerciseName={exerciseName}
-            exercise={exercise}
-            exercisesCount={exercisesCount}
-            navigation={navigation}
-          />
-        )}
+        <DataProvider
+          query={getWorkoutExerciseById}
+          args={[id]}
+          parse={(data: Array<WorkoutExerciseSchemaType>) =>
+            data.length > 0 ? data[0] : null
+          }
+          render={(exercise: ?WorkoutExerciseSchemaType) =>
+            this.props.editSetsScreenType === 'list' ? (
+              <EditSetsWithControls
+                testID="edit-sets-with-controls"
+                day={day}
+                exerciseKey={exerciseKey}
+                exercise={exercise}
+              />
+            ) : (
+              <EditSetsWithPaper
+                testID="edit-sets-with-paper"
+                day={day}
+                exerciseKey={exerciseKey}
+                exerciseName={exerciseName}
+                exercise={exercise}
+                navigation={navigation}
+              />
+            )
+          }
+        />
       </Screen>
     );
   }
@@ -84,20 +89,8 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  (state, ownProps: Props) => {
-    const { day, exerciseKey } = ownProps.navigation.state.params;
-    const workout = state.workouts[day];
-    let exercise = null;
-    if (workout) {
-      exercise = workout.exercises.find(
-        e => e.id === getExerciseSchemaId(day, exerciseKey)
-      );
-    }
-    return {
-      editSetsScreenType: state.settings.editSetsScreenType,
-      exercise,
-      exercisesCount: workout ? workout.exercises.length : 0,
-    };
-  },
+  state => ({
+    editSetsScreenType: state.settings.editSetsScreenType,
+  }),
   null
 )(EditSetsScreen);

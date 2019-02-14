@@ -5,7 +5,10 @@ import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 
-import type { WorkoutExerciseSchemaType } from '../../database/types';
+import type {
+  WorkoutExerciseSchemaType,
+  WorkoutSetSchemaType,
+} from '../../database/types';
 import EditSetsInputControls from './EditSetsInputControls';
 import i18n from '../../utils/i18n';
 import EditSetItem from './EditSetItem';
@@ -19,19 +22,18 @@ import {
   addSet,
   deleteSet,
   getLastSetByType,
+  getMaxSetByType,
   updateSet,
 } from '../../database/services/WorkoutSetService';
 import { addExercise } from '../../database/services/WorkoutExerciseService';
 import { toDate } from '../../utils/date';
-import withMaxSet from '../../components/withMaxSet';
+import DataProvider from '../../components/DataProvider';
+import type { RealmResults } from '../../types';
 
 type Props = {
   day: string,
-  dispatch: () => void,
   exerciseKey: string,
-  exercise?: WorkoutExerciseSchemaType,
-  exercisesCount: number,
-  maxSetId: string,
+  exercise?: ?WorkoutExerciseSchemaType,
 };
 
 type State = {
@@ -126,7 +128,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   };
 
   _onAddSet = () => {
-    const { day, dispatch, exerciseKey, exercise, exercisesCount } = this.props;
+    const { day, exerciseKey, exercise } = this.props;
     const { reps, selectedId, weight } = this.state;
 
     let newExercise = null;
@@ -149,14 +151,13 @@ export class EditSetsWithControls extends React.Component<Props, State> {
         comments: '',
         date: toDate(day),
         type: exerciseKey,
-        sort: exercisesCount + 1,
       };
-      addExercise(dispatch, newExercise);
+      addExercise(newExercise);
     } else if (!selectedId) {
       const lastId = exercise.sets[exercise.sets.length - 1].id;
       const lastIndex = extractSetIndexFromDatabase(lastId);
 
-      addSet(dispatch, {
+      addSet({
         id: getSetSchemaId(day, exerciseKey, lastIndex + 1),
         weight,
         reps,
@@ -164,7 +165,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
         type: exerciseKey,
       });
     } else if (selectedId) {
-      updateSet(dispatch, {
+      updateSet({
         id: selectedId,
         weight,
         reps,
@@ -179,21 +180,20 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   };
 
   _onDeleteSet = () => {
-    const { dispatch } = this.props;
     const { selectedId } = this.state;
 
     Keyboard.dismiss();
 
-    deleteSet(dispatch, selectedId);
+    deleteSet(selectedId);
     this.setState({ selectedId: '' });
   };
 
-  _renderItem = ({ item, index }) => (
+  _renderItem = ({ item, index }, maxSetId) => (
     <EditSetItem
       set={item}
       index={index + 1}
       isSelected={this.state.selectedId === item.id}
-      isMaxSet={this.props.maxSetId === item.id}
+      isMaxSet={maxSetId === item.id}
       onPressItem={this._onPressItem}
     />
   );
@@ -238,13 +238,23 @@ export class EditSetsWithControls extends React.Component<Props, State> {
               onDeleteSet={this._onDeleteSet}
             />
           </Card>
-          <FlatList
-            contentContainerStyle={styles.list}
-            data={exercise ? exercise.sets : []}
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderItem}
-            extraData={[this.state.selectedId, this.props.maxSetId]}
-            keyboardShouldPersistTaps="always"
+          <DataProvider
+            query={getMaxSetByType}
+            args={[this.props.exerciseKey]}
+            parse={(sets: RealmResults<WorkoutSetSchemaType>) =>
+              sets.length > 0 ? sets[0].id : null
+            }
+            render={(maxSetId: string) => (
+              <FlatList
+                contentContainerStyle={styles.list}
+                // It's possible that we delete the whole exercise so this access to .sets would be invalid
+                data={exercise && exercise.isValid() ? exercise.sets : []}
+                keyExtractor={this._keyExtractor}
+                renderItem={propsData => this._renderItem(propsData, maxSetId)}
+                extraData={[this.state.selectedId, exercise]}
+                keyboardShouldPersistTaps="always"
+              />
+            )}
           />
         </View>
       </AndroidBackHandler>
@@ -269,4 +279,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withMaxSet(EditSetsWithControls);
+export default EditSetsWithControls;

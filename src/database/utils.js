@@ -1,7 +1,6 @@
 /* @flow */
 
 import leftPad from 'left-pad';
-import type { WorkoutSchemaType } from './types';
 
 export const getExerciseSchemaId = (day: string, exerciseKey: string) =>
   `${day}_${exerciseKey}`;
@@ -23,20 +22,3 @@ export const extractExerciseKeyFromDatabase = (id: string) => id.split('_')[1];
 
 export const extractSetIndexFromDatabase = (id: string) =>
   parseInt(id.split('_')[2], 10);
-
-// Parameter is in fact a Realm object
-export const deserializeWorkout = (
-  workout: WorkoutSchemaType
-): WorkoutSchemaType => ({
-  id: workout.id,
-  date: workout.date,
-  comments: workout.comments,
-  exercises: Array.from(workout.exercises)
-    // eslint-disable-next-line no-nested-ternary
-    .sort((a, b) => (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0))
-    .map(e =>
-      Object.assign({}, e, {
-        sets: Array.from(e.sets).map(s => Object.assign({}, s)),
-      })
-    ),
-});

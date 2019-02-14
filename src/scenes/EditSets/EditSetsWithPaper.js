@@ -19,13 +19,11 @@ import type { ThemeType } from '../../utils/theme/withTheme';
 import type { NavigationType } from '../../types';
 
 type Props = {
-  dispatch: () => void,
   day: string,
   exerciseKey: string,
   exerciseName?: string,
   // eslint-disable-next-line react/no-unused-prop-types
   exercise: ?WorkoutExerciseSchemaType,
-  exercisesCount: number,
   navigation: NavigationType<{
     day: string,
     exerciseKey: string,
@@ -84,7 +82,7 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
   }
 
   _saveSets = () => {
-    const { day, exerciseKey, exercise, dispatch, exercisesCount } = this.props;
+    const { day, exerciseKey, exercise } = this.props;
     const { exerciseSummary } = this.state;
     const { comments, sets } = parseSummary(exerciseSummary, day, exerciseKey);
     const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
@@ -96,16 +94,15 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
       sets,
       type: exerciseKey,
       date,
-      sort: exercise ? exercise.sort : exercisesCount + 1,
     };
 
     if (!exercise && newExercise.sets.length > 0) {
       // New one recently added
-      addExercise(dispatch, newExercise);
+      addExercise(newExercise);
     }
 
     if (exercise) {
-      updateExercisePaperForWorkout(dispatch, newExercise);
+      updateExercisePaperForWorkout(newExercise);
     }
   };
 

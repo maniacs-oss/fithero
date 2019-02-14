@@ -86,9 +86,14 @@ export class ExercisesScreen extends Component<Props, State> {
         }));
       });
 
-      changes.deletions.forEach(i => {
-        this.setState(prevState => ({
-          exercises: prevState.exercises.filter(e => e.id !== exercises[i].id),
+      changes.deletions.forEach(() => {
+        // From Realm docs: "Deleted objects cannot be accessed directly"
+        // As our list is a combination of app exercises and custom user ones,
+        // We do not really know where the delete exercise is
+        this.setState(() => ({
+          exercises: sortBy([...getAllExercises(), ...dzikuExercises], e =>
+            getExerciseName(e.id, e.name)
+          ),
         }));
       });
     });
@@ -116,7 +121,11 @@ export class ExercisesScreen extends Component<Props, State> {
   _keyExtractor = item => item.id;
 
   _renderItem = ({ item }) => (
-    <ExerciseItem exercise={item} onPressItem={this._onExercisePress} />
+    <ExerciseItem
+      exercise={item}
+      navigate={this.props.navigation.navigate}
+      onPressItem={this._onExercisePress}
+    />
   );
 
   _onSelectCategory = (id: string) => {
@@ -146,7 +155,7 @@ export class ExercisesScreen extends Component<Props, State> {
     }
 
     return this.state.exercises.filter(e => {
-      const exerciseName = getExerciseName(e.id);
+      const exerciseName = getExerciseName(e.id, e.name);
       const matchesSearch =
         exerciseName
           .toLowerCase()
@@ -175,7 +184,7 @@ export class ExercisesScreen extends Component<Props, State> {
   _renderHeader = () => {
     const { day } = this.props.navigation.state.params;
     return (
-      <View>
+      <View style={styles.listHeader}>
         <ExerciseHeader day={day} style={styles.header} />
         <ChipsCategory
           items={mainCategories}
@@ -253,6 +262,9 @@ const styles = StyleSheet.create({
       ios: { height: 44 },
       android: { flex: 1, height: 48 },
     }),
+  },
+  listHeader: {
+    paddingBottom: 8,
   },
   list: {
     paddingTop: 4,

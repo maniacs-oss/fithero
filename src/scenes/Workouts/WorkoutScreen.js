@@ -3,35 +3,25 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
-import { connect } from 'react-redux';
 
-import Screen from '../../components/Screen';
 import WorkoutList from '../../components/WorkoutList';
-import {
-  getDay,
-  getDatePrettyFormat,
-  getToday,
-  toDate,
-} from '../../utils/date';
-import { getWorkout } from '../../database/services/WorkoutService';
+import { getDay, getDatePrettyFormat, getToday } from '../../utils/date';
+import { getWorkoutById } from '../../database/services/WorkoutService';
 import type { NavigationType } from '../../types';
 import type { WorkoutSchemaType } from '../../database/types';
+import DataProvider from '../../components/DataProvider';
+import Screen from '../../components/Screen';
 
-type Props = {
-  dispatch: () => void,
+type NavigationOptions = {
   navigation: NavigationType<{ day: string }>,
-  workout: ?WorkoutSchemaType,
 };
 
+type Props = NavigationOptions & {};
+
 class WorkoutScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({ navigation }: NavigationOptions) => ({
     title: getDatePrettyFormat(navigation.state.params.day, getToday(), true),
   });
-
-  componentDidMount() {
-    const day = getDay(this.props.navigation.state.params.day);
-    getWorkout(this.props.dispatch, toDate(day));
-  }
 
   _onAddExercises = () => {
     const day = getDay(this.props.navigation.state.params.day);
@@ -48,17 +38,24 @@ class WorkoutScreen extends React.Component<Props> {
   };
 
   render() {
-    const { workout } = this.props;
+    const day = getDay(this.props.navigation.state.params.day);
 
     return (
       <Screen>
-        {workout && (
-          <WorkoutList
-            contentContainerStyle={styles.list}
-            workout={workout}
-            onPressItem={this._onExercisePress}
-          />
-        )}
+        <DataProvider
+          query={getWorkoutById}
+          args={[day]}
+          parse={(data: Array<WorkoutSchemaType>) =>
+            data.length > 0 ? data[0] : null
+          }
+          render={(workout: ?WorkoutSchemaType) => (
+            <WorkoutList
+              contentContainerStyle={styles.list}
+              workout={workout}
+              onPressItem={this._onExercisePress}
+            />
+          )}
+        />
         <FAB icon="add" onPress={this._onAddExercises} style={styles.fab} />
       </Screen>
     );
@@ -78,12 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(
-  (state, ownProps) => {
-    const day = getDay(ownProps.navigation.state.params.day);
-    return {
-      workout: state.workouts[day],
-    };
-  },
-  null
-)(WorkoutScreen);
+export default WorkoutScreen;

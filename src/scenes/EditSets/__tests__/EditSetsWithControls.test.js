@@ -27,7 +27,6 @@ const date = toDate('2018-05-01T00:00:00.000Z');
 
 describe('EditSetsWithControls', () => {
   const day = '2018-05-01T00:00:00.000Z';
-  const dispatch = jest.fn();
   const exerciseKey = 'bench-press';
   const exercise = {
     id: '2018-05-01T00:00:00.000Z_bench-press',
@@ -50,7 +49,6 @@ describe('EditSetsWithControls', () => {
     ],
     date,
     type: 'bench-press',
-    sort: 1,
   };
 
   const defaultWeight = 20;
@@ -72,7 +70,6 @@ describe('EditSetsWithControls', () => {
       const wrapper = shallow(
         <EditSetsWithControls
           day={day}
-          dispatch={dispatch}
           exerciseKey={exerciseKey}
           exercisesCount={1}
           maxSetId=""
@@ -110,9 +107,8 @@ describe('EditSetsWithControls', () => {
       const wrapper = shallow(
         <EditSetsWithControls
           day={day}
-          dispatch={dispatch}
           exerciseKey={exerciseKey}
-          exercise={exercise}
+          exercise={{ sort: 1, isValid: jest.fn(), ...exercise }}
           exercisesCount={1}
           maxSetId=""
         />
@@ -149,7 +145,6 @@ describe('EditSetsWithControls', () => {
       const wrapper = shallow(
         <EditSetsWithControls
           day={day}
-          dispatch={dispatch}
           exerciseKey={exerciseKey}
           exercisesCount={0}
           maxSetId=""
@@ -176,7 +171,6 @@ describe('EditSetsWithControls', () => {
       const wrapper = shallow(
         <EditSetsWithControls
           day={day}
-          dispatch={dispatch}
           exerciseKey={exerciseKey}
           exercisesCount={1}
           maxSetId=""
@@ -223,7 +217,6 @@ describe('EditSetsWithControls', () => {
       const wrapper = shallow(
         <EditSetsWithControls
           day={day}
-          dispatch={dispatch}
           exerciseKey={exerciseKey}
           exercisesCount={1}
           maxSetId=""
@@ -260,7 +253,6 @@ describe('EditSetsWithControls', () => {
       const wrapper = shallow(
         <EditSetsWithControls
           day={day}
-          dispatch={dispatch}
           exerciseKey={exerciseKey}
           exercisesCount={1}
           maxSetId=""
@@ -290,7 +282,6 @@ describe('EditSetsWithControls', () => {
     const wrapper = shallow(
       <EditSetsWithControls
         day={day}
-        dispatch={dispatch}
         exerciseKey={exerciseKey}
         exercisesCount={1}
         maxSetId=""

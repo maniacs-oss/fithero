@@ -2,11 +2,10 @@
 
 import {
   addExercise,
-  deleteExercise,
+  deleteWorkoutExercise,
   updateExercisePaperForWorkout,
 } from '../WorkoutExerciseService';
 import realm from '../../index';
-import { getExercise } from '../../../redux/modules/workouts';
 import {
   RealmArray,
   dates,
@@ -19,7 +18,6 @@ import {
 
 jest.mock('realm');
 
-const dispatch = jest.fn();
 const mockExercise = getMockExercises(mockSets)[0];
 
 beforeEach(() => {
@@ -31,10 +29,7 @@ describe('addExercise', () => {
     realm.create = jest.fn(() => mockRealmWorkout);
     realm.objectForPrimaryKey = jest.fn(() => null);
 
-    addExercise(dispatch, mockExercise);
-
-    expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toBeCalledWith(getExercise(mockExercise));
+    addExercise(mockExercise);
 
     expect(realm.create).toHaveBeenCalledTimes(1);
     expect(realm.create).toBeCalledWith('Workout', {
@@ -49,10 +44,7 @@ describe('addExercise', () => {
   it('pushes the new exercise directly into a existing workout', () => {
     realm.objectForPrimaryKey = jest.fn(() => mockRealmWorkout);
 
-    addExercise(dispatch, mockExercise);
-
-    expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toBeCalledWith(getExercise(mockExercise));
+    addExercise(mockExercise);
 
     expect(realm.create).toHaveBeenCalledTimes(0);
 
@@ -61,18 +53,18 @@ describe('addExercise', () => {
   });
 });
 
-describe('deleteExercise', () => {
+describe('deleteWorkoutExercise', () => {
   it('deletes an exercise', () => {
     // Mock it to return a workout that still has exercises
     realm.objectForPrimaryKey = jest.fn(() => mockWorkouts[0]);
-    deleteExercise(mockExercise);
+    deleteWorkoutExercise(mockExercise);
     expect(realm.delete).toHaveBeenCalledTimes(1);
     expect(realm.delete).toHaveBeenCalledWith(mockExercise);
   });
   it('deletes an exercise and the workout', () => {
     // Mock it to return a workout with empty exercises
     realm.objectForPrimaryKey = jest.fn(() => mockWorkouts[1]);
-    deleteExercise(mockExercise);
+    deleteWorkoutExercise(mockExercise);
     expect(realm.delete).toHaveBeenCalledTimes(2);
     expect(realm.delete).toHaveBeenCalledWith(mockExercise);
   });
@@ -99,7 +91,7 @@ describe('updateExercisePaperForWorkout', () => {
     };
 
     // $FlowFixMe Hard to type this way of mocking RealmArray for tests
-    updateExercisePaperForWorkout(dispatch, mutatedExercise);
+    updateExercisePaperForWorkout(mutatedExercise);
 
     expect(mutatedExercise.comments).toEqual('New comment!');
     expect(mockSets.push).toHaveBeenCalledTimes(0);
@@ -123,7 +115,7 @@ describe('updateExercisePaperForWorkout', () => {
     };
 
     // $FlowFixMe Hard to type this way of mocking RealmArray for tests
-    updateExercisePaperForWorkout(dispatch, mutatedExercise);
+    updateExercisePaperForWorkout(mutatedExercise);
 
     expect(mutatedExercise.sets).toHaveLength(2);
     expect(mockSets.push).toHaveBeenCalledTimes(1);
@@ -147,7 +139,7 @@ describe('updateExercisePaperForWorkout', () => {
     };
 
     // $FlowFixMe Hard to type this way of mocking RealmArray for tests
-    updateExercisePaperForWorkout(dispatch, mutatedExercise);
+    updateExercisePaperForWorkout(mutatedExercise);
 
     expect(mockSets.push).toHaveBeenCalledTimes(0);
     expect(realm.delete).toHaveBeenCalledTimes(2);

@@ -10,6 +10,7 @@ import { EDIT_SETS_SCREEN_TYPE } from '../../../redux/modules/settings';
 
 jest.mock('../EditSetsWithControls');
 jest.mock('../EditSetsWithPaper');
+jest.mock('../../../components/DataProvider', () => props => props.render());
 
 const getComponent = (type: 'list' | 'paper') => {
   store.dispatch({
