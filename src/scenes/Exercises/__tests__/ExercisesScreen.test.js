@@ -59,11 +59,11 @@ describe('ExercisesScreen', () => {
       ._getData('Barbell Squat', wrapper.state().tagSelection);
 
     expect(data).toEqual([
-      {
+      expect.objectContaining({
         id: 'barbell-squat',
         primary: ['quadriceps'],
         secondary: ['hamstrings'],
-      },
+      }),
     ]);
   });
 
@@ -109,11 +109,11 @@ describe('ExercisesScreen', () => {
       ._getData(newState.searchQuery, newState.tagSelection);
 
     expect(data).toEqual([
-      {
+      expect.objectContaining({
         id: 'air-bike',
         primary: ['abs'],
         secondary: [],
-      },
+      }),
     ]);
   });
 
@@ -135,11 +135,11 @@ describe('ExercisesScreen', () => {
       ._getData(newState.searchQuery, newState.tagSelection);
 
     expect(data).toEqual([
-      {
+      expect.objectContaining({
         id: 'decline-barbell-bench-press',
         primary: ['chest'],
         secondary: ['triceps', 'shoulders'],
-      },
+      }),
     ]);
   });
 
