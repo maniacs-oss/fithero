@@ -66,8 +66,7 @@ export const deleteExercise = (id: string) => {
       .filtered(`type = $0`, id);
 
     // We first need to delete any exercise referenced that is part of a workout
-    realm.delete(workoutExerciseSets);
-    realm.delete(workoutExercises);
+    realm.delete([...workoutExerciseSets, ...workoutExercises]);
 
     // Clear workouts if necessary
     const emptyWorkouts = realm

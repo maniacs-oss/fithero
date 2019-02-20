@@ -31,17 +31,26 @@ class WorkoutList extends React.Component<Props> {
         <DataProvider
           query={getExerciseById}
           args={[extractExerciseKeyFromDatabase(item.id)]}
-          parse={(data: Array<ExerciseSchemaType>) => data[0].name}
-          render={(data: string) => (
-            <WorkoutItem
-              exercise={item}
-              customExerciseName={data}
-              onPressItem={this._onPressItem}
-            />
-          )}
+          parse={(data: Array<ExerciseSchemaType>) =>
+            data.length > 0 ? data[0].name : ''
+          }
+          render={(customName: string) => {
+            if (!item.isValid()) {
+              // We might have deleted the whole user exercise
+              return null;
+            }
+            return (
+              <WorkoutItem
+                exercise={item}
+                customExerciseName={customName}
+                onPressItem={this._onPressItem}
+              />
+            );
+          }}
         />
       );
     }
+
     return <WorkoutItem exercise={item} onPressItem={this._onPressItem} />;
   };
 

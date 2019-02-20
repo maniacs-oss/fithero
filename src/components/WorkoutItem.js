@@ -41,6 +41,12 @@ class WorkoutItem extends React.PureComponent<Props> {
         sets.length > 0 ? sets[0].id : null
       }
       render={(maxSetId: string) => {
+        // $FlowFixMe type RealmObject(s) better
+        if (!set.isValid()) {
+          // When we delete a set we might hit here firts
+          return null;
+        }
+
         const { colors } = this.props.theme;
         const isMaxSet = maxSetId === set.id;
         const color = isMaxSet ? colors.trophy : colors.secondaryText;

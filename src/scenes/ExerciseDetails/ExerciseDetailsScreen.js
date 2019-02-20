@@ -34,6 +34,7 @@ type Props = NavigationOptions & {};
 
 type State = {
   showDeleteDialog: boolean,
+  isDeleting: boolean,
 };
 
 class ExerciseDetailsScreen extends React.Component<Props, State> {
@@ -63,6 +64,7 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
     super(props);
     this.state = {
       showDeleteDialog: false,
+      isDeleting: false,
     };
 
     this.props.navigation.setParams({ editAction: this._editExercise });
@@ -86,8 +88,10 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
   };
 
   _deleteExercise = () => {
-    deleteExercise(this.props.navigation.state.params.id);
-    this.props.navigation.goBack();
+    this.setState({ isDeleting: true }, () => {
+      deleteExercise(this.props.navigation.state.params.id);
+      this.props.navigation.goBack();
+    });
   };
 
   _renderBody = exercise => (
@@ -136,6 +140,10 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
   );
 
   render() {
+    if (this.state.isDeleting) {
+      return null;
+    }
+
     const { params = {} } = this.props.navigation.state;
     const id = params.id;
     if (isCustomExercise(id)) {
@@ -143,7 +151,9 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
         <DataProvider
           query={getExerciseById}
           args={[id]}
-          parse={(data: Array<ExerciseSchemaType>) => (data ? data[0] : null)}
+          parse={(data: Array<ExerciseSchemaType>) =>
+            data.length > 0 ? data[0] : null
+          }
           render={(exercise: ?ExerciseSchemaType) =>
             exercise ? this._renderBody(exercise) : null
           }

@@ -75,10 +75,12 @@ describe('deleteExercise', () => {
 
     deleteExercise(mockExercise.id);
 
-    expect(realm.delete).toHaveBeenCalledTimes(4);
-    expect(realm.delete.mock.calls[0][0]).toEqual(mockWorkoutExercise.sets);
-    expect(realm.delete.mock.calls[1][0]).toEqual([mockWorkoutExercise]);
-    expect(realm.delete.mock.calls[2][0]).toEqual([mockWorkout]);
-    expect(realm.delete.mock.calls[3][0]).toEqual(mockExercise);
+    expect(realm.delete).toHaveBeenCalledTimes(3);
+    expect(realm.delete.mock.calls[0][0]).toEqual([
+      ...mockWorkoutExercise.sets,
+      mockWorkoutExercise,
+    ]);
+    expect(realm.delete.mock.calls[1][0]).toEqual([mockWorkout]);
+    expect(realm.delete.mock.calls[2][0]).toEqual(mockExercise);
   });
 });
