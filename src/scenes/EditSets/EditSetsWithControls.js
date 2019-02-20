@@ -251,7 +251,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
                 data={exercise && exercise.isValid() ? exercise.sets : []}
                 keyExtractor={this._keyExtractor}
                 renderItem={propsData => this._renderItem(propsData, maxSetId)}
-                extraData={[this.state.selectedId, exercise]}
+                extraData={[this.state.selectedId]}
                 keyboardShouldPersistTaps="always"
               />
             )}
