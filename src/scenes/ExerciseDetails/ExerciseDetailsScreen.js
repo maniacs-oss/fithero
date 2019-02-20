@@ -97,9 +97,9 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
           <Title style={styles.section}>
             {getExerciseName(exercise.id, exercise.name)}
           </Title>
-          {exercise.notes && (
+          {exercise.notes ? (
             <Paragraph style={styles.section}>{exercise.notes}</Paragraph>
-          )}
+          ) : null}
           <View style={styles.section}>
             <Caption style={styles.smallSubheading}>
               {i18n.t('primary_muscle')}

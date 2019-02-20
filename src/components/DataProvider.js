@@ -41,7 +41,18 @@ class DataProvider<T, A> extends React.Component<Props<T, A>, State<*>> {
   }
 
   render() {
-    return this.props.render(this.state.data);
+    try {
+      return this.props.render(this.state.data);
+    } catch (e) {
+      // Deleting Realm objects might cause crashes here
+      // Instead of having a lot of isValid() around all the files,
+      // this seems to do the trick
+      if (e.message.includes('Accessing object of type')) {
+        return null;
+      }
+      // TODO send to bugsnag
+      throw e;
+    }
   }
 }
 
