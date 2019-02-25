@@ -1,0 +1,21 @@
+diff --git a/node_modules/react-native-paper/src/components/Card/Card.js b/node_modules/react-native-paper/src/components/Card/Card.js
+index 923afbc..0191d7a 100644
+--- a/node_modules/react-native-paper/src/components/Card/Card.js
++++ b/node_modules/react-native-paper/src/components/Card/Card.js
+@@ -4,6 +4,7 @@ import * as React from 'react';
+ import {
+   Animated,
+   View,
++  Platform,
+   TouchableWithoutFeedback,
+   StyleSheet,
+ } from 'react-native';
+@@ -89,7 +90,7 @@ class Card extends React.Component<Props, State> {
+   static Title = CardTitle;
+ 
+   static defaultProps = {
+-    elevation: 1,
++    elevation: Platform.OS === 'android' && Platform.Version >= 28 ? 0 : 1,
+   };
+ 
+   state = {

@@ -9,7 +9,8 @@
     "test": "jest",
     "flow": "flow --include-warnings",
     "lint": "eslint .",
-    "ci": "npm test && npm run lint && npm run flow"
+    "ci": "npm test && npm run lint && npm run flow",
+    "prepare": "patch-package"
   },
   "dependencies": {
     "bugsnag-react-native": "^2.10.2",
@@ -22,7 +23,7 @@
     "react-native-calendars": "^1.21.0",
     "react-native-gesture-handler": "^1.0.10",
     "react-native-i18n": "^2.0.12",
-    "react-native-paper": "^2.11.0",
+    "react-native-paper": "^2.11.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^3.0.8",
     "react-navigation-backhandler": "^1.1.1",
@@ -42,6 +43,8 @@
     "flow-bin": "0.78.0",
     "jest": "^24.0.0-alpha.12",
     "metro-react-native-babel-preset": "^0.50.0",
+    "patch-package": "^6.0.4",
+    "postinstall-prepare": "^1.0.1",
     "react-dom": "^16.3.1",
     "react-native-testing-library": "^1.5.0",
     "react-test-renderer": "16.6.3"
