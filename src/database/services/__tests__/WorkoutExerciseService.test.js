@@ -143,9 +143,7 @@ describe('updateExercisePaperForWorkout', () => {
 
     expect(mockSets.push).toHaveBeenCalledTimes(0);
     expect(realm.delete).toHaveBeenCalledTimes(2);
-    // $FlowFixMe figure out what is going on with toHaveBeenNthCalledWith
     expect(realm.delete).toHaveBeenNthCalledWith(1, [mockSets[0]]);
-    // $FlowFixMe figure out what is going on with toHaveBeenNthCalledWith
     expect(realm.delete).toHaveBeenNthCalledWith(
       2,
       mockNewRealmWorkout.exercises[0]

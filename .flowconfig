@@ -19,10 +19,16 @@
 ; Ignore metro
 .*/node_modules/metro/.*
 
+; Dependency of realm
+.*/node_modules/license-checker/.*
+
 [untyped]
 ; Bunch of errors (uses to new version of Flow?)
 .*/node_modules/react-native-testing-library/.*
 .*/node_modules/react-native-safe-area-view/.*
+; Flow definitions from Paper not compatible with RN 0.58.x and flow 0.86.0
+.*/node_modules/react-native-paper/.*
+.*/node_modules/realm/node_modules/license-checker/
 
 [include]
 
@@ -30,6 +36,7 @@
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow/
 node_modules/react-native/flow-github/
+node_modules/react-navigation/flow/react-navigation.js
 
 [options]
 emoji=true
@@ -76,4 +83,4 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 unnecessary-optional-chain=error
 
 [version]
-^0.78.0
+^0.86.0

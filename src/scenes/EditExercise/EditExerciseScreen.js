@@ -117,7 +117,6 @@ export class EditExerciseScreen extends React.Component<Props, State> {
     return (
       <ScrollView>
         <View style={styles.screen}>
-          {/* $FlowFixMe passing theme to a component gives Flow errors (Paper) */}
           <TextInput
             label={i18n.t('name')}
             mode="outlined"
@@ -133,7 +132,6 @@ export class EditExerciseScreen extends React.Component<Props, State> {
             error={this._isErrorName()}
             style={styles.inputRow}
           />
-          {/* $FlowFixMe passing theme to a component gives Flow errors (Paper) */}
           <TextInput
             label={i18n.t('notes')}
             mode="outlined"

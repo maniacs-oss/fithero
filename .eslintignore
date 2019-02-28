@@ -3,3 +3,4 @@
 /android/**
 /coverage/**
 /flow-typed/**
+/patches/**

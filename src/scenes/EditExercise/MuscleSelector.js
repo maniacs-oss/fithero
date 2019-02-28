@@ -58,7 +58,6 @@ class MuscleSelector extends React.Component<Props> {
             onValueChange={this._onMuscleChange}
             style={styles.item}
             render={props => (
-              // $FlowFixMe value in RadioButton is required
               <ItemComponent status={props.checked ? 'checked' : 'unchecked'} />
             )}
           />

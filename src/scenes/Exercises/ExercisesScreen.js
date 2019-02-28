@@ -210,7 +210,6 @@ export class ExercisesScreen extends Component<Props, State> {
         <View
           style={[styles.searchToolbar, { backgroundColor: colors.surface }]}
         >
-          {/* $FlowFixMe problems with the theme from Paper */}
           <Searchbar
             style={styles.searchBar}
             onChangeText={this._onSearchChange}
