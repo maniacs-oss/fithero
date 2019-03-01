@@ -13,6 +13,7 @@ import {
   getFirstAndLastMonthDay,
   getFirstAndLastWeekday,
 } from '../date';
+import { clearTranslateCache } from '../i18n';
 
 beforeEach(() => {
   moment.locale('en');
@@ -76,6 +77,7 @@ describe('getDatePrettyFormat', () => {
 
     moment.locale('es');
     I18nJs.locale = 'es';
+    clearTranslateCache();
     expect(
       getDatePrettyFormat(
         '2018-05-04T00:00:00.000Z',

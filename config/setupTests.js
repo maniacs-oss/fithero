@@ -13,3 +13,6 @@ jest.mock('realm');
 jest.mock('react-navigation-backhandler', () => ({
   AndroidBackHandler: ({ children }) => children,
 }));
+jest.mock('react-native-localize', () => ({
+  findBestAvailableLanguage: () => 'en',
+}));

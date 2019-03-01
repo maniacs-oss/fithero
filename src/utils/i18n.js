@@ -1,12 +1,36 @@
 /* @flow */
 
-import I18n from 'react-native-i18n';
+import * as RNLocalize from 'react-native-localize';
+import i18nJS from 'i18n-js';
+import memoize from 'lodash/memoize';
 import { en, es } from './locales';
 
-I18n.fallbacks = true;
-I18n.translations = {
+const translate = memoize(
+  (key, config) => i18nJS.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+);
+
+// fallback if no available language fits
+const fallback = { languageTag: 'en', isRTL: false };
+
+const { languageTag } =
+  RNLocalize.findBestAvailableLanguage(['en', 'es']) || fallback;
+
+// clear translation cache
+translate.cache.clear();
+
+// set i18n-js config
+i18nJS.fallbacks = true;
+i18nJS.translations = {
   en,
   es,
 };
+i18nJS.locale = languageTag;
 
-export default I18n;
+export const clearTranslateCache = () => translate.cache.clear();
+
+const i18n = {
+  t: translate,
+};
+
+export default i18n;
