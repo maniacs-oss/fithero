@@ -17,6 +17,7 @@ export type AddWorkoutExerciseSchemaType = {
   type: string,
   sets: Array<WorkoutSetSchemaType>,
   comments?: string,
+  weight_unit: 'metric' | 'imperial',
 };
 
 export type WorkoutExerciseSchemaType = RealmObject &

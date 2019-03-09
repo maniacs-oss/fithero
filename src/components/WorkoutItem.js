@@ -16,8 +16,11 @@ import withTheme from '../utils/theme/withTheme';
 import { getMaxSetByType } from '../database/services/WorkoutSetService';
 import type { RealmResults } from '../types';
 import DataProvider from './DataProvider';
+import { getWeightUnit, toLb, toTwoDecimals } from '../utils/metrics';
+import type { DefaultUnitSystemType } from '../redux/modules/settings';
 
 type Props = {
+  defaultUnitSystem: DefaultUnitSystemType,
   exercise: WorkoutExerciseSchemaType,
   customExerciseName?: string,
   onPressItem: (exerciseKey: string, customExerciseName?: string) => void,
@@ -32,39 +35,53 @@ class WorkoutItem extends React.PureComponent<Props> {
     );
   };
 
-  _renderSet = (set: WorkoutSetSchemaType, index: number) => (
-    <DataProvider
-      key={set.id}
-      query={getMaxSetByType}
-      args={[extractExerciseKeyFromDatabase(this.props.exercise.id)]}
-      parse={(sets: RealmResults<WorkoutSetSchemaType>) =>
-        sets.length > 0 ? sets[0].id : null
-      }
-      render={(maxSetId: string) => {
-        // $FlowFixMe type RealmObject(s) better
-        if (!set.isValid()) {
-          // When we delete a set we might hit here firts
-          return null;
+  _renderSet = (set: WorkoutSetSchemaType, index: number) => {
+    const { exercise, defaultUnitSystem } = this.props;
+
+    const unit = getWeightUnit(exercise, defaultUnitSystem);
+
+    return (
+      <DataProvider
+        key={set.id}
+        query={getMaxSetByType}
+        args={[extractExerciseKeyFromDatabase(this.props.exercise.id)]}
+        parse={(sets: RealmResults<WorkoutSetSchemaType>) =>
+          sets.length > 0 ? sets[0].id : null
         }
+        render={(maxSetId: string) => {
+          // $FlowFixMe type RealmObject(s) better
+          if (!set.isValid()) {
+            // When we delete a set we might hit here firts
+            return null;
+          }
 
-        const { colors } = this.props.theme;
-        const isMaxSet = maxSetId === set.id;
-        const color = isMaxSet ? colors.trophy : colors.secondaryText;
+          const { colors } = this.props.theme;
+          const isMaxSet = maxSetId === set.id;
+          const color = isMaxSet ? colors.trophy : colors.secondaryText;
 
-        return (
-          <View style={styles.setRow}>
-            <Text style={[styles.setIndex, { color }]}>{`${index + 1}.`}</Text>
-            <Text style={[styles.setWeight, { color }]}>{`${i18n.t('kg.value', {
-              count: set.weight,
-            })}`}</Text>
-            <Text style={[styles.setReps, { color }]}>{`${i18n.t('reps.value', {
-              count: set.reps,
-            })}`}</Text>
-          </View>
-        );
-      }}
-    />
-  );
+          return (
+            <View style={styles.setRow}>
+              <Text style={[styles.setIndex, { color }]}>{`${index +
+                1}.`}</Text>
+              <Text style={[styles.setWeight, { color }]}>
+                {unit === 'metric'
+                  ? `${i18n.t('kg.value', {
+                      count: toTwoDecimals(set.weight),
+                    })}`
+                  : `${toTwoDecimals(toLb(set.weight))} ${i18n.t('lb')}`}
+              </Text>
+              <Text style={[styles.setReps, { color }]}>{`${i18n.t(
+                'reps.value',
+                {
+                  count: set.reps,
+                }
+              )}`}</Text>
+            </View>
+          );
+        }}
+      />
+    );
+  };
 
   render() {
     const { exercise, customExerciseName } = this.props;

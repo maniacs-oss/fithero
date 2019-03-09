@@ -9,7 +9,8 @@ import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
 import theme from './utils/theme';
 import { Settings } from './utils/constants';
-import { setEditSetsScreenType } from './redux/modules/settings';
+import { initSettings } from './redux/modules/settings';
+import { getDefaultUnitSystemByCountry } from './utils/metrics';
 
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
@@ -26,14 +27,29 @@ const navigationPersistenceKey = global.__DEV__
   : null;
 
 export default class App extends React.Component<{}> {
-  componentDidMount() {
+  constructor(props: {}) {
+    super(props);
     this._loadSettings();
   }
 
   _loadSettings = async () => {
-    // TODO do it in better place and make sure its loaded (SplashScreen)
-    const type = await AsyncStorage.getItem(Settings.editSetsScreen);
-    store.dispatch(setEditSetsScreenType(type || 'list'));
+    // TODO Do it in the SplashScreen and render content after it
+    const editSetsScreenType = await AsyncStorage.getItem(
+      Settings.editSetsScreen
+    );
+    let defaultUnitSystem = await AsyncStorage.getItem(
+      Settings.defaultUnitSystem
+    );
+    if (defaultUnitSystem == null) {
+      defaultUnitSystem = getDefaultUnitSystemByCountry();
+      await AsyncStorage.setItem(Settings.defaultUnitSystem, defaultUnitSystem);
+    }
+    store.dispatch(
+      initSettings({
+        editSetsScreenType: editSetsScreenType || 'list',
+        defaultUnitSystem,
+      })
+    );
   };
 
   render() {

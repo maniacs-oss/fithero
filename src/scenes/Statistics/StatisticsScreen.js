@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
+import { connect } from 'react-redux';
 
 import DataProvider from '../../components/DataProvider';
 import {
@@ -18,14 +19,17 @@ import type {
 import { getSetsThisWeek } from '../../database/services/WorkoutSetService';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
+import type { DefaultUnitSystemType } from '../../redux/modules/settings';
+import { toLb } from '../../utils/metrics';
 
 type Props = {
+  defaultUnitSystem: DefaultUnitSystemType,
   theme: ThemeType,
 };
 
 class StatisticsScreen extends React.Component<Props> {
   render() {
-    const { theme } = this.props;
+    const { defaultUnitSystem, theme } = this.props;
 
     return (
       <View style={styles.screen}>
@@ -79,10 +83,15 @@ class StatisticsScreen extends React.Component<Props> {
                 )
               }
               render={(data: number) => {
-                const unit = i18n.t('kg.unit', { count: Math.floor(data) });
+                const unit =
+                  defaultUnitSystem === 'metric'
+                    ? i18n.t('kg.unit', { count: Math.floor(data) })
+                    : i18n.t('lb');
                 return (
                   <Text style={styles.singleNumber}>
-                    {data}{' '}
+                    {Math.floor(
+                      defaultUnitSystem === 'metric' ? data : toLb(data)
+                    )}{' '}
                     <Text
                       style={[
                         styles.unit,
@@ -132,4 +141,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(StatisticsScreen);
+export default withTheme(
+  connect(
+    state => ({
+      defaultUnitSystem: state.settings.defaultUnitSystem,
+    }),
+    null
+  )(StatisticsScreen)
+);

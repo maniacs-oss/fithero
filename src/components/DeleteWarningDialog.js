@@ -10,20 +10,34 @@ import {
 } from 'react-native-paper';
 
 import i18n from '../utils/i18n';
+import withTheme from '../utils/theme/withTheme';
+import type { ThemeType } from '../utils/theme/withTheme';
 
 type Props = {
   description: string,
   title?: string,
   onConfirm: () => void,
   onDismiss: () => void,
+  visible: boolean,
+  theme: ThemeType,
 };
 
 class DeleteWarningDialog extends React.Component<Props> {
   render() {
-    const { description, title, onConfirm, onDismiss } = this.props;
+    const { description, title, onConfirm, onDismiss, visible } = this.props;
+    const { colors } = this.props.theme;
+
+    const dialogTheme = {
+      ...DefaultTheme,
+      colors: {
+        ...DefaultTheme.colors,
+        primary: colors.primary,
+      },
+    };
+
     return (
       <Portal>
-        <Dialog visible theme={DefaultTheme} onDismiss={onDismiss}>
+        <Dialog visible={visible} theme={dialogTheme} onDismiss={onDismiss}>
           {title && <Dialog.Title>{title}</Dialog.Title>}
           <Dialog.Content>
             <Paragraph>{description}</Paragraph>
@@ -38,4 +52,4 @@ class DeleteWarningDialog extends React.Component<Props> {
   }
 }
 
-export default DeleteWarningDialog;
+export default withTheme(DeleteWarningDialog);

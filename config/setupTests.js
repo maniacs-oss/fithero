@@ -5,6 +5,13 @@
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
+const snapshotDiff = require('snapshot-diff');
+
+const { toMatchDiffSnapshot } = snapshotDiff;
+
+expect.addSnapshotSerializer(snapshotDiff.getSnapshotDiffSerializer());
+expect.extend({ toMatchDiffSnapshot });
+
 Enzyme.configure({ adapter: new Adapter() });
 
 // We never want to call the real methods of this module (or bad things are going to happen)

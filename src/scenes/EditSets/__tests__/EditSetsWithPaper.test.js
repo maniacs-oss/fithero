@@ -43,6 +43,7 @@ const getComponent = (exercise: ?AddWorkoutExerciseSchemaType) => (
       push: jest.fn(),
     }}
     theme={theme}
+    defaultUnitSystem="metric"
   />
 );
 
@@ -66,6 +67,7 @@ const mockExercise = {
   ],
   date,
   type: 'bench-press',
+  weight_unit: 'metric',
 };
 
 it('handles willBlur subscription properly', () => {
@@ -126,10 +128,13 @@ describe('saving sets', () => {
     const component = TestRenderer.create(getComponent(null));
 
     component.getInstance().setState({
-      exerciseSummary: generateSummary({
-        sets: mockExercise.sets,
-        comments: 'Some comment',
-      }),
+      exerciseSummary: generateSummary(
+        {
+          sets: mockExercise.sets,
+          comments: 'Some comment',
+        },
+        'metric'
+      ),
       numberOfSets: mockExercise.sets.length,
     });
 

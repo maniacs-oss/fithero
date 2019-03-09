@@ -1,45 +1,64 @@
 /* @flow */
 
 import * as React from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
-import { Caption, Text, TouchableRipple } from 'react-native-paper';
+import { Platform, StyleSheet, TextInput, View } from 'react-native';
+import { Caption, IconButton } from 'react-native-paper';
+import type {
+  TextStyleProp,
+  ViewStyleProp,
+} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
 
 type Props = {
   controls: Array<{
-    label: string,
+    icon: 'remove' | 'add',
     action: (property: string, value: number) => void,
   }>,
-  input: number,
+  input: string,
   label: string,
   onChangeText: (value: string) => void,
   theme: ThemeType,
+  containerStyle?: ViewStyleProp,
+  labelStyle?: TextStyleProp,
 };
+
+const increaseButtonSize = Platform.OS === 'ios' ? 36 : 28;
 
 class EditSetsInputControls extends React.Component<Props> {
   static _renderInput(control) {
     return (
-      <TouchableRipple style={styles.increaseButton} onPress={control.action}>
-        <Text>{control.label}</Text>
-      </TouchableRipple>
+      <IconButton
+        icon={control.icon}
+        size={20}
+        style={styles.increaseButton}
+        onPress={control.action}
+      />
     );
   }
 
   render() {
-    const { controls, input, label, onChangeText, theme } = this.props;
+    const {
+      controls,
+      input,
+      label,
+      onChangeText,
+      theme,
+      containerStyle,
+      labelStyle,
+      ...rest
+    } = this.props;
 
     return (
-      <View style={styles.container}>
-        <Caption style={styles.lineTitle}>{label}</Caption>
+      <View style={[styles.container, containerStyle]}>
+        <Caption style={[styles.lineTitle, labelStyle]}>{label}</Caption>
         <View style={styles.lineInput}>
           {EditSetsInputControls._renderInput(controls[0])}
-          {EditSetsInputControls._renderInput(controls[1])}
           <View style={styles.textInputContainer}>
             <TextInput
-              value={input >= 0 ? input.toString() : ''}
+              value={input}
               onChangeText={onChangeText}
-              keyboardType="numeric"
               underlineColorAndroid="transparent"
               selectionColor={theme.colors.textSelection}
               style={[
@@ -50,10 +69,10 @@ class EditSetsInputControls extends React.Component<Props> {
                 styles.textInput,
               ]}
               placeholderTextColor={theme.colors.placeholder}
+              {...rest}
             />
           </View>
-          {EditSetsInputControls._renderInput(controls[2])}
-          {EditSetsInputControls._renderInput(controls[3])}
+          {EditSetsInputControls._renderInput(controls[1])}
         </View>
       </View>
     );
@@ -62,6 +81,7 @@ class EditSetsInputControls extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingBottom: 2,
   },
   lineTitle: {
@@ -71,26 +91,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   lineInput: {
-    marginTop: 16,
+    marginTop: 20,
     flexDirection: 'row',
   },
   textInputContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 4,
   },
   textInput: {
     fontSize: 20,
-    width: 100,
-    maxWidth: 100,
   },
   increaseButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 4,
-    height: 48,
-    width: 48,
+    height: increaseButtonSize,
+    width: increaseButtonSize,
   },
 });
 

@@ -12,7 +12,10 @@ import EditSetsWithControls from './EditSetsWithControls';
 import ExerciseHeader from '../Exercises/ExerciseHeader';
 import EditSetsWithPaper from './EditSetsWithPaper';
 import { getExerciseName } from '../../utils/exercises';
-import type { EditSetsScreenType } from '../../redux/modules/settings';
+import type {
+  DefaultUnitSystemType,
+  EditSetsScreenType,
+} from '../../redux/modules/settings';
 import EditSetsTypeIcon from './EditSetsTypeIcon';
 import { getWorkoutExerciseById } from '../../database/services/WorkoutExerciseService';
 import DataProvider from '../../components/DataProvider';
@@ -24,6 +27,7 @@ type Props = {
     exerciseKey: string,
     exerciseName?: string,
   }>,
+  defaultUnitSystem: DefaultUnitSystemType,
 };
 
 class EditSetsScreen extends Component<Props> {
@@ -36,7 +40,7 @@ class EditSetsScreen extends Component<Props> {
   });
 
   render() {
-    const { navigation } = this.props;
+    const { defaultUnitSystem, navigation } = this.props;
     const {
       day,
       exerciseKey,
@@ -61,6 +65,7 @@ class EditSetsScreen extends Component<Props> {
                 day={day}
                 exerciseKey={exerciseKey}
                 exercise={exercise}
+                defaultUnitSystem={defaultUnitSystem}
               />
             ) : (
               <EditSetsWithPaper
@@ -70,6 +75,7 @@ class EditSetsScreen extends Component<Props> {
                 exerciseName={exerciseName}
                 exercise={exercise}
                 navigation={navigation}
+                defaultUnitSystem={defaultUnitSystem}
               />
             )
           }
@@ -91,6 +97,7 @@ const styles = StyleSheet.create({
 export default connect(
   state => ({
     editSetsScreenType: state.settings.editSetsScreenType,
+    defaultUnitSystem: state.settings.defaultUnitSystem,
   }),
   null
 )(EditSetsScreen);

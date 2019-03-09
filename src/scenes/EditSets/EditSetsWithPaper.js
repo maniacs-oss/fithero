@@ -17,9 +17,12 @@ import {
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import type { NavigationType } from '../../types';
+import type { DefaultUnitSystemType } from '../../redux/modules/settings';
+import { toKg } from '../../utils/metrics';
 
 type Props = {
   day: string,
+  defaultUnitSystem: DefaultUnitSystemType,
   exerciseKey: string,
   exerciseName?: string,
   // eslint-disable-next-line react/no-unused-prop-types
@@ -52,11 +55,15 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
     super(props);
     const { exercise } = this.props;
     if (exercise) {
+      const unit = exercise ? exercise.weight_unit : props.defaultUnitSystem;
       this.state = {
-        exerciseSummary: generateSummary({
-          sets: exercise.sets,
-          comments: exercise.comments,
-        }),
+        exerciseSummary: generateSummary(
+          {
+            sets: exercise.sets,
+            comments: exercise.comments,
+          },
+          unit
+        ),
         numberOfSets: exercise.sets.length,
       };
     }
@@ -73,6 +80,26 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
     );
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (
+      nextProps.defaultUnitSystem !== this.props.defaultUnitSystem &&
+      nextProps.exercise
+    ) {
+      const unit = nextProps.exercise
+        ? nextProps.exercise.weight_unit
+        : nextProps.defaultUnitSystem;
+      this.setState({
+        exerciseSummary: generateSummary(
+          {
+            sets: nextProps.exercise.sets,
+            comments: nextProps.exercise.comments,
+          },
+          unit
+        ),
+      });
+    }
+  }
+
   componentWillUnmount() {
     this.willBlurSubscription.remove();
     if (!this.setsAreSaved) {
@@ -82,18 +109,24 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
   }
 
   _saveSets = () => {
-    const { day, exerciseKey, exercise } = this.props;
+    const { day, defaultUnitSystem, exerciseKey, exercise } = this.props;
     const { exerciseSummary } = this.state;
     const { comments, sets } = parseSummary(exerciseSummary, day, exerciseKey);
     const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
     const date = toDate(day);
 
+    const unit = exercise ? exercise.weight_unit : defaultUnitSystem;
+
     const newExercise = {
       id: exerciseIdDb,
       comments,
-      sets,
+      sets:
+        unit === 'metric'
+          ? sets
+          : sets.map(s => ({ ...s, weight: toKg(s.weight) })),
       type: exerciseKey,
       date,
+      weight_unit: exercise ? exercise.weight_unit : defaultUnitSystem,
     };
 
     if (!exercise && newExercise.sets.length > 0) {

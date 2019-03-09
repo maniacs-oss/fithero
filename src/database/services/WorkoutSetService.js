@@ -12,7 +12,7 @@ export const getMaxSetByType = (type: string) =>
   realm
     .objects(WORKOUT_SET_SCHEMA_NAME)
     .filtered('type = $0', type)
-    .sorted([['weight', true], 'date', 'id']);
+    .sorted([['weight', true], ['reps', true], 'date', 'id']);
 
 export const addSet = (set: WorkoutSetSchemaType) => {
   realm.write(() => {

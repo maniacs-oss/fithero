@@ -29,60 +29,90 @@ import { addExercise } from '../../database/services/WorkoutExerciseService';
 import { toDate } from '../../utils/date';
 import DataProvider from '../../components/DataProvider';
 import type { RealmResults } from '../../types';
+import {
+  getWeight,
+  getWeightUnit,
+  toKg,
+  toTwoDecimals,
+} from '../../utils/metrics';
+import type { DefaultUnitSystemType } from '../../redux/modules/settings';
 
 type Props = {
   day: string,
+  defaultUnitSystem: DefaultUnitSystemType,
   exerciseKey: string,
-  exercise?: ?WorkoutExerciseSchemaType,
+  exercise: ?WorkoutExerciseSchemaType,
 };
 
 type State = {
-  weight: number,
-  reps: number,
+  weight: string,
+  reps: string,
   selectedId: string,
 };
 
 type ActionIncDec = (property: string, value: number) => void;
 
 export class EditSetsWithControls extends React.Component<Props, State> {
-  smallestWeightDec: ActionIncDec;
   weightDec: ActionIncDec;
   weightInc: ActionIncDec;
-  smallestWeightInc: ActionIncDec;
-  biggestRepsDec: ActionIncDec;
   repsDec: ActionIncDec;
   repsInc: ActionIncDec;
-  biggestRepsInc: ActionIncDec;
 
   constructor(props: Props) {
     super(props);
-    this.smallestWeightDec = this.handleIncDec.bind(this, 'weight', -0.5);
     this.weightDec = this.handleIncDec.bind(this, 'weight', -1);
     this.weightInc = this.handleIncDec.bind(this, 'weight', +1);
-    this.smallestWeightInc = this.handleIncDec.bind(this, 'weight', +0.5);
 
-    this.biggestRepsDec = this.handleIncDec.bind(this, 'reps', -2);
     this.repsDec = this.handleIncDec.bind(this, 'reps', -1);
     this.repsInc = this.handleIncDec.bind(this, 'reps', +1);
-    this.biggestRepsInc = this.handleIncDec.bind(this, 'reps', +2);
 
-    let lastSet = null;
-    if (props.exercise) {
-      lastSet = props.exercise.sets[props.exercise.sets.length - 1];
-    } else {
-      const sets = getLastSetByType(
-        this.props.exerciseKey || this.props.exercise?.type
-      );
-      if (sets.length > 0) {
-        lastSet = sets[0];
-      }
-    }
-
+    const lastSet = this._getLastSet(props, '');
     this.state = {
-      weight: lastSet ? lastSet.weight : 20,
-      reps: lastSet ? lastSet.reps : 8,
+      weight: this._getInputWeight(props, lastSet),
+      reps: lastSet ? lastSet.reps.toString() : '8',
       selectedId: '',
     };
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.defaultUnitSystem !== this.props.defaultUnitSystem) {
+      const lastSet = this._getLastSet(nextProps, this.state.selectedId);
+      this.setState({
+        weight: this._getInputWeight(nextProps, lastSet),
+      });
+    }
+  }
+
+  _getLastSet(props: Props, selectedId?: string) {
+    let lastSet = null;
+    if (!selectedId) {
+      if (props.exercise) {
+        lastSet = props.exercise.sets[props.exercise.sets.length - 1];
+      } else {
+        const sets = getLastSetByType(
+          this.props.exerciseKey || this.props.exercise?.type
+        );
+        if (sets.length > 0) {
+          lastSet = sets[0];
+        }
+      }
+    } else if (props.exercise) {
+      const sets = props.exercise.sets;
+      lastSet = sets[sets.findIndex(s => s.id === selectedId)];
+    }
+    return lastSet;
+  }
+
+  _getInputWeight(props: Props, lastSet: ?WorkoutSetSchemaType) {
+    const defaultWeight = props.defaultUnitSystem === 'metric' ? 20 : 45;
+
+    const lastWeight = lastSet
+      ? toTwoDecimals(
+          getWeight(lastSet.weight, props.exercise, props.defaultUnitSystem)
+        )
+      : defaultWeight;
+
+    return lastWeight.toString();
   }
 
   onBackButtonPressAndroid = () => {
@@ -94,17 +124,26 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   };
 
   handleIncDec = (property: string, value: number) => {
-    const currentValue = this.state[property] >= 0 ? this.state[property] : 0;
-    const newValue = currentValue + value;
-    this.setState({ [property]: newValue > 0 ? newValue : 0 });
+    const currentValue =
+      this.state[property] >= '0' ? this.state[property] : '0';
+    const parsedValue =
+      property === 'weight'
+        ? parseFloat(currentValue)
+        : parseInt(currentValue, 10);
+    const newValue = (parsedValue + value).toString();
+    this.setState({ [property]: newValue > '0' ? newValue : '0' });
   };
 
   _onChangeWeightInput = (value: string) => {
-    this.setState({ weight: value ? parseFloat(value) : -1 });
+    if (value === '.' || !isNaN(value)) {
+      this.setState({
+        weight: value,
+      });
+    }
   };
 
   _onChangeRepsInput = (value: string) => {
-    this.setState({ reps: value ? parseInt(value, 10) : -1 });
+    this.setState({ reps: parseInt(value, 10) >= 0 ? value : '0' });
   };
 
   _keyExtractor = item => item.id;
@@ -120,20 +159,41 @@ export class EditSetsWithControls extends React.Component<Props, State> {
       if (set) {
         this.setState({
           selectedId: setId,
-          weight: set.weight,
-          reps: set.reps,
+          weight: toTwoDecimals(
+            getWeight(
+              set.weight,
+              this.props.exercise,
+              this.props.defaultUnitSystem
+            )
+          ).toString(),
+          reps: set.reps.toString(),
         });
       }
     }
   };
 
   _onAddSet = () => {
-    const { day, exerciseKey, exercise } = this.props;
-    const { reps, selectedId, weight } = this.state;
+    const { day, defaultUnitSystem, exerciseKey, exercise } = this.props;
+    const {
+      reps: repsToConvert,
+      selectedId,
+      weight: weightToConvert,
+    } = this.state;
 
     let newExercise = null;
 
     Keyboard.dismiss();
+
+    const unit = getWeightUnit(exercise, defaultUnitSystem);
+    let weight = 0;
+    if (weightToConvert !== '.' && !isNaN(weightToConvert)) {
+      weight =
+        unit === 'metric'
+          ? parseFloat(weightToConvert)
+          : toKg(parseFloat(weightToConvert));
+    }
+
+    const reps = parseInt(repsToConvert, 10);
 
     if (!exercise) {
       const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
@@ -151,6 +211,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
         comments: '',
         date: toDate(day),
         type: exerciseKey,
+        weight_unit: defaultUnitSystem,
       };
       addExercise(newExercise);
     } else if (!selectedId) {
@@ -188,19 +249,31 @@ export class EditSetsWithControls extends React.Component<Props, State> {
     this.setState({ selectedId: '' });
   };
 
-  _renderItem = ({ item, index }, maxSetId) => (
-    <EditSetItem
-      set={item}
-      index={index + 1}
-      isSelected={this.state.selectedId === item.id}
-      isMaxSet={maxSetId === item.id}
-      onPressItem={this._onPressItem}
-    />
-  );
+  _renderItem = ({ item, index }, maxSetId) => {
+    const { defaultUnitSystem, exercise } = this.props;
+
+    const unit =
+      exercise && exercise.weight_unit
+        ? exercise.weight_unit
+        : defaultUnitSystem;
+
+    return (
+      <EditSetItem
+        set={item}
+        index={index + 1}
+        isSelected={this.state.selectedId === item.id}
+        isMaxSet={maxSetId === item.id}
+        onPressItem={this._onPressItem}
+        unit={unit}
+      />
+    );
+  };
 
   render() {
-    const { exercise } = this.props;
+    const { defaultUnitSystem, exercise } = this.props;
     const { reps, selectedId, weight } = this.state;
+
+    const unit = getWeightUnit(exercise, defaultUnitSystem);
 
     return (
       <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>
@@ -210,26 +283,34 @@ export class EditSetsWithControls extends React.Component<Props, State> {
               <EditSetsInputControls
                 input={weight}
                 label={i18n.t('weight_label', {
-                  w: i18n.t('kg.unit', { count: 10 }),
+                  w:
+                    unit === 'metric'
+                      ? i18n.t('kg.unit', { count: 10 })
+                      : i18n.t('lb'),
                 })}
                 onChangeText={this._onChangeWeightInput}
                 controls={[
-                  { label: '-0.5', action: this.smallestWeightDec },
-                  { label: '-1.0', action: this.weightDec },
-                  { label: '+1.0', action: this.weightInc },
-                  { label: '+0.5', action: this.smallestWeightInc },
+                  { icon: 'remove', action: this.weightDec },
+                  { icon: 'add', action: this.weightInc },
                 ]}
+                keyboardType="numeric"
+                containerStyle={[
+                  styles.weightContainer,
+                  styles.weightSeparation,
+                ]}
+                labelStyle={styles.weightSeparation}
               />
               <EditSetsInputControls
                 input={reps}
                 label={i18n.t('reps.title')}
                 onChangeText={this._onChangeRepsInput}
                 controls={[
-                  { label: '-2', action: this.biggestRepsDec },
-                  { label: '-1', action: this.repsDec },
-                  { label: '+1', action: this.repsInc },
-                  { label: '+2', action: this.biggestRepsInc },
+                  { icon: 'remove', action: this.repsDec },
+                  { icon: 'add', action: this.repsInc },
                 ]}
+                keyboardType="number-pad"
+                containerStyle={[styles.repsContainer, styles.repsSeparation]}
+                labelStyle={styles.repsSeparation}
               />
             </View>
             <EditSetActionButtons
@@ -271,11 +352,25 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     paddingTop: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
   },
   list: {
     paddingVertical: 12,
+  },
+  weightContainer: {
+    flex: 1,
+  },
+  repsContainer: {
+    flex: 0.9,
+  },
+  weightSeparation: {
+    paddingRight: 8,
+  },
+  repsSeparation: {
+    paddingLeft: 8,
   },
 });
 

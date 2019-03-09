@@ -127,14 +127,13 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
             </View>
           )}
         </View>
-        {this.state.showDeleteDialog && (
-          <DeleteWarningDialog
-            title={i18n.t('delete__exercise_title')}
-            description={i18n.t('delete__exercise_description')}
-            onConfirm={this._deleteExercise}
-            onDismiss={this._hideDeleteWarning}
-          />
-        )}
+        <DeleteWarningDialog
+          title={i18n.t('delete__exercise_title')}
+          description={i18n.t('delete__exercise_description')}
+          onConfirm={this._deleteExercise}
+          onDismiss={this._hideDeleteWarning}
+          visible={this.state.showDeleteDialog}
+        />
       </React.Fragment>
     </ScrollView>
   );

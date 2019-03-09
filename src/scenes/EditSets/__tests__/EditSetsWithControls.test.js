@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Keyboard } from 'react-native';
+import { render } from 'react-native-testing-library';
 import { shallow } from 'enzyme';
 
 import { EditSetsWithControls } from '../EditSetsWithControls';
@@ -10,7 +11,10 @@ import { toDate } from '../../../utils/date';
 import {
   deleteSet,
   getLastSetByType,
+  getMaxSetByType,
 } from '../../../database/services/WorkoutSetService';
+import { MockRealmArray } from '../../../database/services/__tests__/helpers/databaseMocks';
+import type { WorkoutExerciseSchemaType } from '../../../database/types';
 
 jest.mock('Keyboard');
 
@@ -19,6 +23,7 @@ jest.mock('../../../database/services/WorkoutSetService', () => ({
   deleteSet: jest.fn(),
   getLastSetByType: jest.fn(() => []),
   updateSet: jest.fn(),
+  getMaxSetByType: jest.fn(),
 }));
 
 jest.mock('../../../database/services/WorkoutExerciseService');
@@ -49,6 +54,9 @@ describe('EditSetsWithControls', () => {
     ],
     date,
     type: 'bench-press',
+    sort: 0,
+    weight_unit: 'metric',
+    isValid: jest.fn(() => true),
   };
 
   const defaultWeight = 20;
@@ -72,13 +80,14 @@ describe('EditSetsWithControls', () => {
           day={day}
           exerciseKey={exerciseKey}
           exercisesCount={1}
-          maxSetId=""
+          defaultUnitSystem="metric"
+          exercise={null}
         />
       );
 
       expect(wrapper.state()).toEqual({
-        weight: defaultWeight,
-        reps: defaultReps,
+        weight: defaultWeight.toString(),
+        reps: defaultReps.toString(),
         selectedId: '',
       });
 
@@ -108,14 +117,19 @@ describe('EditSetsWithControls', () => {
         <EditSetsWithControls
           day={day}
           exerciseKey={exerciseKey}
-          exercise={{ sort: 1, isValid: jest.fn(), ...exercise }}
+          exercise={{
+            weight_unit: 'metric',
+            sort: 1,
+            isValid: jest.fn(),
+            ...exercise,
+          }}
           exercisesCount={1}
-          maxSetId=""
+          defaultUnitSystem="metric"
         />
       );
       expect(wrapper.state()).toEqual({
-        weight: exercise.sets[1].weight,
-        reps: exercise.sets[1].reps,
+        weight: exercise.sets[1].weight.toString(),
+        reps: exercise.sets[1].reps.toString(),
         selectedId: '',
       });
 
@@ -147,12 +161,13 @@ describe('EditSetsWithControls', () => {
           day={day}
           exerciseKey={exerciseKey}
           exercisesCount={0}
-          maxSetId=""
+          defaultUnitSystem="metric"
+          exercise={null}
         />
       );
       expect(wrapper.state()).toEqual({
-        weight: mockLastSet.weight,
-        reps: mockLastSet.reps,
+        weight: mockLastSet.weight.toString(),
+        reps: mockLastSet.reps.toString(),
         selectedId: '',
       });
 
@@ -173,7 +188,8 @@ describe('EditSetsWithControls', () => {
           day={day}
           exerciseKey={exerciseKey}
           exercisesCount={1}
-          maxSetId=""
+          defaultUnitSystem="metric"
+          exercise={null}
         />
       );
       const weightControls = getInputControls(wrapper, 0);
@@ -185,14 +201,16 @@ describe('EditSetsWithControls', () => {
           .props()
           .onChangeText(value.toString());
 
-        expect(wrapper.state()[stateLabel]).toEqual(value);
+        expect(wrapper.state()[stateLabel]).toEqual(value.toString());
 
         controls
           .find('TextInput')
           .props()
           .onChangeText('');
 
-        expect(wrapper.state()[stateLabel]).toEqual(-1);
+        expect(wrapper.state()[stateLabel]).toEqual(
+          stateLabel === 'weight' ? '' : '0'
+        );
       };
 
       _checkStateAfterChange(weightControls, 'weight', 50.0);
@@ -219,24 +237,22 @@ describe('EditSetsWithControls', () => {
           day={day}
           exerciseKey={exerciseKey}
           exercisesCount={1}
-          maxSetId=""
+          defaultUnitSystem="metric"
+          exercise={null}
         />
       );
       const weightControls = getInputControls(wrapper, 1);
 
-      const buttons = weightControls.find('withTheme(TouchableRipple)');
+      const buttons = weightControls.find('withTheme(IconButton)');
 
       changeRepsValue(buttons, 0);
-      expect(wrapper.state().reps).toEqual(defaultReps - 2);
+      expect(wrapper.state().reps).toEqual((defaultReps - 1).toString());
 
       changeRepsValue(buttons, 1);
-      expect(wrapper.state().reps).toEqual(defaultReps - 2 - 1);
-
-      changeRepsValue(buttons, 2);
-      expect(wrapper.state().reps).toEqual(defaultReps - 2 - 1 + 1);
-
-      changeRepsValue(buttons, 3);
-      expect(wrapper.state().reps).toEqual(defaultReps - 2 - 1 + 1 + 2);
+      changeRepsValue(buttons, 1);
+      expect(wrapper.state().reps).toEqual(
+        (defaultReps - 1 + 1 + 1).toString()
+      );
     });
 
     it('uses -1.0, -0.5, +0.5, +1.0 buttons for weight', () => {
@@ -255,25 +271,21 @@ describe('EditSetsWithControls', () => {
           day={day}
           exerciseKey={exerciseKey}
           exercisesCount={1}
-          maxSetId=""
+          defaultUnitSystem="metric"
+          exercise={null}
         />
       );
       const weightControls = getInputControls(wrapper, 0);
 
-      const buttons = weightControls.find('withTheme(TouchableRipple)');
+      const buttons = weightControls.find('withTheme(IconButton)');
 
       changeWeightValue(buttons, 0);
-      expect(wrapper.state().weight).toEqual(defaultWeight - 0.5);
+      expect(wrapper.state().weight).toEqual((defaultWeight - 1.0).toString());
 
       changeWeightValue(buttons, 1);
-      expect(wrapper.state().weight).toEqual(defaultWeight - 0.5 - 1.0);
-
-      changeWeightValue(buttons, 2);
-      expect(wrapper.state().weight).toEqual(defaultWeight - 0.5 - 1.0 + 1.0);
-
-      changeWeightValue(buttons, 3);
+      changeWeightValue(buttons, 1);
       expect(wrapper.state().weight).toEqual(
-        defaultWeight - 0.5 - 1.0 + 1.0 + 0.5
+        (defaultWeight - 1.0 + 1.0 + 1.0).toString()
       );
     });
   });
@@ -284,7 +296,8 @@ describe('EditSetsWithControls', () => {
         day={day}
         exerciseKey={exerciseKey}
         exercisesCount={1}
-        maxSetId=""
+        defaultUnitSystem="metric"
+        exercise={null}
       />
     );
 
@@ -365,6 +378,37 @@ describe('EditSetsWithControls', () => {
 
       expect(Keyboard.dismiss).toBeCalled();
       expect(deleteSet).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Weight units', () => {
+    // $FlowFixMe
+    getMaxSetByType.mockImplementation(
+      () => new MockRealmArray({ ...exercise.sets[0] })
+    );
+
+    const _renderComponent = (customExercise?: WorkoutExerciseSchemaType) =>
+      render(
+        <EditSetsWithControls
+          day={day}
+          exerciseKey={exerciseKey}
+          exercisesCount={1}
+          defaultUnitSystem="metric"
+          exercise={customExercise || exercise}
+        />
+      );
+
+    it('renders kgs or lbs', () => {
+      const { toJSON: metricJSON } = _renderComponent();
+      const { toJSON: imperialJSON } = _renderComponent({
+        ...exercise,
+        weight_unit: 'imperial',
+      });
+
+      // $FlowFixMe
+      expect(metricJSON()).toMatchDiffSnapshot(imperialJSON(), {
+        contextLines: 0,
+      });
     });
   });
 });

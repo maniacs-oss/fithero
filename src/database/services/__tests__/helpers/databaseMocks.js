@@ -16,7 +16,11 @@ export class RealmArray extends Array<any> {
   }
   // eslint-disable-next-line flowtype/no-weak-types
   push: (val: any) => number = jest.fn();
+  // eslint-disable-next-line flowtype/no-weak-types
+  addListener: (val: any) => void = jest.fn();
 }
+
+export const MockRealmArray = RealmArray;
 
 export const dates = [
   {
@@ -40,13 +44,15 @@ export const mockMultipleSets = new RealmArray(
     weight: 100,
     date: dates[0].date,
     type: 'bench-press',
+    isValid: () => true,
   },
   {
     id: `${dates[0].dateString}_bench-press_002`,
     reps: 15,
-    weight: 100,
+    weight: 105,
     date: dates[0].date,
     type: 'bench-press',
+    isValid: () => true,
   }
 );
 
@@ -57,6 +63,7 @@ export const getMockExercises = (sets: RealmArray) =>
     date: dates[0].date,
     type: 'bench-press',
     sort: 1,
+    isValid: () => true,
   });
 
 export const mockWorkouts = [

@@ -255,7 +255,7 @@ describe('generateSummary', () => {
       ],
       comments: '',
     };
-    expect(generateSummary(log)).toEqual('10x50.5');
+    expect(generateSummary(log, 'metric')).toEqual('10x50.5');
   });
 
   it('generates summary from a log without comments', () => {
@@ -278,7 +278,7 @@ describe('generateSummary', () => {
       ],
       comments: '',
     };
-    expect(generateSummary(log)).toEqual('8x50.5\n7x45');
+    expect(generateSummary(log, 'metric')).toEqual('8x50.5\n7x45');
   });
 
   it('generates summary from a log with comments', () => {
@@ -301,6 +301,8 @@ describe('generateSummary', () => {
       ],
       comments: 'Testing comment.',
     };
-    expect(generateSummary(log)).toEqual('8x50.5\n7x45\n\nTesting comment.');
+    expect(generateSummary(log, 'metric')).toEqual(
+      '8x50.5\n7x45\n\nTesting comment.'
+    );
   });
 });

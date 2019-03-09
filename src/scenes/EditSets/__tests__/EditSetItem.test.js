@@ -25,6 +25,7 @@ describe('EditSetItem', () => {
           type: 'bench-press',
         }}
         theme={theme}
+        unit="metric"
         {...props}
       />
     ).root;

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { FlatList, View } from 'react-native';
+import { connect } from 'react-redux';
 
 import type { ExerciseSchemaType, WorkoutSchemaType } from '../database/types';
 import WorkoutItem from './WorkoutItem';
@@ -11,8 +12,10 @@ import {
 } from '../database/services/ExerciseService';
 import DataProvider from './DataProvider';
 import { extractExerciseKeyFromDatabase } from '../database/utils';
+import type { DefaultUnitSystemType } from '../redux/modules/settings';
 
 type Props = {
+  defaultUnitSystem: DefaultUnitSystemType,
   contentContainerStyle?: View.propTypes.style,
   onPressItem: (exerciseKey: string, customExerciseName?: string) => void,
   workout: ?WorkoutSchemaType,
@@ -44,6 +47,7 @@ class WorkoutList extends React.Component<Props> {
                 exercise={item}
                 customExerciseName={customName}
                 onPressItem={this._onPressItem}
+                defaultUnitSystem={this.props.defaultUnitSystem}
               />
             );
           }}
@@ -51,7 +55,13 @@ class WorkoutList extends React.Component<Props> {
       );
     }
 
-    return <WorkoutItem exercise={item} onPressItem={this._onPressItem} />;
+    return (
+      <WorkoutItem
+        exercise={item}
+        onPressItem={this._onPressItem}
+        defaultUnitSystem={this.props.defaultUnitSystem}
+      />
+    );
   };
 
   render() {
@@ -68,4 +78,9 @@ class WorkoutList extends React.Component<Props> {
   }
 }
 
-export default WorkoutList;
+export default connect(
+  state => ({
+    defaultUnitSystem: state.settings.defaultUnitSystem,
+  }),
+  null
+)(WorkoutList);

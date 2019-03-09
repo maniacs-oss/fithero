@@ -4,13 +4,18 @@ export default {
   add: 'Add',
   cancel: 'Cancel',
   calendar: 'Calendar',
+  default_unit_system: 'Default unit system',
+  default_unit_system_desc:
+    'This will not affect the exercises that you logged in the past.',
   delete: 'Delete',
   delete__exercise_title: 'Delete exercise',
   delete__exercise_description:
     'Deleting an exercise will delete any reference to it in every workout. Are you sure?',
+  edit_exercise: 'Edit exercise',
   exercises: 'Exercises',
   'exercise__paper-placeholder':
     'Each line represents a set. You can type using the format repetitions x weight (RxW), e.g:\n\n8x120\n7x130\n6x140\n\nThis last line can be an optional comment.',
+  imperial: 'Imperial',
   kg: {
     unit: {
       one: 'kg',
@@ -23,11 +28,12 @@ export default {
       zero: '{{count}} kgs',
     },
   },
+  lb: 'lb',
   menu__home: 'Home',
   menu__settings: 'Settings',
   menu__statistics: 'Statistics',
+  metric: 'Metric',
   name: 'Name',
-  edit_exercise: 'Edit exercise',
   new_exercise: 'New exercise',
   notes: 'Notes',
   primary_muscle: 'Primary muscle',

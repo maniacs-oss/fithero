@@ -9,6 +9,8 @@ import i18n from '../../utils/i18n';
 import type { WorkoutSetSchemaType } from '../../database/types';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
+import { toLb, toTwoDecimals } from '../../utils/metrics';
+import type { DefaultUnitSystemType } from '../../redux/modules/settings';
 
 type Props = {
   isSelected: boolean,
@@ -17,6 +19,7 @@ type Props = {
   index: number,
   set: WorkoutSetSchemaType,
   theme: ThemeType,
+  unit: DefaultUnitSystemType,
 };
 
 class EditSetItem extends React.PureComponent<Props> {
@@ -25,7 +28,7 @@ class EditSetItem extends React.PureComponent<Props> {
   };
 
   render() {
-    const { index, isSelected, isMaxSet, set, theme } = this.props;
+    const { index, isSelected, isMaxSet, set, theme, unit } = this.props;
 
     return (
       <View>
@@ -44,11 +47,15 @@ class EditSetItem extends React.PureComponent<Props> {
               style={[styles.icon, !isMaxSet && { opacity: 0 }]}
             />
             <Text style={[styles.text, styles.weight]}>
-              {set.weight}{' '}
+              {unit === 'metric'
+                ? toTwoDecimals(set.weight)
+                : toTwoDecimals(toLb(set.weight))}{' '}
               <Text
                 style={[styles.unit, { color: theme.colors.secondaryText }]}
               >
-                {i18n.t('kg.unit', { count: set.weight })}{' '}
+                {unit === 'metric'
+                  ? i18n.t('kg.unit', { count: set.weight })
+                  : i18n.t('lb')}{' '}
               </Text>
             </Text>
             <Text style={[styles.text, styles.reps]}>
