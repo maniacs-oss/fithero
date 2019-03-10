@@ -7,16 +7,18 @@ import type { DispatchType } from '../../types';
 
 export type EditSetsScreenType = 'list' | 'paper';
 export type DefaultUnitSystemType = 'metric' | 'imperial';
+export type FirstDayOfTheWeekType = 'monday' | 'sunday' | 'saturday';
 
 type SettingsType = {
   editSetsScreenType: EditSetsScreenType,
   defaultUnitSystem: DefaultUnitSystemType,
+  firstDayOfTheWeek: FirstDayOfTheWeekType,
 };
 
 export const INIT_SETTINGS = 'dziku/settings/INIT_SETTINGS';
 export const EDIT_SETS_SCREEN_TYPE = 'dziku/settings/EDIT_SETS_SCREEN_TYPE';
-export const DEFAULT_UNIT_SYSTEM_TYPE =
-  'dziku/settings/DEFAULT_UNIT_SYSTEM_TYPE';
+export const DEFAULT_UNIT_SYSTEM = 'dziku/settings/DEFAULT_UNIT_SYSTEM';
+export const FIRST_DAY_OF_THE_WEEK = 'dziku/settings/FIRST_DAY_OF_THE_WEEK';
 
 type State = SettingsType;
 type Action =
@@ -29,13 +31,18 @@ type Action =
       payload: EditSetsScreenType,
     }
   | {
-      type: typeof DEFAULT_UNIT_SYSTEM_TYPE,
+      type: typeof DEFAULT_UNIT_SYSTEM,
       payload: DefaultUnitSystemType,
+    }
+  | {
+      type: typeof FIRST_DAY_OF_THE_WEEK,
+      payload: FirstDayOfTheWeekType,
     };
 
 export const initialState: State = {
   editSetsScreenType: 'list',
   defaultUnitSystem: 'metric',
+  firstDayOfTheWeek: 'monday',
 };
 
 export default function reducer(state: State = initialState, action: Action) {
@@ -46,8 +53,11 @@ export default function reducer(state: State = initialState, action: Action) {
     case EDIT_SETS_SCREEN_TYPE: {
       return { ...state, editSetsScreenType: action.payload };
     }
-    case DEFAULT_UNIT_SYSTEM_TYPE: {
+    case DEFAULT_UNIT_SYSTEM: {
       return { ...state, defaultUnitSystem: action.payload };
+    }
+    case FIRST_DAY_OF_THE_WEEK: {
+      return { ...state, firstDayOfTheWeek: action.payload };
     }
     default:
       return state;
@@ -74,7 +84,17 @@ export const setDefaultUnitSystem = (payload: DefaultUnitSystemType) => async (
 ) => {
   await AsyncStorage.setItem(Settings.defaultUnitSystem, payload);
   return dispatch({
-    type: DEFAULT_UNIT_SYSTEM_TYPE,
+    type: DEFAULT_UNIT_SYSTEM,
+    payload,
+  });
+};
+
+export const setFirstDayOfTheWeek = (payload: FirstDayOfTheWeekType) => async (
+  dispatch: (args: DispatchType<FirstDayOfTheWeekType>) => void
+) => {
+  await AsyncStorage.setItem(Settings.firstDayOfTheWeek, payload);
+  return dispatch({
+    type: FIRST_DAY_OF_THE_WEEK,
     payload,
   });
 };

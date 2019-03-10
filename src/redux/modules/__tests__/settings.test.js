@@ -3,7 +3,7 @@
 import { AsyncStorage } from 'react-native';
 
 import reducer, {
-  DEFAULT_UNIT_SYSTEM_TYPE,
+  DEFAULT_UNIT_SYSTEM,
   EDIT_SETS_SCREEN_TYPE,
   INIT_SETTINGS,
   initialState,
@@ -30,6 +30,7 @@ describe('EDIT_SETS_SCREEN_TYPE', () => {
     const payload = {
       editSetsScreenType: 'paper',
       defaultUnitSystem: 'imperial',
+      firstDayOfTheWeek: 'monday',
     };
     const newState = reducer(initialState, {
       type: INIT_SETTINGS,
@@ -48,18 +49,20 @@ describe('EDIT_SETS_SCREEN_TYPE', () => {
     expect(newState).toEqual({
       defaultUnitSystem: 'metric',
       editSetsScreenType: 'paper',
+      firstDayOfTheWeek: 'monday',
     });
   });
 
   it('handles DEFAULT_UNIT_SYSTEM_TYPE', async () => {
     const newState = reducer(initialState, {
-      type: DEFAULT_UNIT_SYSTEM_TYPE,
+      type: DEFAULT_UNIT_SYSTEM,
       payload: 'imperial',
     });
 
     expect(newState).toEqual({
       defaultUnitSystem: 'imperial',
       editSetsScreenType: 'list',
+      firstDayOfTheWeek: 'monday',
     });
   });
 });

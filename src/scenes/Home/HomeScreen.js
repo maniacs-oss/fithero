@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
+import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
 import type { NavigationType } from '../../types';
@@ -15,15 +16,17 @@ import HeaderButton from '../../components/HeaderButton';
 import i18n from '../../utils/i18n';
 import HeaderIconButton from '../../components/HeaderIconButton';
 import DataProvider from '../../components/DataProvider';
+import type { FirstDayOfTheWeekType } from '../../redux/modules/settings';
 
 type NavigationOptions = {
   navigation: NavigationType<{}>,
 };
 
-type Props = NavigationOptions & {};
+type Props = NavigationOptions & {
+  firstDayOfTheWeek: FirstDayOfTheWeekType,
+};
 
 type State = {
-  currentWeek: Array<Date>,
   selectedDay: string,
 };
 
@@ -48,10 +51,8 @@ class HomeScreen extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const today = getToday();
     this.state = {
-      selectedDay: dateToString(today),
-      currentWeek: getCurrentWeek(today),
+      selectedDay: dateToString(getToday()),
     };
   }
 
@@ -73,8 +74,11 @@ class HomeScreen extends Component<Props, State> {
     });
   };
 
-  _renderHeader = (workouts: { [key: string]: WorkoutSchemaType }) => {
-    const { currentWeek, selectedDay } = this.state;
+  _renderHeader = (
+    workouts: { [key: string]: WorkoutSchemaType },
+    currentWeek
+  ) => {
+    const { selectedDay } = this.state;
 
     return (
       <DayRow
@@ -87,7 +91,9 @@ class HomeScreen extends Component<Props, State> {
   };
 
   render() {
-    const { currentWeek, selectedDay } = this.state;
+    const { selectedDay } = this.state;
+    const { firstDayOfTheWeek } = this.props;
+    const currentWeek = getCurrentWeek(getToday(), firstDayOfTheWeek);
 
     return (
       <Screen>
@@ -109,7 +115,10 @@ class HomeScreen extends Component<Props, State> {
               contentContainerStyle={styles.list}
               workout={workouts ? workouts[selectedDay] : null}
               onPressItem={this._onExercisePress}
-              ListHeaderComponent={() => this._renderHeader(workouts)}
+              ListHeaderComponent={() =>
+                this._renderHeader(workouts, currentWeek)
+              }
+              extraData={currentWeek}
             />
           )}
         />
@@ -130,4 +139,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default connect(
+  state => ({
+    firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
+  }),
+  null
+)(HomeScreen);

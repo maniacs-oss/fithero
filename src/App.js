@@ -11,6 +11,7 @@ import theme from './utils/theme';
 import { Settings } from './utils/constants';
 import { initSettings } from './redux/modules/settings';
 import { getDefaultUnitSystemByCountry } from './utils/metrics';
+import { getWeekStartByLocale } from './utils/date';
 
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
@@ -26,7 +27,15 @@ const navigationPersistenceKey = global.__DEV__
   ? 'DEV_dziku-navigation-key'
   : null;
 
-export default class App extends React.Component<{}> {
+type State = {
+  loading: boolean,
+};
+
+export default class App extends React.Component<{}, State> {
+  state = {
+    loading: true,
+  };
+
   constructor(props: {}) {
     super(props);
     this._loadSettings();
@@ -40,16 +49,25 @@ export default class App extends React.Component<{}> {
     let defaultUnitSystem = await AsyncStorage.getItem(
       Settings.defaultUnitSystem
     );
-    if (defaultUnitSystem == null) {
+    if (defaultUnitSystem === null) {
       defaultUnitSystem = getDefaultUnitSystemByCountry();
       await AsyncStorage.setItem(Settings.defaultUnitSystem, defaultUnitSystem);
+    }
+    let firstDayOfTheWeek = await AsyncStorage.getItem(
+      Settings.firstDayOfTheWeek
+    );
+    if (firstDayOfTheWeek === null) {
+      firstDayOfTheWeek = getWeekStartByLocale();
+      await AsyncStorage.setItem(Settings.firstDayOfTheWeek, firstDayOfTheWeek);
     }
     store.dispatch(
       initSettings({
         editSetsScreenType: editSetsScreenType || 'list',
         defaultUnitSystem,
+        firstDayOfTheWeek,
       })
     );
+    this.setState({ loading: false });
   };
 
   render() {
@@ -58,7 +76,9 @@ export default class App extends React.Component<{}> {
         <PaperProvider theme={theme}>
           <React.Fragment>
             {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-            <MainNavigator persistenceKey={navigationPersistenceKey} />
+            {!this.state.loading && (
+              <MainNavigator persistenceKey={navigationPersistenceKey} />
+            )}
           </React.Fragment>
         </PaperProvider>
       </Provider>

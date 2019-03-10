@@ -19,11 +19,15 @@ import type {
 import { getSetsThisWeek } from '../../database/services/WorkoutSetService';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
-import type { DefaultUnitSystemType } from '../../redux/modules/settings';
+import type {
+  DefaultUnitSystemType,
+  FirstDayOfTheWeekType,
+} from '../../redux/modules/settings';
 import { toLb } from '../../utils/metrics';
 
 type Props = {
   defaultUnitSystem: DefaultUnitSystemType,
+  firstDayOfTheWeek: FirstDayOfTheWeekType,
   theme: ThemeType,
 };
 
@@ -64,6 +68,7 @@ class StatisticsScreen extends React.Component<Props> {
             <Text style={styles.singleTitle}>{i18n.t('this_week')}</Text>
             <DataProvider
               query={getWorkoutsThisWeek}
+              args={[this.props.firstDayOfTheWeek]}
               parse={(data: Array<WorkoutSchemaType>) =>
                 data ? data.length : 0
               }
@@ -76,6 +81,7 @@ class StatisticsScreen extends React.Component<Props> {
             <Text style={styles.singleTitle}>{i18n.t('week_volume')}</Text>
             <DataProvider
               query={getSetsThisWeek}
+              args={[this.props.firstDayOfTheWeek]}
               parse={(data: Array<WorkoutSetSchemaType>) =>
                 data.reduce(
                   (previousValue, s) => previousValue + s.reps * s.weight,
@@ -141,11 +147,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(
-  connect(
-    state => ({
-      defaultUnitSystem: state.settings.defaultUnitSystem,
-    }),
-    null
-  )(StatisticsScreen)
-);
+export default connect(
+  state => ({
+    defaultUnitSystem: state.settings.defaultUnitSystem,
+    firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
+  }),
+  null
+)(withTheme(StatisticsScreen));

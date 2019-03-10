@@ -3,11 +3,12 @@
 import * as React from 'react';
 import { InteractionManager } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
+import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
 import type { NavigationType, RealmResults } from '../../types';
 import HeaderIconButton from '../../components/HeaderIconButton';
-import { formatDate } from '../../utils/date';
+import { firstDayOfTheWeekToNumber, formatDate } from '../../utils/date';
 import { getAllWorkouts } from '../../database/services/WorkoutService';
 import type { WorkoutSchemaType } from '../../database/types';
 import withTheme from '../../utils/theme/withTheme';
@@ -21,6 +22,7 @@ type NavigationOptions = {
 };
 
 type Props = NavigationOptions & {
+  firstDay: number,
   theme: ThemeType,
 };
 
@@ -99,6 +101,7 @@ export class CalendarScreen extends React.Component<Props, State> {
   render() {
     const { showCalendar } = this.state;
     const {
+      firstDay,
       theme: { colors },
     } = this.props;
     const { today } = this.props.navigation.state.params;
@@ -121,6 +124,7 @@ export class CalendarScreen extends React.Component<Props, State> {
                 marked: !!this.state.markedDates[today],
               },
             }}
+            firstDay={firstDay}
             theme={{
               calendarBackground: colors.background,
               dayTextColor: colors.text,
@@ -139,4 +143,9 @@ export class CalendarScreen extends React.Component<Props, State> {
   }
 }
 
-export default withTheme(CalendarScreen);
+export default connect(
+  state => ({
+    firstDay: firstDayOfTheWeekToNumber(state.settings.firstDayOfTheWeek),
+  }),
+  null
+)(withTheme(CalendarScreen));

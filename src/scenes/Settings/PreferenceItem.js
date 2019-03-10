@@ -4,7 +4,6 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
 
-import i18n from '../../utils/i18n';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 
@@ -13,11 +12,12 @@ type Props = {
   selected: string,
   title: string,
   theme: ThemeType,
+  entries: { [key: string]: string },
 };
 
 class PreferenceItem extends React.PureComponent<Props> {
   render() {
-    const { onPress, selected, title } = this.props;
+    const { onPress, selected, title, entries } = this.props;
     const { colors } = this.props.theme;
 
     return (
@@ -34,7 +34,7 @@ class PreferenceItem extends React.PureComponent<Props> {
                 { color: colors.secondaryText },
               ]}
             >
-              {i18n.t(selected)}
+              {entries[selected]}
             </Text>
           </View>
         </View>

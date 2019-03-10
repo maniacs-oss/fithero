@@ -24,6 +24,7 @@ type Props = {
   values: Array<string>,
   visible: boolean,
   scrollable?: boolean,
+  entries: { [key: string]: string },
   theme: ThemeType,
 };
 
@@ -31,6 +32,7 @@ class ListChoiceDialog extends React.Component<Props> {
   _renderDialogContent = () => {
     const {
       description,
+      entries,
       onValueChange,
       scrollable,
       selected,
@@ -41,7 +43,7 @@ class ListChoiceDialog extends React.Component<Props> {
         key={v}
         checked={v === selected}
         value={v}
-        title={i18n.t(v)}
+        title={entries[v]}
         onValueChange={onValueChange}
       />
     ));

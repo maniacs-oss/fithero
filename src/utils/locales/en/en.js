@@ -4,6 +4,9 @@ export default {
   add: 'Add',
   cancel: 'Cancel',
   calendar: 'Calendar',
+  day__monday: 'Monday',
+  day__sunday: 'Sunday',
+  day__saturday: 'Saturday',
   default_unit_system: 'Default unit system',
   default_unit_system_desc:
     'This will not affect the exercises that you logged in the past.',
@@ -15,6 +18,7 @@ export default {
   exercises: 'Exercises',
   'exercise__paper-placeholder':
     'Each line represents a set. You can type using the format repetitions x weight (RxW), e.g:\n\n8x120\n7x130\n6x140\n\nThis last line can be an optional comment.',
+  first_day_of_the_week: 'First day of the week',
   imperial: 'Imperial',
   kg: {
     unit: {

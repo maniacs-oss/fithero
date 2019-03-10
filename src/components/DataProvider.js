@@ -1,6 +1,8 @@
 /* @flow */
 
 import * as React from 'react';
+import isEqual from 'lodash/isEqual';
+
 import type { RealmResults } from '../types';
 
 type Props<T, A> = {
@@ -27,17 +29,32 @@ class DataProvider<T, A> extends React.Component<Props<T, A>, State<*>> {
   }
 
   componentDidMount() {
-    const { parse } = this.props;
+    this._startListening(this.props);
+  }
+
+  componentWillReceiveProps(nextProps: Props<T, A>) {
+    if (!isEqual(this.props.args, nextProps.args)) {
+      const { args, query } = nextProps;
+
+      this.dataListener.removeAllListeners();
+      this.dataListener = args ? query(...args) : query();
+      this._startListening(nextProps);
+    }
+  }
+
+  componentWillUnmount() {
+    this.dataListener.removeAllListeners();
+  }
+
+  _startListening(props: Props<T, A>) {
+    const { parse } = props;
+
     this.dataListener.addListener(data => {
       const newData = parse(data);
       if (newData !== this.state.data) {
         this.setState({ data: newData });
       }
     });
-  }
-
-  componentWillUnmount() {
-    this.dataListener.removeAllListeners();
   }
 
   render() {
