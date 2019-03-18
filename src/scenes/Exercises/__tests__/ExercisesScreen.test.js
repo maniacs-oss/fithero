@@ -50,7 +50,7 @@ describe('ExercisesScreen', () => {
   });
 
   it('shows all exercises if no filters', () => {
-    expect(List.props().data.length).toEqual(exercises.length);
+    expect(List.props().data).toHaveLength(exercises.length);
   });
 
   it('filters by search query', () => {

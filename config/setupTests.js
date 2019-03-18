@@ -23,3 +23,6 @@ jest.mock('react-navigation-backhandler', () => ({
 jest.mock('react-native-localize', () => ({
   findBestAvailableLanguage: () => 'en',
 }));
+jest.mock('@react-native-community/async-storage', () => ({
+  setItem: jest.fn(),
+}));

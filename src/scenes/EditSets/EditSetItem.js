@@ -44,7 +44,7 @@ class EditSetItem extends React.PureComponent<Props> {
               name="trophy"
               size={24}
               color={theme.colors.trophy}
-              style={[styles.icon, !isMaxSet && { opacity: 0 }]}
+              style={[styles.icon, !isMaxSet && styles.notMax]}
             />
             <Text style={[styles.text, styles.weight]}>
               {unit === 'metric'
@@ -103,6 +103,9 @@ const styles = StyleSheet.create({
   },
   unit: {
     fontSize: 14,
+  },
+  notMax: {
+    opacity: 0,
   },
 });
 

@@ -1,9 +1,8 @@
 /* @flow */
 
-import type { JestMockFn } from 'jest';
-
 function Realm(): {
-  [key: string]: JestMockFn,
+  // eslint-disable-next-line flowtype/no-weak-types
+  [key: string]: Function,
 } {
   return {
     create: jest.fn(),

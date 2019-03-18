@@ -1,6 +1,6 @@
 /* @flow */
 
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { Settings } from '../../utils/constants';
 import type { DispatchType } from '../../types';

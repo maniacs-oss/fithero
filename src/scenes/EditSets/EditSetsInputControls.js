@@ -64,7 +64,6 @@ class EditSetsInputControls extends React.Component<Props> {
               style={[
                 {
                   color: theme.colors.text,
-                  textAlign: 'center',
                 },
                 styles.textInput,
               ]}
@@ -101,6 +100,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 20,
+    textAlign: 'center',
   },
   increaseButton: {
     justifyContent: 'center',

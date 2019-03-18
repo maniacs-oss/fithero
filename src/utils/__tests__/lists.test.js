@@ -33,12 +33,12 @@ describe('insertInSortedList', () => {
       { id: 6, name: 'A1' },
       e => e.name
     );
-    expect(newList.length).toEqual(list.length + 1);
+    expect(newList).toHaveLength(list.length + 1);
     expect(newList[1]).toEqual(newElement);
   });
 });
 
-describe('insertInSortedList', () => {
+describe('updateInSortedList', () => {
   it('updates an element and we need to re-sort', () => {
     const updateElement = { id: 5, name: 'B1' };
     const newList = updateInSortedList(
@@ -48,7 +48,7 @@ describe('insertInSortedList', () => {
       e => e.name
     );
 
-    expect(newList.length).toEqual(list.length);
+    expect(newList).toHaveLength(list.length);
     expect(newList[2]).toEqual(updateElement);
     expect(newList[newList.length - 1]).toEqual(list[newList.length - 2]);
   });

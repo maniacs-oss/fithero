@@ -1,9 +1,10 @@
 /* @flow */
 
 import * as React from 'react';
-import { AsyncStorage, Platform, StatusBar, YellowBox } from 'react-native';
+import { Platform, StatusBar, YellowBox } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
@@ -20,6 +21,8 @@ if (global.__DEV__) {
     'Module RCTImageLoader',
     // https://github.com/facebook/react-native/issues/18201
     'Warning: Class RCTCxxModule was not exported',
+    // Comes from react-navigation
+    'Async Storage has been extracted',
   ]);
 }
 

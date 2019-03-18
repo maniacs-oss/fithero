@@ -164,10 +164,7 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
           multiline
           underlineColorAndroid="transparent"
           selectionColor={theme.colors.textSelection}
-          style={[
-            { color: theme.colors.text, textAlignVertical: 'top' },
-            styles.textArea,
-          ]}
+          style={[{ color: theme.colors.text }, styles.textArea]}
           placeholderTextColor={theme.colors.placeholder}
           placeholder={i18n.t('exercise__paper-placeholder')}
           value={exerciseSummary}
@@ -192,6 +189,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingTop: 24,
     fontSize: Platform.OS === 'ios' ? 16 : 18,
+    textAlignVertical: 'top',
   },
 });
 

@@ -1,6 +1,6 @@
 /* @flow */
 
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import reducer, {
   DEFAULT_UNIT_SYSTEM,
@@ -10,10 +10,6 @@ import reducer, {
   setEditSetsScreenType,
 } from '../settings';
 import { Settings } from '../../../utils/constants';
-
-jest.mock('react-native', () => ({
-  AsyncStorage: { setItem: jest.fn() },
-}));
 
 describe('EDIT_SETS_SCREEN_TYPE', () => {
   it('calls AsyncStorage when switching editSetsScreenType', async () => {

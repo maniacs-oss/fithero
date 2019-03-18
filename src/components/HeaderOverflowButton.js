@@ -19,7 +19,6 @@ type Props = {
 };
 
 class HeaderOverflowButton extends React.Component<Props> {
-  // $FlowFixMe my own withTheme is not good with refs
   menuRef: ?HeaderIconButton;
 
   _onPress = () => {
