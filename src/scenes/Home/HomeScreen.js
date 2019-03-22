@@ -40,13 +40,14 @@ class HomeScreen extends Component<Props, State> {
         today: getToday().format('YYYY-MM-DD'),
       });
     };
+    const { params = {} } = navigation.state;
     return {
       headerRight: (
         <View style={styles.headerButtons}>
           <HeaderIconButton icon="date-range" onPress={navigateToCalendar} />
           <HeaderOverflowButton
             actions={[i18n.t('comment_workout')]}
-            onPress={navigation.state.params.addWorkoutComment}
+            onPress={params.addWorkoutComment}
             last
           />
         </View>
