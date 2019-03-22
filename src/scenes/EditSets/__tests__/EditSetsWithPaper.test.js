@@ -120,7 +120,6 @@ describe('saving sets', () => {
     expect(addExercise).not.toBeCalled();
     expect(updateExercisePaperForWorkout).toBeCalledWith({
       ...mockExercise,
-      comments: '',
     });
   });
 
@@ -131,7 +130,6 @@ describe('saving sets', () => {
       exerciseSummary: generateSummary(
         {
           sets: mockExercise.sets,
-          comments: 'Some comment',
         },
         'metric'
       ),
@@ -141,7 +139,6 @@ describe('saving sets', () => {
     component.getInstance()._saveSets();
     expect(addExercise).toBeCalledWith({
       ...mockExercise,
-      comments: 'Some comment',
     });
     expect(updateExercisePaperForWorkout).not.toBeCalled();
   });

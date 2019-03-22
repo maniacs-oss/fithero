@@ -14,7 +14,6 @@ const mockRealmExercise = {
   id: '2018-05-04T00:00:00.000Z_bench-press',
   date,
   type: 'bench-press',
-  comments: '',
   sets: {
     push: jest.fn(),
   },
@@ -143,7 +142,7 @@ describe('deleteSet', () => {
       id: '2018-05-04T00:00:00.000Z_barbell-squat',
       date,
       type: 'barbell-squat',
-      comments: '',
+
       sets: {
         push: jest.fn(),
       },

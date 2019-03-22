@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Paragraph, Caption, Title } from 'react-native-paper';
 import { exercises } from 'dziku-exercises';
 import memoize from 'lodash/memoize';
@@ -52,8 +52,8 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
           <HeaderOverflowButton
             onPress={i => params.deleteAction(i)}
             actions={[i18n.t('delete')]}
-            icon={Platform.OS === 'ios' ? 'more-horiz' : 'more-vert'}
             destructiveButtonIndex={1}
+            last
           />
         </View>
       ),

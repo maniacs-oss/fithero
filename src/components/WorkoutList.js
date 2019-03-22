@@ -69,7 +69,7 @@ class WorkoutList extends React.Component<Props> {
 
     return (
       <FlatList
-        data={workout ? workout.exercises : []}
+        data={workout && workout.isValid() ? workout.exercises : []}
         keyExtractor={this._keyExtractor}
         renderItem={this._renderItem}
         {...rest}

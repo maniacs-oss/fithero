@@ -38,7 +38,6 @@ export type CategoryType = {|
 
 export type ExerciseLog = {|
   sets: Array<WorkoutSetSchemaType>,
-  comments?: string,
 |};
 
 export interface RealmResults<T> extends Array<T> {

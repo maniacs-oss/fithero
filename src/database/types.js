@@ -9,6 +9,7 @@ export type WorkoutSchemaType = {|
   date: Date,
   comments?: string,
   exercises: Array<WorkoutExerciseSchemaType>,
+  isValid: () => boolean,
 |};
 
 export type AddWorkoutExerciseSchemaType = {
@@ -16,7 +17,6 @@ export type AddWorkoutExerciseSchemaType = {
   date: Date,
   type: string,
   sets: Array<WorkoutSetSchemaType>,
-  comments?: string,
   weight_unit: 'metric' | 'imperial',
 };
 

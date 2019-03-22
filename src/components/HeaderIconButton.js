@@ -4,18 +4,20 @@ import * as React from 'react';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import withTheme from '../utils/theme/withTheme';
 import type { ThemeType } from '../utils/theme/withTheme';
 
-type Props = {
+type Props = {|
   icon: string,
   onPress: () => mixed,
   theme: ThemeType,
-};
+  last?: boolean,
+|};
 
 class HeaderIconButton extends React.Component<Props> {
   render() {
-    const { icon, onPress, theme, ...rest } = this.props;
+    const { icon, onPress, last, theme, ...rest } = this.props;
     const { toolbarTint } = theme.colors;
 
     if (Platform.OS === 'android') {
@@ -30,7 +32,10 @@ class HeaderIconButton extends React.Component<Props> {
     }
 
     return (
-      <TouchableOpacity onPress={onPress} style={styles.container}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={[styles.container, last && styles.lastStyle]}
+      >
         <Icon name={icon} size={24} color={toolbarTint} />
       </TouchableOpacity>
     );
@@ -39,12 +44,12 @@ class HeaderIconButton extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    ...Platform.select({
-      ios: {
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-      },
-    }),
+    paddingVertical: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+  },
+  lastStyle: {
+    paddingRight: 16,
   },
 });
 

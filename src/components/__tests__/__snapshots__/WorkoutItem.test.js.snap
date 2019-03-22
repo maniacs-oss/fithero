@@ -7,13 +7,13 @@ Snapshot Diff:
 
 @@ -87,1 +87,1 @@
 -                     "color": "#6FE3C4",
-+                     "color": "rgba(255, 255, 255, .7)",
++                     "color": "#ffffff",
 @@ -111,1 +111,1 @@
 -                     "color": "#6FE3C4",
-+                     "color": "rgba(255, 255, 255, .7)",
++                     "color": "#ffffff",
 @@ -134,1 +134,1 @@
 -                     "color": "#6FE3C4",
-+                     "color": "rgba(255, 255, 255, .7)",
++                     "color": "#ffffff",
 `;
 
 exports[`WorkoutItem renders using kg vs lb 1`] = `

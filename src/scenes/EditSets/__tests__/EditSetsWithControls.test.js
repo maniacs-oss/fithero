@@ -35,7 +35,6 @@ describe('EditSetsWithControls', () => {
   const exerciseKey = 'bench-press';
   const exercise = {
     id: '2018-05-01T00:00:00.000Z_bench-press',
-    comments: '',
     sets: [
       {
         id: '2018-05-01T00:00:00.000Z_bench-press_001',

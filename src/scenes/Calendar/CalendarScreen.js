@@ -54,6 +54,7 @@ export class CalendarScreen extends React.Component<Props, State> {
             }
           }}
           icon="today"
+          last
         />
       ),
     };

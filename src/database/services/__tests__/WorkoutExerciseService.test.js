@@ -54,6 +54,10 @@ describe('addExercise', () => {
 });
 
 describe('deleteWorkoutExercise', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('deletes an exercise', () => {
     // Mock it to return a workout that still has exercises
     realm.objectForPrimaryKey = jest.fn(() => mockWorkouts[0]);
@@ -61,13 +65,26 @@ describe('deleteWorkoutExercise', () => {
     expect(realm.delete).toHaveBeenCalledTimes(1);
     expect(realm.delete).toHaveBeenCalledWith(mockExercise);
   });
-  it('deletes an exercise and the workout', () => {
+
+  it('deletes the last exercise and the workout', () => {
     // Mock it to return a workout with empty exercises
     realm.objectForPrimaryKey = jest.fn(() => mockWorkouts[1]);
     deleteWorkoutExercise(mockExercise);
     expect(realm.delete).toHaveBeenCalledTimes(2);
     expect(realm.delete).toHaveBeenCalledWith(mockExercise);
+    expect(realm.delete).toHaveBeenCalledWith(mockWorkouts[1]);
   });
+
+  it('deletes the last exercise but not the workout if it has comments', () => {
+    realm.objectForPrimaryKey = jest.fn(() => ({
+      ...mockWorkouts[1],
+      comments: 'This was was hard!',
+    }));
+    deleteWorkoutExercise(mockExercise);
+    expect(realm.delete).toHaveBeenCalledTimes(1);
+    expect(realm.delete).toHaveBeenCalledWith(mockExercise);
+  });
+
   // TODO
   it.skip('deletes an exercise and change the order of the others', () => {});
 });
@@ -83,7 +100,6 @@ describe('updateExercisePaperForWorkout', () => {
 
     const mutatedExercise = {
       id: mockExercise.id,
-      comments: 'New comment!',
       sets: mockSets,
       date: dates[0].date,
       type: mockExercise.type,
@@ -93,7 +109,6 @@ describe('updateExercisePaperForWorkout', () => {
     // $FlowFixMe Hard to type this way of mocking RealmArray for tests
     updateExercisePaperForWorkout(mutatedExercise);
 
-    expect(mutatedExercise.comments).toEqual('New comment!');
     expect(mockSets.push).toHaveBeenCalledTimes(0);
     expect(realm.delete).not.toBeCalled();
   });

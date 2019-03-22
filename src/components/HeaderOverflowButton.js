@@ -13,9 +13,9 @@ import i18n from '../utils/i18n';
 
 type Props = {
   actions: Array<string>,
-  icon: string,
   onPress: (index: number) => void,
-  destructiveButtonIndex: number,
+  destructiveButtonIndex?: number,
+  last?: boolean,
 };
 
 class HeaderOverflowButton extends React.Component<Props> {
@@ -50,15 +50,14 @@ class HeaderOverflowButton extends React.Component<Props> {
     }
   };
   render() {
-    const { icon } = this.props;
-
     return (
       <HeaderIconButton
         ref={r => {
           this.menuRef = r;
         }}
         onPress={this._onPress}
-        icon={icon}
+        icon={Platform.OS === 'ios' ? 'more-horiz' : 'more-vert'}
+        last={this.props.last}
       />
     );
   }

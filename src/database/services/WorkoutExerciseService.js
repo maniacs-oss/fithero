@@ -41,7 +41,7 @@ export const deleteWorkoutExercise = (
     workout.exercises.forEach((e, i) => {
       e.sort = i + 1;
     });
-  } else {
+  } else if (!workout.comments) {
     realm.delete(workout);
   }
 };
@@ -71,7 +71,6 @@ export const updateExercisePaperForWorkout = (
     }
 
     if (exercise.sets.length > 0) {
-      existingExercise.comments = exercise.comments || null;
       exercise.sets.forEach(s => {
         const set = existingSets.filtered(`id = "${s.id}"`)[0];
         if (set) {

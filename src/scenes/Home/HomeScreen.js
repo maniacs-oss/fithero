@@ -1,8 +1,8 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { FAB } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Card, FAB, Text } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
@@ -12,18 +12,21 @@ import { dateToString, getCurrentWeek, getToday } from '../../utils/date';
 import { getWorkoutsByRange } from '../../database/services/WorkoutService';
 import WorkoutList from '../../components/WorkoutList';
 import type { WorkoutSchemaType } from '../../database/types';
-import HeaderButton from '../../components/HeaderButton';
-import i18n from '../../utils/i18n';
 import HeaderIconButton from '../../components/HeaderIconButton';
 import DataProvider from '../../components/DataProvider';
 import type { FirstDayOfTheWeekType } from '../../redux/modules/settings';
+import HeaderOverflowButton from '../../components/HeaderOverflowButton';
+import i18n from '../../utils/i18n';
+import withTheme from '../../utils/theme/withTheme';
+import type { ThemeType } from '../../utils/theme/withTheme';
 
 type NavigationOptions = {
-  navigation: NavigationType<{}>,
+  navigation: NavigationType<{ addWorkoutComment: () => void }>,
 };
 
 type Props = NavigationOptions & {
   firstDayOfTheWeek: FirstDayOfTheWeekType,
+  theme: ThemeType,
 };
 
 type State = {
@@ -38,14 +41,16 @@ class HomeScreen extends Component<Props, State> {
       });
     };
     return {
-      headerRight:
-        Platform.OS === 'ios' ? (
-          <HeaderButton onPress={navigateToCalendar}>
-            {i18n.t('calendar')}
-          </HeaderButton>
-        ) : (
+      headerRight: (
+        <View style={styles.headerButtons}>
           <HeaderIconButton icon="date-range" onPress={navigateToCalendar} />
-        ),
+          <HeaderOverflowButton
+            actions={[i18n.t('comment_workout')]}
+            onPress={navigation.state.params.addWorkoutComment}
+            last
+          />
+        </View>
+      ),
     };
   };
 
@@ -55,6 +60,17 @@ class HomeScreen extends Component<Props, State> {
       selectedDay: dateToString(getToday()),
     };
   }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      addWorkoutComment: this._addWorkoutComment,
+    });
+  }
+
+  _addWorkoutComment = () => {
+    const { selectedDay } = this.state;
+    this.props.navigation.navigate('Comments', { day: selectedDay });
+  };
 
   _onAddExercises = () => {
     const { selectedDay } = this.state;
@@ -78,15 +94,27 @@ class HomeScreen extends Component<Props, State> {
     workouts: { [key: string]: WorkoutSchemaType },
     currentWeek
   ) => {
+    const { colors } = this.props.theme;
     const { selectedDay } = this.state;
 
     return (
-      <DayRow
-        selected={selectedDay}
-        currentWeek={currentWeek}
-        onDaySelected={this._onDaySelected}
-        workouts={workouts}
-      />
+      <View>
+        <DayRow
+          selected={selectedDay}
+          currentWeek={currentWeek}
+          onDaySelected={this._onDaySelected}
+          workouts={workouts}
+        />
+        {workouts && workouts[selectedDay] && workouts[selectedDay].comments ? (
+          <Card style={styles.comments} onPress={this._addWorkoutComment}>
+            <Card.Content>
+              <Text style={{ color: colors.secondaryText }}>
+                {workouts[selectedDay].comments}
+              </Text>
+            </Card.Content>
+          </Card>
+        ) : null}
+      </View>
     );
   };
 
@@ -137,6 +165,13 @@ const styles = StyleSheet.create({
     bottom: 16,
     right: 16,
   },
+  headerButtons: {
+    flexDirection: 'row',
+  },
+  comments: {
+    marginHorizontal: 8,
+    marginVertical: 4,
+  },
 });
 
 export default connect(
@@ -144,4 +179,4 @@ export default connect(
     firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
   }),
   null
-)(HomeScreen);
+)(withTheme(HomeScreen));

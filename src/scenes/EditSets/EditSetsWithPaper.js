@@ -60,7 +60,6 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
         exerciseSummary: generateSummary(
           {
             sets: exercise.sets,
-            comments: exercise.comments,
           },
           unit
         ),
@@ -92,7 +91,6 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
         exerciseSummary: generateSummary(
           {
             sets: nextProps.exercise.sets,
-            comments: nextProps.exercise.comments,
           },
           unit
         ),
@@ -111,7 +109,7 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
   _saveSets = () => {
     const { day, defaultUnitSystem, exerciseKey, exercise } = this.props;
     const { exerciseSummary } = this.state;
-    const { comments, sets } = parseSummary(exerciseSummary, day, exerciseKey);
+    const { sets } = parseSummary(exerciseSummary, day, exerciseKey);
     const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
     const date = toDate(day);
 
@@ -119,7 +117,6 @@ export class EditSetsWithPaper extends React.Component<Props, State> {
 
     const newExercise = {
       id: exerciseIdDb,
-      comments,
       sets:
         unit === 'metric'
           ? sets

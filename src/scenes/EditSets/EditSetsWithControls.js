@@ -208,7 +208,6 @@ export class EditSetsWithControls extends React.Component<Props, State> {
             type: exerciseKey,
           },
         ],
-        comments: '',
         date: toDate(day),
         type: exerciseKey,
         weight_unit: defaultUnitSystem,

@@ -46,6 +46,7 @@ export class ExercisesScreen extends Component<Props, State> {
       <HeaderIconButton
         onPress={() => navigation.navigate('EditExercise')}
         icon="add"
+        last
       />
     ),
   });

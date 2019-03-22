@@ -6,7 +6,7 @@ import { toDate } from '../date';
 const date = toDate('2018-05-01T22:00:00.000Z');
 
 describe('parseSummary', () => {
-  it('parses a summary case without comments', () => {
+  it('parses a summary case', () => {
     const summary = `
   8x100
   8x110
@@ -34,41 +34,6 @@ describe('parseSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: '',
-    });
-  });
-
-  it('parses a summary case with comments', () => {
-    const summary = `
-  8x100
-  8x110
-  
-  Testing a comment.
-  `;
-
-    const result = parseSummary(
-      summary,
-      '2018-05-01T22:00:00.000Z',
-      'bench-press'
-    );
-    expect(result).toEqual({
-      sets: [
-        {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
-          reps: 8,
-          weight: 100,
-          date,
-          type: 'bench-press',
-        },
-        {
-          id: '2018-05-01T22:00:00.000Z_bench-press_002',
-          reps: 8,
-          weight: 110,
-          date,
-          type: 'bench-press',
-        },
-      ],
-      comments: 'Testing a comment.',
     });
   });
 
@@ -114,7 +79,6 @@ describe('parseSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: '',
     });
   });
 
@@ -146,7 +110,6 @@ describe('parseSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: '',
     });
   });
 
@@ -154,7 +117,6 @@ describe('parseSummary', () => {
     const summary = `
   0x50
   5x50
-  Testing comment.
   `;
 
     const result = parseSummary(
@@ -172,7 +134,6 @@ describe('parseSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: 'Testing comment.',
     });
   });
 
@@ -204,7 +165,6 @@ describe('parseSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: '',
     });
   });
 
@@ -236,7 +196,6 @@ describe('parseSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: '',
     });
   });
 });
@@ -253,12 +212,11 @@ describe('generateSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: '',
     };
     expect(generateSummary(log, 'metric')).toEqual('10x50.5');
   });
 
-  it('generates summary from a log without comments', () => {
+  it('generates summary from a log', () => {
     const log = {
       sets: [
         {
@@ -276,33 +234,7 @@ describe('generateSummary', () => {
           type: 'bench-press',
         },
       ],
-      comments: '',
     };
     expect(generateSummary(log, 'metric')).toEqual('8x50.5\n7x45');
-  });
-
-  it('generates summary from a log with comments', () => {
-    const log = {
-      sets: [
-        {
-          id: '2018-05-01T22:00:00.000Z_bench-press_000',
-          reps: 8,
-          weight: 50.5,
-          date,
-          type: 'bench-press',
-        },
-        {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
-          reps: 7,
-          weight: 45,
-          date,
-          type: 'bench-press',
-        },
-      ],
-      comments: 'Testing comment.',
-    };
-    expect(generateSummary(log, 'metric')).toEqual(
-      '8x50.5\n7x45\n\nTesting comment.'
-    );
   });
 });

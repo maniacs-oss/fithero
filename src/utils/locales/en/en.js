@@ -4,6 +4,7 @@ export default {
   add: 'Add',
   cancel: 'Cancel',
   calendar: 'Calendar',
+  comment_workout: 'Comment workout',
   day__monday: 'Monday',
   day__sunday: 'Sunday',
   day__saturday: 'Saturday',
@@ -68,5 +69,7 @@ export default {
   total_workouts: 'Total workouts',
   week_volume: 'Week volume',
   weight_label: 'Weight ({{w}})',
+  workout_notes: 'Workout notes',
+  workout_comment__placeholder: 'Add a memorable comment here...',
   update: 'Update',
 };

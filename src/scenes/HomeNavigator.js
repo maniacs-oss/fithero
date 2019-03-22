@@ -11,6 +11,7 @@ import ExercisesScreen from './Exercises';
 import EditSetsScreen from './EditSets';
 import WorkoutScreen from './Workouts';
 import ExerciseDetailsScreen from './ExerciseDetails';
+import CommentsScreen from './Comments';
 
 export default createStackNavigator(
   {
@@ -43,6 +44,12 @@ export default createStackNavigator(
     },
     Workouts: {
       screen: WorkoutScreen,
+    },
+    Comments: {
+      screen: CommentsScreen,
+      navigationOptions: {
+        title: null,
+      },
     },
   },
   {

@@ -12,7 +12,6 @@ const WorkoutExerciseSchema = {
     date: 'date',
     type: 'string',
     sets: { type: 'list', objectType: WORKOUT_SET_SCHEMA_NAME },
-    comments: { type: 'string', optional: true },
     sort: 'int',
     weight_unit: { type: 'string', optional: true },
   },

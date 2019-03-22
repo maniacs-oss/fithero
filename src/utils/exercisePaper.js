@@ -13,7 +13,6 @@ export const parseSummary = (
   exerciseKey: string
 ): ExerciseLog => {
   const sets: Array<WorkoutSetSchemaType> = [];
-  let comments = '';
 
   const lines = exerciseSummary
     .split('\n')
@@ -21,7 +20,7 @@ export const parseSummary = (
     .filter(line => line !== '');
 
   let setIndex = 1;
-  lines.forEach((line, index) => {
+  lines.forEach(line => {
     // We remove whitespaces too so we fix mistakes like "5x 30"
     const isSet = /\d+x\d+\.?\d*/.test(line.replace(/\s/g, ''));
     if (isSet) {
@@ -39,14 +38,11 @@ export const parseSummary = (
         });
         setIndex++;
       }
-    } else if (index === lines.length - 1) {
-      comments = line;
     }
   });
 
   return {
     sets,
-    comments,
   };
 };
 
@@ -63,5 +59,5 @@ export const generateSummary = (
     );
   });
 
-  return `${sets.join(`\n`)}${log.comments ? `\n\n${log.comments}` : ''}`;
+  return sets.join(`\n`);
 };
