@@ -16,8 +16,24 @@ import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
 export const getAllWorkouts = (): RealmResults<WorkoutSchemaType> =>
   realm.objects('Workout');
 
-export const getWorkoutsByRange = (start: Date, end: Date) =>
-  realm.objects('Workout').filtered(`date >= $0 AND date <= $1`, start, end);
+export const getAllWorkoutsWithExercises = (): RealmResults<
+  WorkoutSchemaType
+> => realm.objects('Workout').filtered('exercises.@count > 0');
+
+export const getWorkoutsByRange = (
+  start: Date,
+  end: Date,
+  onlyWithExercises: boolean = false
+) =>
+  realm
+    .objects('Workout')
+    .filtered(
+      `date >= $0 AND date <= $1${
+        onlyWithExercises ? ' AND exercises.@count > 0' : ''
+      }`,
+      start,
+      end
+    );
 
 export const getWorkoutById = (id: string): RealmResults<WorkoutSchemaType> =>
   realm.objects('Workout').filtered(`id = $0`, id);
@@ -26,12 +42,12 @@ export const getWorkoutsThisWeek = (
   firstDayOfTheWeek: FirstDayOfTheWeekType
 ) => {
   const [start, end] = getFirstAndLastWeekday(getToday(), firstDayOfTheWeek);
-  return getWorkoutsByRange(start, end);
+  return getWorkoutsByRange(start, end, true);
 };
 
 export const getWorkoutsThisMonth = () => {
   const [start, end] = getFirstAndLastMonthDay(getToday());
-  return getWorkoutsByRange(start, end);
+  return getWorkoutsByRange(start, end, true);
 };
 
 export const getWorkoutComments = (workoutId: string) => {

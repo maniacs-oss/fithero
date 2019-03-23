@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import DataProvider from '../../components/DataProvider';
 import {
-  getAllWorkouts,
+  getAllWorkoutsWithExercises,
   getWorkoutsThisMonth,
   getWorkoutsThisWeek,
 } from '../../database/services/WorkoutService';
@@ -41,7 +41,7 @@ class StatisticsScreen extends React.Component<Props> {
           <Card style={[styles.first, styles.singleCard]}>
             <Text style={styles.singleTitle}>{i18n.t('total_workouts')}</Text>
             <DataProvider
-              query={getAllWorkouts}
+              query={getAllWorkoutsWithExercises}
               parse={(data: Array<WorkoutSchemaType>) =>
                 data ? data.length : 0
               }
