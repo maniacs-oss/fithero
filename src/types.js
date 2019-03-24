@@ -8,6 +8,11 @@ import type { WorkoutSetSchemaType } from './database/types';
 // Shared types
 export type StylePropType = ____DangerouslyImpreciseStyleProp_Internal;
 
+export type NavigateType = (
+  route: string,
+  params?: { [key: string]: mixed }
+) => void;
+
 // TODO replace this type for flow-typed react-navigation 2
 export type NavigationType<T> = {
   state: {
@@ -20,7 +25,7 @@ export type NavigationType<T> = {
     remove: () => void,
   },
   push: (route: string, params?: { [key: string]: mixed }) => void,
-  navigate: (route: string, params?: { [key: string]: mixed }) => void,
+  navigate: NavigateType,
   // eslint-disable-next-line flowtype/no-weak-types
   setParams: (params: { [key: string]: any }) => void,
   goBack: (routeKey?: ?string) => boolean,

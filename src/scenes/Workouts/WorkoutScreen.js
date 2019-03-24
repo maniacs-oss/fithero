@@ -11,17 +11,41 @@ import type { NavigationType } from '../../types';
 import type { WorkoutSchemaType } from '../../database/types';
 import DataProvider from '../../components/DataProvider';
 import Screen from '../../components/Screen';
+import WorkoutComments from '../../components/WorkoutComments';
+import i18n from '../../utils/i18n';
+import HeaderOverflowButton from '../../components/HeaderOverflowButton';
 
 type NavigationOptions = {
-  navigation: NavigationType<{ day: string }>,
+  navigation: NavigationType<{ day: string, addWorkoutComment: () => void }>,
 };
 
 type Props = NavigationOptions & {};
 
 class WorkoutScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }: NavigationOptions) => ({
-    title: getDatePrettyFormat(navigation.state.params.day, getToday(), true),
-  });
+  static navigationOptions = ({ navigation }: NavigationOptions) => {
+    const { params = {} } = navigation.state;
+    return {
+      title: getDatePrettyFormat(navigation.state.params.day, getToday(), true),
+      headerRight: (
+        <HeaderOverflowButton
+          actions={[i18n.t('comment_workout')]}
+          onPress={params.addWorkoutComment}
+          last
+        />
+      ),
+    };
+  };
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      addWorkoutComment: this._addWorkoutComment,
+    });
+  }
+
+  _addWorkoutComment = () => {
+    const day = getDay(this.props.navigation.state.params.day);
+    this.props.navigation.navigate('Comments', { day });
+  };
 
   _onAddExercises = () => {
     const day = getDay(this.props.navigation.state.params.day);
@@ -36,6 +60,19 @@ class WorkoutScreen extends React.Component<Props> {
       exerciseName: customExerciseName,
     });
   };
+
+  _renderHeader(workout: ?WorkoutSchemaType, day: string) {
+    if (workout && workout.comments) {
+      return (
+        <WorkoutComments
+          comments={workout.comments}
+          navigate={this.props.navigation.navigate}
+          day={day}
+        />
+      );
+    }
+    return null;
+  }
 
   render() {
     const day = getDay(this.props.navigation.state.params.day);
@@ -53,6 +90,7 @@ class WorkoutScreen extends React.Component<Props> {
               contentContainerStyle={styles.list}
               workout={workout}
               onPressItem={this._onExercisePress}
+              ListHeaderComponent={() => this._renderHeader(workout, day)}
             />
           )}
         />

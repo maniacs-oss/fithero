@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Card, FAB, Text } from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
@@ -17,8 +17,7 @@ import DataProvider from '../../components/DataProvider';
 import type { FirstDayOfTheWeekType } from '../../redux/modules/settings';
 import HeaderOverflowButton from '../../components/HeaderOverflowButton';
 import i18n from '../../utils/i18n';
-import withTheme from '../../utils/theme/withTheme';
-import type { ThemeType } from '../../utils/theme/withTheme';
+import WorkoutComments from '../../components/WorkoutComments';
 
 type NavigationOptions = {
   navigation: NavigationType<{ addWorkoutComment: () => void }>,
@@ -26,7 +25,6 @@ type NavigationOptions = {
 
 type Props = NavigationOptions & {
   firstDayOfTheWeek: FirstDayOfTheWeekType,
-  theme: ThemeType,
 };
 
 type State = {
@@ -95,7 +93,6 @@ class HomeScreen extends Component<Props, State> {
     workouts: { [key: string]: WorkoutSchemaType },
     currentWeek
   ) => {
-    const { colors } = this.props.theme;
     const { selectedDay } = this.state;
 
     return (
@@ -107,13 +104,11 @@ class HomeScreen extends Component<Props, State> {
           workouts={workouts}
         />
         {workouts && workouts[selectedDay] && workouts[selectedDay].comments ? (
-          <Card style={styles.comments} onPress={this._addWorkoutComment}>
-            <Card.Content>
-              <Text style={{ color: colors.secondaryText }}>
-                {workouts[selectedDay].comments}
-              </Text>
-            </Card.Content>
-          </Card>
+          <WorkoutComments
+            comments={workouts[selectedDay].comments}
+            navigate={this.props.navigation.navigate}
+            day={selectedDay}
+          />
         ) : null}
       </View>
     );
@@ -169,10 +164,6 @@ const styles = StyleSheet.create({
   headerButtons: {
     flexDirection: 'row',
   },
-  comments: {
-    marginHorizontal: 8,
-    marginVertical: 4,
-  },
 });
 
 export default connect(
@@ -180,4 +171,4 @@ export default connect(
     firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
   }),
   null
-)(withTheme(HomeScreen));
+)(HomeScreen);
