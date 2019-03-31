@@ -19,7 +19,7 @@ import withTheme from '../../utils/theme/withTheme';
 import HeaderIconButton from '../../components/HeaderIconButton';
 import type { ExerciseSchemaType } from '../../database/types';
 import { getAllExercises } from '../../database/services/ExerciseService';
-import { insertInSortedList, updateInSortedList } from '../../utils/lists';
+import { deserializeExercises } from '../../database/utils';
 
 type NavigationOptions = {
   navigation: NavigationType<{ day: string }>,
@@ -54,8 +54,12 @@ export class ExercisesScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.realmExercises = getAllExercises();
+    // We don't want to mix Realm objects and normal objects into the state because it gives
+    // a lot of problems when for example, the Restore function deletes all the database.
+    // The user will not often add, modify or delete exercises so deserialize here is acceptable
+    const customExercises = deserializeExercises(this.realmExercises);
     this.state = {
-      exercises: sortBy([...this.realmExercises, ...dzikuExercises], e =>
+      exercises: sortBy([...customExercises, ...dzikuExercises], e =>
         getExerciseName(e.id, e.name)
       ),
       searchQuery: '',
@@ -68,35 +72,19 @@ export class ExercisesScreen extends Component<Props, State> {
 
   componentDidMount() {
     this.realmExercises.addListener((exercises, changes) => {
-      changes.insertions.forEach(i => {
-        this.setState(prevState => ({
-          exercises: insertInSortedList(prevState.exercises, exercises[i], e =>
+      if (
+        changes.insertions.length > 0 ||
+        changes.modifications.length > 0 ||
+        changes.deletions.length > 0
+      ) {
+        const realmExercises = getAllExercises();
+        const customExercises = deserializeExercises(realmExercises);
+        this.setState({
+          exercises: sortBy([...customExercises, ...dzikuExercises], e =>
             getExerciseName(e.id, e.name)
           ),
-        }));
-      });
-
-      changes.modifications.forEach(i => {
-        this.setState(prevState => ({
-          exercises: updateInSortedList(
-            prevState.exercises,
-            exercises[i],
-            e => e.id === exercises[i].id,
-            e => getExerciseName(e.id, e.name)
-          ),
-        }));
-      });
-
-      changes.deletions.forEach(() => {
-        // From Realm docs: "Deleted objects cannot be accessed directly"
-        // As our list is a combination of app exercises and custom user ones,
-        // We do not really know where the delete exercise is
-        this.setState(() => ({
-          exercises: sortBy([...getAllExercises(), ...dzikuExercises], e =>
-            getExerciseName(e.id, e.name)
-          ),
-        }));
-      });
+        });
+      }
     });
   }
 

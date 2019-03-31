@@ -2,6 +2,9 @@
 
 export default {
   add: 'Add',
+  backup: 'Backup',
+  backup_description:
+    'Backup your data to a cloud service such as Google Drive',
   cancel: 'Cancel',
   calendar: 'Calendar',
   comment_workout: 'Comment workout',
@@ -55,6 +58,8 @@ export default {
       zero: '{{count}} reps',
     },
   },
+  restore: 'Restore',
+  restore_description: 'Restore your data from a backup',
   save: 'Save',
   secondary_muscle: {
     one: 'Secondary muscle',

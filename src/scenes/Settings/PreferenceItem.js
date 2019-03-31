@@ -8,25 +8,29 @@ import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 
 type Props = {
-  onPress: () => void,
-  selected: string,
+  onPress: () => mixed,
   title: string,
+  description?: string,
   theme: ThemeType,
-  entries: { [key: string]: string },
+  selected?: string,
+  entries?: { [key: string]: string },
 };
 
 class PreferenceItem extends React.PureComponent<Props> {
   render() {
-    const { onPress, selected, title, entries } = this.props;
+    const { description, onPress, selected, title, entries } = this.props;
     const { colors } = this.props.theme;
+
+    let secondaryText = description;
+    if (!secondaryText && entries && selected) {
+      secondaryText = entries[selected];
+    }
 
     return (
       <TouchableRipple onPress={onPress}>
         <View style={styles.content}>
-          <View>
-            <Text style={[styles.body, styles.title]}>{title}</Text>
-          </View>
-          <View>
+          <Text style={[styles.body, styles.title]}>{title}</Text>
+          {secondaryText && (
             <Text
               style={[
                 styles.body,
@@ -34,9 +38,9 @@ class PreferenceItem extends React.PureComponent<Props> {
                 { color: colors.secondaryText },
               ]}
             >
-              {entries[selected]}
+              {secondaryText}
             </Text>
-          </View>
+          )}
         </View>
       </TouchableRipple>
     );
@@ -47,6 +51,7 @@ const styles = StyleSheet.create({
   content: {
     minHeight: 64,
     paddingHorizontal: 16,
+    paddingVertical: 8,
     justifyContent: 'center',
   },
   body: {

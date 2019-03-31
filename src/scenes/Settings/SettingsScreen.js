@@ -8,13 +8,20 @@ import PreferenceItem from './PreferenceItem';
 import i18n from '../../utils/i18n';
 import ListChoiceDialog from './ListChoiceDialog';
 import {
+  initSettings,
   setDefaultUnitSystem,
   setFirstDayOfTheWeek,
 } from '../../redux/modules/settings';
 import type {
   DefaultUnitSystemType,
   FirstDayOfTheWeekType,
+  SettingsType,
 } from '../../redux/modules/settings';
+import { Divider } from 'react-native-paper';
+import {
+  backupDatabase,
+  restoreDatabase,
+} from '../../database/services/BackupService';
 
 const DEFAULT_UNIT_SYSTEM = 'default_unit_system';
 const FIRST_DAY_OF_THE_WEEK = 'first_day_of_the_week';
@@ -24,6 +31,7 @@ type Props = {
   setDefaultUnitSystem: (unit: DefaultUnitSystemType) => void,
   firstDayOfTheWeek: FirstDayOfTheWeekType,
   setFirstDayOfTheWeek: (day: FirstDayOfTheWeekType) => void,
+  initSettings: (settings: SettingsType) => void,
 };
 
 type State = {
@@ -55,6 +63,10 @@ class SettingsScreen extends React.Component<Props, State> {
   _onFirstDayOfTheWeekChange = value => {
     this.props.setFirstDayOfTheWeek(value);
     this.setState({ showDialog: '' });
+  };
+
+  _restoreDatabase = () => {
+    restoreDatabase(this.props.initSettings);
   };
 
   render() {
@@ -108,6 +120,17 @@ class SettingsScreen extends React.Component<Props, State> {
           visible={showDialog === FIRST_DAY_OF_THE_WEEK}
           onValueChange={this._onFirstDayOfTheWeekChange}
         />
+        <Divider style={styles.divider} />
+        <PreferenceItem
+          title={i18n.t('backup')}
+          description={i18n.t('backup_description')}
+          onPress={backupDatabase}
+        />
+        <PreferenceItem
+          title={i18n.t('restore')}
+          description={i18n.t('restore_description')}
+          onPress={this._restoreDatabase}
+        />
       </View>
     );
   }
@@ -116,6 +139,9 @@ class SettingsScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   screen: {
     paddingVertical: 8,
+  },
+  divider: {
+    marginVertical: 8,
   },
 });
 
@@ -127,5 +153,6 @@ export default connect(
   {
     setDefaultUnitSystem,
     setFirstDayOfTheWeek,
+    initSettings,
   }
 )(SettingsScreen);

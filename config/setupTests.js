@@ -25,4 +25,19 @@ jest.mock('react-native-localize', () => ({
 }));
 jest.mock('@react-native-community/async-storage', () => ({
   setItem: jest.fn(),
+  getAllKeys: jest.fn(),
+  multiGet: jest.fn(),
+  multiSet: jest.fn(),
 }));
+jest.mock('react-native-share');
+jest.mock('react-native-unimodules', () => ({
+  FileSystem: {
+    cacheDirectory: 'testCache',
+    writeAsStringAsync: jest.fn(),
+    readDirectoryAsync: jest.fn(),
+    deleteAsync: jest.fn(),
+    copyAsync: jest.fn(),
+    readAsStringAsync: jest.fn(),
+  },
+}));
+jest.mock('expo-document-picker');

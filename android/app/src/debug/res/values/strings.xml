@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Dziku Debug</string>
+    <string name="file_provider" translatable="false">com.fnp.dziku.debug.provider</string>
 </resources>

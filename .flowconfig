@@ -31,6 +31,8 @@
 .*/node_modules/realm/node_modules/license-checker/
 ; Figure out how to make it pass
 .*/node_modules/react-native-vector-icons/.*
+; Issues with React.createElement
+.*/node_modules/react-native-share/.*
 
 [include]
 

@@ -16,6 +16,7 @@ function Realm(): {
       })),
     })),
     write: jest.fn(f => f()),
+    deleteAll: jest.fn(),
   };
 }
 

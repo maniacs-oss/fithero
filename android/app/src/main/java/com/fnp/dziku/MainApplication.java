@@ -3,6 +3,10 @@ package com.fnp.dziku;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+
+import cl.json.RNSharePackage;
+import cl.json.ShareApplication;
+
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -13,46 +17,68 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.oblador.vectoricons.VectorIconsPackage;
 
+import expo.modules.constants.ConstantsPackage;
+import expo.modules.filesystem.FileSystemPackage;
+import org.unimodules.adapters.react.ModuleRegistryAdapter;
+import org.unimodules.adapters.react.ReactAdapterPackage;
+import org.unimodules.adapters.react.ReactModuleRegistryProvider;
+
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import expo.modules.documentpicker.DocumentPickerPackage;
 import io.realm.react.RealmReactPackage;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application implements ReactApplication, ShareApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(Arrays.asList(
+            new ReactAdapterPackage(),
+            new FileSystemPackage(),
+            new ConstantsPackage(),
+            new DocumentPickerPackage()
+    ), Collections.emptyList());
+
+    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
+
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.asList(
+                    new MainReactPackage(),
+                    new AsyncStoragePackage(),
+                    new RNGestureHandlerPackage(),
+                    BugsnagReactNative.getPackage(),
+                    new RealmReactPackage(),
+                    new RNLocalizePackage(),
+                    new VectorIconsPackage(),
+                    new RNSharePackage(),
+                    new ModuleRegistryAdapter(mModuleRegistryProvider)
+            );
+        }
+
+        @Override
+        protected String getJSMainModuleName() {
+            return "index";
+        }
+    };
+
     @Override
-    public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
+    public ReactNativeHost getReactNativeHost() {
+        return mReactNativeHost;
     }
 
     @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new AsyncStoragePackage(),
-          new RNGestureHandlerPackage(),
-          BugsnagReactNative.getPackage(),
-          new RealmReactPackage(),
-          new RNLocalizePackage(),
-          new VectorIconsPackage()
-      );
+    public void onCreate() {
+        super.onCreate();
+        SoLoader.init(this, /* native exopackage */ false);
     }
 
     @Override
-    protected String getJSMainModuleName() {
-      return "index";
+    public String getFileProviderAuthority() {
+        return BuildConfig.APPLICATION_ID + ".provider";
     }
-  };
-
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
-  }
-
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
-  }
 }

@@ -71,7 +71,7 @@ export const deleteExercise = (id: string) => {
     // Clear workouts if necessary
     const emptyWorkouts = realm
       .objects(WORKOUT_SCHEMA_NAME)
-      .filtered('exercises.@size = 0');
+      .filtered('exercises.@size = 0 AND comments = null');
 
     realm.delete(emptyWorkouts);
 

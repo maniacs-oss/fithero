@@ -9,7 +9,7 @@ export type EditSetsScreenType = 'list' | 'paper';
 export type DefaultUnitSystemType = 'metric' | 'imperial';
 export type FirstDayOfTheWeekType = 'monday' | 'sunday' | 'saturday';
 
-type SettingsType = {
+export type SettingsType = {
   editSetsScreenType: EditSetsScreenType,
   defaultUnitSystem: DefaultUnitSystemType,
   firstDayOfTheWeek: FirstDayOfTheWeekType,
