@@ -15,100 +15,90 @@ import { Settings } from '../../utils/constants';
 import type { SettingsType } from '../../redux/modules/settings';
 
 export const backupDatabase = async () => {
+  const keys = await AsyncStorage.getAllKeys();
+  const asyncStorageData = await AsyncStorage.multiGet(keys);
+  let settings = {};
+  asyncStorageData.forEach(([key, value]) => {
+    if (key.includes(packageName)) {
+      settings[key] = value;
+    }
+  });
+
+  // Clear old backups
   try {
-    const keys = await AsyncStorage.getAllKeys();
-    const asyncStorageData = await AsyncStorage.multiGet(keys);
-    let settings = {};
-    asyncStorageData.forEach(([key, value]) => {
-      if (key.includes(packageName)) {
-        settings[key] = value;
+    const files = await FileSystem.readDirectoryAsync(
+      FileSystem.cacheDirectory
+    );
+    files.forEach(async file => {
+      if (file.includes('fithero-backup-')) {
+        await FileSystem.deleteAsync(`${FileSystem.cacheDirectory}/${file}`);
       }
     });
-
-    // Clear old backups
-    try {
-      const files = await FileSystem.readDirectoryAsync(
-        FileSystem.cacheDirectory
-      );
-      files.forEach(async file => {
-        if (file.includes('fithero-backup-')) {
-          await FileSystem.deleteAsync(`${FileSystem.cacheDirectory}/${file}`);
-        }
-      });
-    } catch {
-      // No file
-    }
-
-    // Workouts already contain everything about workouts exercises and workouts sets
-    const workoutSchema = realm.objects(WORKOUT_SCHEMA_NAME);
-    const exerciseSchema = realm.objects(EXERCISE_SCHEMA_NAME);
-
-    const backupJSON = JSON.stringify({
-      workouts: deserializeWorkouts(workoutSchema),
-      exercises: deserializeExercises(exerciseSchema),
-      settings,
-    });
-
-    const filePath = `${
-      FileSystem.cacheDirectory
-    }/fithero-backup-${getToday().format('YYYY-MM-DD')}.json`;
-    await FileSystem.writeAsStringAsync(filePath, backupJSON);
-
-    await Share.open({ url: `file://${filePath}`, type: 'text/plain' });
-  } catch (e) {
-    // TODO handle error
+  } catch {
+    // No file
   }
+
+  // Workouts already contain everything about workouts exercises and workouts sets
+  const workoutSchema = realm.objects(WORKOUT_SCHEMA_NAME);
+  const exerciseSchema = realm.objects(EXERCISE_SCHEMA_NAME);
+
+  const backupJSON = JSON.stringify({
+    workouts: deserializeWorkouts(workoutSchema),
+    exercises: deserializeExercises(exerciseSchema),
+    settings,
+  });
+
+  const filePath = `${
+    FileSystem.cacheDirectory
+  }/fithero-backup-${getToday().format('YYYY-MM-DD')}.json`;
+  await FileSystem.writeAsStringAsync(filePath, backupJSON);
+
+  await Share.open({ url: `file://${filePath}`, type: 'text/plain' });
 };
 
 export const restoreDatabase = async (
   initSettingsAction: (settings: SettingsType) => void
 ) => {
-  try {
-    const { name, uri, type } = await DocumentPicker.getDocumentAsync({
-      copyToCacheDirectory: false,
+  const { name, uri, type } = await DocumentPicker.getDocumentAsync({
+    copyToCacheDirectory: false,
+  });
+  if (type === 'cancel') {
+    return;
+  }
+
+  if (name.match(/fithero-backup-\d\d\d\d-\d\d-\d\d.json/g)) {
+    await FileSystem.copyAsync({
+      from: uri,
+      to: `${FileSystem.cacheDirectory}/${name}`,
     });
-    if (type === 'cancel') {
-      return;
-    }
+    const backup = JSON.parse(
+      await FileSystem.readAsStringAsync(`${FileSystem.cacheDirectory}/${name}`)
+    );
 
-    if (name.match(/fithero-backup-\d\d\d\d-\d\d-\d\d.json/g)) {
-      await FileSystem.copyAsync({
-        from: uri,
-        to: `${FileSystem.cacheDirectory}/${name}`,
-      });
-      const backup = JSON.parse(
-        await FileSystem.readAsStringAsync(
-          `${FileSystem.cacheDirectory}/${name}`
-        )
-      );
+    const settings = [];
+    Object.keys(backup.settings).map(key => {
+      settings.push([key, backup.settings[key]]);
+    });
+    await AsyncStorage.multiSet(settings);
 
-      const settings = [];
-      Object.keys(backup.settings).map(key => {
-        settings.push([key, backup.settings[key]]);
-      });
-      await AsyncStorage.multiSet(settings);
+    initSettingsAction({
+      editSetsScreenType: backup.settings[Settings.editSetsScreen] || 'list',
+      defaultUnitSystem: backup.settings[Settings.defaultUnitSystem],
+      firstDayOfTheWeek: backup.settings[Settings.firstDayOfTheWeek],
+    });
 
-      initSettingsAction({
-        editSetsScreenType: backup.settings[Settings.editSetsScreen] || 'list',
-        defaultUnitSystem: backup.settings[Settings.defaultUnitSystem],
-        firstDayOfTheWeek: backup.settings[Settings.firstDayOfTheWeek],
+    realm.write(() => {
+      realm.deleteAll();
+
+      backup.exercises.forEach(exercise => {
+        realm.create(EXERCISE_SCHEMA_NAME, exercise);
       });
 
-      realm.write(() => {
-        realm.deleteAll();
-
-        backup.exercises.forEach(exercise => {
-          realm.create(EXERCISE_SCHEMA_NAME, exercise);
-        });
-
-        backup.workouts.forEach(workout => {
-          realm.create(WORKOUT_SCHEMA_NAME, workout);
-        });
+      backup.workouts.forEach(workout => {
+        realm.create(WORKOUT_SCHEMA_NAME, workout);
       });
-    } else {
-      // TODO warn not supported file
-    }
-  } catch (e) {
-    // TODO handle error
+    });
+  } else {
+    // TODO warn not supported file
   }
 };
