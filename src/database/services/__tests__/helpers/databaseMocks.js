@@ -30,7 +30,7 @@ export const dates = [
 ];
 
 export const mockSets = new RealmArray({
-  id: `${dates[0].dateString}_bench-press_001`,
+  id: `20180504_bench-press_001`,
   reps: 18,
   weight: 100,
   date: dates[0].date,
@@ -39,7 +39,7 @@ export const mockSets = new RealmArray({
 
 export const mockMultipleSets = new RealmArray(
   {
-    id: `${dates[0].dateString}_bench-press_001`,
+    id: `20180504_bench-press_001`,
     reps: 18,
     weight: 100,
     date: dates[0].date,
@@ -47,7 +47,7 @@ export const mockMultipleSets = new RealmArray(
     isValid: () => true,
   },
   {
-    id: `${dates[0].dateString}_bench-press_002`,
+    id: `20180504_bench-press_002`,
     reps: 15,
     weight: 105,
     date: dates[0].date,
@@ -58,7 +58,7 @@ export const mockMultipleSets = new RealmArray(
 
 export const getMockExercises = (sets: RealmArray) =>
   new RealmArray({
-    id: `${dates[0].dateString}_bench-press`,
+    id: `20180504_bench-press`,
     sets,
     date: dates[0].date,
     type: 'bench-press',
@@ -68,20 +68,20 @@ export const getMockExercises = (sets: RealmArray) =>
 
 export const mockWorkouts = [
   {
-    id: dates[0].dateString,
+    id: '20180504',
     date: dates[0].date,
     exercises: getMockExercises(mockSets),
   },
   {
     // Won't happen in DB but we use it for testing deletions
-    id: dates[0].dateString,
+    id: '20180504',
     date: dates[0].date,
     exercises: new RealmArray(),
   },
 ];
 
 export const mockRealmWorkout = {
-  id: dates[0].dateString,
+  id: '20180504',
   date: dates[0].date,
   exercises: new RealmArray(),
 };

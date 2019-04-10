@@ -2,8 +2,7 @@
 
 import realm from '../index';
 import type { AddWorkoutExerciseSchemaType } from '../types';
-import { extractWorkoutKeyFromDatabase } from '../utils';
-import { dateToString, toDate } from '../../utils/date';
+import { dateToWorkoutId } from '../../utils/date';
 import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
 import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
 
@@ -12,13 +11,13 @@ export const getWorkoutExerciseById = (id: string) =>
 
 export const addExercise = (exercise: AddWorkoutExerciseSchemaType) => {
   realm.write(() => {
-    const workoutId = extractWorkoutKeyFromDatabase(exercise.id);
+    const workoutId = dateToWorkoutId(exercise.date);
     let workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
 
     if (!workout) {
       workout = realm.create(WORKOUT_SCHEMA_NAME, {
         id: workoutId,
-        date: toDate(workoutId),
+        date: exercise.date,
       });
     }
 
@@ -32,7 +31,7 @@ export const addExercise = (exercise: AddWorkoutExerciseSchemaType) => {
 export const deleteWorkoutExercise = (
   exercise: AddWorkoutExerciseSchemaType
 ) => {
-  const workoutId = extractWorkoutKeyFromDatabase(exercise.id);
+  const workoutId = dateToWorkoutId(exercise.date);
   realm.delete(exercise);
   // Now we check if workout needs to be deleted too
   const workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
@@ -50,7 +49,7 @@ export const updateExercisePaperForWorkout = (
   exercise: AddWorkoutExerciseSchemaType
 ) => {
   realm.write(() => {
-    const workoutId = dateToString(exercise.date);
+    const workoutId = dateToWorkoutId(exercise.date);
     const workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
     const existingExercise = workout.exercises.filtered(
       `id = "${exercise.id}"`

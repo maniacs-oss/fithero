@@ -3,7 +3,7 @@
 import { generateSummary, parseSummary } from '../exercisePaper';
 import { toDate } from '../date';
 
-const date = toDate('2018-05-01T22:00:00.000Z');
+const date = toDate('2018-05-01T00:00:00.000Z');
 
 describe('parseSummary', () => {
   it('parses a summary case', () => {
@@ -14,20 +14,20 @@ describe('parseSummary', () => {
 
     const result = parseSummary(
       summary,
-      '2018-05-01T22:00:00.000Z',
+      '2018-05-01T00:00:00.000Z',
       'bench-press'
     );
     expect(result).toEqual({
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
+          id: '20180501_bench-press_001',
           reps: 8,
           weight: 100,
           date,
           type: 'bench-press',
         },
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_002',
+          id: '20180501_bench-press_002',
           reps: 8,
           weight: 110,
           date,
@@ -52,27 +52,27 @@ describe('parseSummary', () => {
 
     const result = parseSummary(
       summary,
-      '2018-05-01T22:00:00.000Z',
+      '2018-05-01T00:00:00.000Z',
       'bench-press'
     );
     expect(result).toEqual({
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
+          id: '20180501_bench-press_001',
           reps: 10,
           weight: 100,
           date,
           type: 'bench-press',
         },
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_002',
+          id: '20180501_bench-press_002',
           reps: 8,
           weight: 110,
           date,
           type: 'bench-press',
         },
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_003',
+          id: '20180501_bench-press_003',
           reps: 7,
           weight: 120,
           date,
@@ -90,20 +90,20 @@ describe('parseSummary', () => {
 
     const result = parseSummary(
       summary,
-      '2018-05-01T22:00:00.000Z',
+      '2018-05-01T00:00:00.000Z',
       'bench-press'
     );
     expect(result).toEqual({
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
+          id: '20180501_bench-press_001',
           reps: 10,
           weight: 50.35,
           date,
           type: 'bench-press',
         },
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_002',
+          id: '20180501_bench-press_002',
           reps: 8,
           weight: 20.25,
           date,
@@ -121,13 +121,13 @@ describe('parseSummary', () => {
 
     const result = parseSummary(
       summary,
-      '2018-05-01T22:00:00.000Z',
+      '2018-05-01T00:00:00.000Z',
       'bench-press'
     );
     expect(result).toEqual({
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
+          id: '20180501_bench-press_001',
           reps: 5,
           weight: 50,
           date,
@@ -145,20 +145,20 @@ describe('parseSummary', () => {
 
     const result = parseSummary(
       summary,
-      '2018-05-01T22:00:00.000Z',
+      '2018-05-01T00:00:00.000Z',
       'bench-press'
     );
     expect(result).toEqual({
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
+          id: '20180501_bench-press_001',
           reps: 8,
           weight: 50,
           date,
           type: 'bench-press',
         },
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_002',
+          id: '20180501_bench-press_002',
           reps: 10,
           weight: 50,
           date,
@@ -176,20 +176,20 @@ describe('parseSummary', () => {
 
     const result = parseSummary(
       summary,
-      '2018-05-01T22:00:00.000Z',
+      '2018-05-01T00:00:00.000Z',
       'bench-press'
     );
     expect(result).toEqual({
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
+          id: '20180501_bench-press_001',
           reps: 8,
           weight: 100,
           date,
           type: 'bench-press',
         },
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_002',
+          id: '20180501_bench-press_002',
           reps: 9,
           weight: 110.5,
           date,
@@ -205,7 +205,7 @@ describe('generateSummary', () => {
     const log = {
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_000',
+          id: '20180501_bench-press_000',
           reps: 10,
           weight: 50.5,
           date,
@@ -220,14 +220,14 @@ describe('generateSummary', () => {
     const log = {
       sets: [
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_000',
+          id: '20180501_bench-press_000',
           reps: 8,
           weight: 50.5,
           date,
           type: 'bench-press',
         },
         {
-          id: '2018-05-01T22:00:00.000Z_bench-press_001',
+          id: '20180501_bench-press_001',
           reps: 7,
           weight: 45,
           date,

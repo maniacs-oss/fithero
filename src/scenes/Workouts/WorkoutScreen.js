@@ -5,7 +5,11 @@ import { StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
 
 import WorkoutList from '../../components/WorkoutList';
-import { getDay, getDatePrettyFormat, getToday } from '../../utils/date';
+import {
+  getDatePrettyFormat,
+  getToday,
+  dateToWorkoutId,
+} from '../../utils/date';
 import { getWorkoutById } from '../../database/services/WorkoutService';
 import type { NavigationType } from '../../types';
 import type { WorkoutSchemaType } from '../../database/types';
@@ -43,17 +47,17 @@ class WorkoutScreen extends React.Component<Props> {
   }
 
   _addWorkoutComment = () => {
-    const day = getDay(this.props.navigation.state.params.day);
+    const day = this.props.navigation.state.params.day;
     this.props.navigation.navigate('Comments', { day });
   };
 
   _onAddExercises = () => {
-    const day = getDay(this.props.navigation.state.params.day);
+    const day = this.props.navigation.state.params.day;
     this.props.navigation.navigate('Exercises', { day });
   };
 
   _onExercisePress = (exerciseKey: string, customExerciseName?: string) => {
-    const day = getDay(this.props.navigation.state.params.day);
+    const day = this.props.navigation.state.params.day;
     this.props.navigation.navigate('EditSets', {
       day,
       exerciseKey,
@@ -75,7 +79,7 @@ class WorkoutScreen extends React.Component<Props> {
   }
 
   render() {
-    const day = getDay(this.props.navigation.state.params.day);
+    const day = dateToWorkoutId(this.props.navigation.state.params.day);
 
     return (
       <Screen>

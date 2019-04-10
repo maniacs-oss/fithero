@@ -88,6 +88,9 @@ export const getToday = () => moment().startOf('day');
 export const isSameDay = (date: Date, today: string) =>
   moment(date).isSame(moment(today), 'day');
 
+export const dateToWorkoutId = (date: Date | string) =>
+  moment(date).format('YYYYMMDD');
+
 export const dateToString = (date: Date) => moment(date).toISOString();
 
 export const toDate = (dateString: string) => moment(dateString).toDate();
@@ -111,7 +114,7 @@ export const getDay = (day: string) =>
     .startOf('day')
     .toISOString();
 
-export const formatDate = (date: Date, format: string) =>
+export const formatDate = (date: Date | string, format: string) =>
   moment(date).format(format);
 
 export const getFirstAndLastMonthDay = (date: Date) => {
@@ -144,4 +147,10 @@ export const firstDayOfTheWeekToNumber = (
     firstDay = 6;
   }
   return firstDay;
+};
+
+export const getSafeTimezoneTime = (date: Date) => {
+  return moment(date)
+    .subtract(1, 'day')
+    .toDate();
 };

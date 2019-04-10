@@ -67,7 +67,7 @@ export class CalendarScreen extends React.Component<Props, State> {
         // TODO handle specific cases one by one?
         const markedDates = {};
         workouts.forEach(w => {
-          markedDates[formatDate(w.date, 'YYYY-MM-DD')] = {
+          markedDates[formatDate(w.id, 'YYYY-MM-DD')] = {
             marked: true,
           };
         });

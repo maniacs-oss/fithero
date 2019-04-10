@@ -7,6 +7,7 @@ import { Text } from 'react-native-paper';
 import DayItem from './DayItem';
 import {
   dateToString,
+  dateToWorkoutId,
   getDatePrettyFormat,
   getToday,
   isSameDay,
@@ -28,7 +29,7 @@ class DayRow extends React.Component<Props> {
   _renderDays() {
     return this.props.currentWeek.map(d => {
       const isSelected = isSameDay(d, this.props.selected);
-      const dateString = dateToString(d);
+      const dateString = dateToWorkoutId(d);
       return (
         <DayItem
           key={dateString}

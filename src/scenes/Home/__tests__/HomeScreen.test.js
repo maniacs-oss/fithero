@@ -13,14 +13,14 @@ const dateStringLater = '2018-05-23T00:00:00.000Z';
 
 const mockWorkouts = [
   {
-    id: dateString,
+    id: '20180522',
     date: toDate(dateString),
     comments: 'Testing comment.',
     exercises: [],
     isValid: jest.fn(),
   },
   {
-    id: dateStringLater,
+    id: '20180523',
     date: toDate(dateStringLater),
     exercises: [],
     isValid: jest.fn(),

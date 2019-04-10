@@ -6,7 +6,12 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import i18n from '../../utils/i18n';
 import withTheme from '../../utils/theme/withTheme';
 import { Paragraph, Title } from 'react-native-paper';
-import { dateToString, getDatePrettyFormat, getToday } from '../../utils/date';
+import {
+  dateToString,
+  dateToWorkoutId,
+  getDatePrettyFormat,
+  getToday,
+} from '../../utils/date';
 import {
   deleteWorkoutComments,
   getWorkoutComments,
@@ -43,7 +48,9 @@ class CommentsScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      comments: getWorkoutComments(this.props.navigation.state.params.day),
+      comments: getWorkoutComments(
+        dateToWorkoutId(this.props.navigation.state.params.day)
+      ),
     };
   }
 
@@ -59,7 +66,7 @@ class CommentsScreen extends React.Component<Props, State> {
 
   _saveComments = () => {
     const { comments } = this.state;
-    const workoutId = this.props.navigation.state.params.day;
+    const workoutId = dateToWorkoutId(this.props.navigation.state.params.day);
 
     if (comments) {
       setWorkoutComments(workoutId, comments);

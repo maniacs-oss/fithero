@@ -197,6 +197,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
 
     if (!exercise) {
       const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
+      const date = toDate(day);
       newExercise = {
         id: exerciseIdDb,
         sets: [
@@ -204,11 +205,11 @@ export class EditSetsWithControls extends React.Component<Props, State> {
             id: getSetSchemaId(day, exerciseKey, 1),
             weight,
             reps,
-            date: toDate(day),
+            date,
             type: exerciseKey,
           },
         ],
-        date: toDate(day),
+        date,
         type: exerciseKey,
         weight_unit: defaultUnitSystem,
       };

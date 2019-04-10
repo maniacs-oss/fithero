@@ -48,17 +48,17 @@ const getComponent = (exercise: ?AddWorkoutExerciseSchemaType) => (
 );
 
 const mockExercise = {
-  id: `${dateString}_bench-press`,
+  id: `20180504_bench-press`,
   sets: [
     {
-      id: `${dateString}_bench-press_001`,
+      id: `20180504_bench-press_001`,
       reps: 6,
       weight: 100,
       date,
       type: 'bench-press',
     },
     {
-      id: `${dateString}_bench-press_002`,
+      id: `20180504_bench-press_002`,
       reps: 5,
       weight: 100,
       date,

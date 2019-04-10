@@ -8,7 +8,12 @@ import { connect } from 'react-redux';
 import Screen from '../../components/Screen';
 import type { NavigationType } from '../../types';
 import DayRow from './DayRow';
-import { dateToString, getCurrentWeek, getToday } from '../../utils/date';
+import {
+  dateToWorkoutId,
+  getCurrentWeek,
+  getSafeTimezoneTime,
+  getToday,
+} from '../../utils/date';
 import { getWorkoutsByRange } from '../../database/services/WorkoutService';
 import WorkoutList from '../../components/WorkoutList';
 import type { WorkoutSchemaType } from '../../database/types';
@@ -56,7 +61,7 @@ class HomeScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      selectedDay: dateToString(getToday()),
+      selectedDay: dateToWorkoutId(getToday()),
     };
   }
 
@@ -117,13 +122,14 @@ class HomeScreen extends Component<Props, State> {
   render() {
     const { selectedDay } = this.state;
     const { firstDayOfTheWeek } = this.props;
-    const currentWeek = getCurrentWeek(getToday(), firstDayOfTheWeek);
+    const today = getToday();
+    const currentWeek = getCurrentWeek(today, firstDayOfTheWeek);
 
     return (
       <Screen>
         <DataProvider
           query={getWorkoutsByRange}
-          args={[currentWeek[0], currentWeek[6]]}
+          args={[getSafeTimezoneTime(currentWeek[0]), currentWeek[6]]}
           parse={(data: Array<WorkoutSchemaType>) => {
             if (!data) {
               return null;
