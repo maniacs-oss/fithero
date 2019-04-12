@@ -6,7 +6,7 @@ import type { ThemeColorsType } from './types';
 import type { ThemeType } from './withTheme';
 
 const primary = '#415B76';
-const accent = '#6FE3C4';
+const accent = '#a6ed8e';
 const selected = 'rgba(255, 255, 255, .20)';
 
 const ThemeColors: ThemeColorsType = {

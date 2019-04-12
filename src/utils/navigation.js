@@ -3,7 +3,7 @@
 import theme from './theme';
 
 export const defaultNavigationOptions = {
-  title: 'Dziku',
+  title: 'FitHero',
   headerStyle: {
     elevation: 0,
     backgroundColor: theme.colors.toolbar,
