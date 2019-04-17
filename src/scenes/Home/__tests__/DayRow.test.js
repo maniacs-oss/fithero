@@ -38,6 +38,7 @@ describe('DayRow', () => {
     // $FlowFixMe
     expect(mondayJSON()).toMatchDiffSnapshot(sundayJSON(), {
       contextLines: 0,
+      stablePatchmarks: true,
     });
   });
 
@@ -50,6 +51,7 @@ describe('DayRow', () => {
     // $FlowFixMe
     expect(mondayJSON()).toMatchDiffSnapshot(saturdayJSON(), {
       contextLines: 0,
+      stablePatchmarks: true,
     });
   });
 });

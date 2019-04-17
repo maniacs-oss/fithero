@@ -63,8 +63,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
-    paddingTop: 16,
-    paddingBottom: 8,
+    paddingVertical: 8,
     paddingHorizontal: 16,
   },
 });

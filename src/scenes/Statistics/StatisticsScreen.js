@@ -119,7 +119,8 @@ class StatisticsScreen extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
   },
   row: {
     flexDirection: 'row',
