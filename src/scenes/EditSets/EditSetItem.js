@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Divider, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import i18n from '../../utils/i18n';
@@ -31,14 +31,14 @@ class EditSetItem extends React.PureComponent<Props> {
     const { index, isSelected, isMaxSet, set, theme, unit } = this.props;
 
     return (
-      <View>
-        <TouchableWithoutFeedback onPress={this._onPressItem}>
-          <View
-            style={[
-              styles.item,
-              isSelected && { backgroundColor: theme.colors.selected },
-            ]}
-          >
+      <TouchableWithoutFeedback onPress={this._onPressItem}>
+        <View
+          style={[
+            styles.item,
+            isSelected && { backgroundColor: theme.colors.selected },
+          ]}
+        >
+          <View style={styles.leftContent}>
             <Text style={[styles.text, styles.index]}>{index}.</Text>
             <Icon
               name="trophy"
@@ -46,30 +46,25 @@ class EditSetItem extends React.PureComponent<Props> {
               color={theme.colors.trophy}
               style={[styles.icon, !isMaxSet && styles.notMax]}
             />
-            <Text style={[styles.text, styles.weight]}>
-              {unit === 'metric'
-                ? toTwoDecimals(set.weight)
-                : toTwoDecimals(toLb(set.weight))}{' '}
-              <Text
-                style={[styles.unit, { color: theme.colors.secondaryText }]}
-              >
-                {unit === 'metric'
-                  ? i18n.t('kg.unit', { count: set.weight })
-                  : i18n.t('lb')}{' '}
-              </Text>
-            </Text>
-            <Text style={[styles.text, styles.reps]}>
-              {set.reps}{' '}
-              <Text
-                style={[styles.unit, { color: theme.colors.secondaryText }]}
-              >
-                {i18n.t('reps.unit', { count: set.reps })}{' '}
-              </Text>
-            </Text>
           </View>
-        </TouchableWithoutFeedback>
-        <Divider />
-      </View>
+          <Text style={[styles.text, styles.weight]}>
+            {unit === 'metric'
+              ? toTwoDecimals(set.weight)
+              : toTwoDecimals(toLb(set.weight))}{' '}
+            <Text style={[styles.unit, { color: theme.colors.secondaryText }]}>
+              {unit === 'metric'
+                ? i18n.t('kg.unit', { count: set.weight })
+                : i18n.t('lb')}{' '}
+            </Text>
+          </Text>
+          <Text style={[styles.text, styles.reps]}>
+            {set.reps}{' '}
+            <Text style={[styles.unit, { color: theme.colors.secondaryText }]}>
+              {i18n.t('reps.unit', { count: set.reps })}{' '}
+            </Text>
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -83,6 +78,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
+  },
+  leftContent: {
+    flexDirection: 'row',
+    flex: 0.25,
   },
   index: {
     textAlign: 'left',

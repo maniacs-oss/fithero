@@ -32,11 +32,11 @@ describe('EditSetItem', () => {
 
   it('shows the set selected if is set is isSelected', () => {
     expect(
-      getWrapper({ isSelected: true }).findAllByType(View)[1].props.style
+      getWrapper({ isSelected: true }).findAllByType(View)[0].props.style
     ).toContainEqual({ backgroundColor: theme.colors.selected });
 
     expect(
-      getWrapper({ isSelected: false }).findAllByType(View)[1].props.style
+      getWrapper({ isSelected: false }).findAllByType(View)[0].props.style
     ).not.toContainEqual({ backgroundColor: theme.colors.selected });
   });
 

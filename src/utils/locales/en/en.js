@@ -22,7 +22,9 @@ export default {
   exercises: 'Exercises',
   'exercise__paper-placeholder':
     'Each line represents a set. You can type using the format repetitions x weight (RxW), e.g:\n\n8x120\n7x130\n6x140\n\nThis last line can be an optional comment.',
+  empty_view__history: 'There are no sets recorded for this exercise.',
   first_day_of_the_week: 'First day of the week',
+  history: 'History',
   imperial: 'Imperial',
   kg: {
     unit: {

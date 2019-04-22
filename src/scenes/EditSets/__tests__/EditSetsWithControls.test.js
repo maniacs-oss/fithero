@@ -407,6 +407,7 @@ describe('EditSetsWithControls', () => {
       // $FlowFixMe
       expect(metricJSON()).toMatchDiffSnapshot(imperialJSON(), {
         contextLines: 0,
+        stablePatchmarks: true,
       });
     });
   });

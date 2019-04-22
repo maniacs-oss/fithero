@@ -5,13 +5,13 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -87,1 +87,1 @@
+@@ --- --- @@
 -                     "color": "#a6ed8e",
 +                     "color": "#ffffff",
-@@ -111,1 +111,1 @@
+@@ --- --- @@
 -                     "color": "#a6ed8e",
 +                     "color": "#ffffff",
-@@ -134,1 +134,1 @@
+@@ --- --- @@
 -                     "color": "#a6ed8e",
 +                     "color": "#ffffff",
 `;
@@ -21,10 +21,10 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -117,1 +117,1 @@
+@@ --- --- @@
 -             100 kgs
 +             220.46 lb
-@@ -195,1 +195,1 @@
+@@ --- --- @@
 -             105 kgs
 +             231.49 lb
 `;

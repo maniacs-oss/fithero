@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
-import { Card } from 'react-native-paper';
+import { Card, Divider } from 'react-native-paper';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 
 import type {
@@ -269,6 +269,8 @@ export class EditSetsWithControls extends React.Component<Props, State> {
     );
   };
 
+  _renderDivider = () => <Divider />;
+
   render() {
     const { defaultUnitSystem, exercise } = this.props;
     const { reps, selectedId, weight } = this.state;
@@ -334,6 +336,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
                 renderItem={propsData => this._renderItem(propsData, maxSetId)}
                 extraData={[this.state.selectedId]}
                 keyboardShouldPersistTaps="always"
+                ItemSeparatorComponent={this._renderDivider}
               />
             )}
           />

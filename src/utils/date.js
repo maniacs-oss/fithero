@@ -96,7 +96,7 @@ export const dateToString = (date: Date) => moment(date).toISOString();
 export const toDate = (dateString: string) => moment(dateString).toDate();
 
 export const getDatePrettyFormat = (
-  dateString: string,
+  dateString: Date | string,
   today: string,
   short?: boolean = false
 ) => {

@@ -47,6 +47,7 @@ describe('WorkoutItem', () => {
     // $FlowFixMe
     expect(metricJSON()).toMatchDiffSnapshot(imperialJSON(), {
       contextLines: 0,
+      stablePatchmarks: true,
     });
 
     expect(queryAllByTextMetric(`18 reps`)).toHaveLength(1);
@@ -71,6 +72,7 @@ describe('WorkoutItem', () => {
     // $FlowFixMe
     expect(maxJSON()).toMatchDiffSnapshot(noMaxJSON(), {
       contextLines: 0,
+      stablePatchmarks: true,
     });
   });
 });

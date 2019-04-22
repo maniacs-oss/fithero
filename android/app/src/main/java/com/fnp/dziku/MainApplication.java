@@ -3,6 +3,7 @@ package com.fnp.dziku;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import is.uncommon.rn.widgets.TabbedViewPagerAndroidPackage;
 
 import cl.json.RNSharePackage;
 import cl.json.ShareApplication;
@@ -49,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication, Sh
         protected List<ReactPackage> getPackages() {
             return Arrays.asList(
                     new MainReactPackage(),
+                    new TabbedViewPagerAndroidPackage(),
                     new AsyncStoragePackage(),
                     new RNGestureHandlerPackage(),
                     BugsnagReactNative.getPackage(),

@@ -87,3 +87,9 @@ export const updateExercisePaperForWorkout = (
     }
   });
 };
+
+export const getExercisesByType = (type: string) =>
+  realm
+    .objects(WORKOUT_EXERCISE_SCHEMA_NAME)
+    .filtered('type = $0', type)
+    .sorted([['date', true]]);

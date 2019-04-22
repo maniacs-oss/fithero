@@ -120,10 +120,11 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
   setIndex: {
+    flex: 0.06,
     paddingRight: 8,
   },
   setWeight: {
-    flex: 0.3,
+    flex: 0.25,
     textAlign: 'right',
     paddingRight: 8,
   },

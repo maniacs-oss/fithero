@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import Screen from '../../components/Screen';
@@ -9,14 +9,11 @@ import type { NavigationType } from '../../types';
 import type { WorkoutExerciseSchemaType } from '../../database/types';
 import { getExerciseSchemaId } from '../../database/utils';
 import EditSetsWithControls from './EditSetsWithControls';
-import ExerciseHeader from '../Exercises/ExerciseHeader';
 import EditSetsWithPaper from './EditSetsWithPaper';
-import { getExerciseName } from '../../utils/exercises';
 import type {
   DefaultUnitSystemType,
   EditSetsScreenType,
 } from '../../redux/modules/settings';
-import EditSetsTypeIcon from './EditSetsTypeIcon';
 import { getWorkoutExerciseById } from '../../database/services/WorkoutExerciseService';
 import DataProvider from '../../components/DataProvider';
 
@@ -31,14 +28,6 @@ type Props = {
 };
 
 class EditSetsScreen extends Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: getExerciseName(
-      navigation.state.params.exerciseKey,
-      navigation.state.params.exerciseName
-    ),
-    headerRight: <EditSetsTypeIcon />,
-  });
-
   render() {
     const { defaultUnitSystem, navigation } = this.props;
     const {
@@ -51,7 +40,6 @@ class EditSetsScreen extends Component<Props> {
 
     return (
       <Screen style={styles.container}>
-        <ExerciseHeader day={day} style={styles.header} />
         <DataProvider
           query={getWorkoutExerciseById}
           args={[id]}
@@ -87,10 +75,14 @@ class EditSetsScreen extends Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 8,
-  },
-  header: {
-    paddingHorizontal: 16,
+    ...Platform.select({
+      ios: {
+        paddingVertical: 8,
+      },
+      android: {
+        paddingTop: 8,
+      },
+    }),
   },
 });
 

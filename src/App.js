@@ -23,6 +23,8 @@ if (global.__DEV__) {
     'Warning: Class RCTCxxModule was not exported',
     // Comes from react-navigation
     'Async Storage has been extracted',
+    // Comes from react-native-tabbed-view-pager-android
+    'Accessing view manager configs directly off UIManager',
   ]);
 }
 
