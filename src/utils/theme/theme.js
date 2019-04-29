@@ -13,6 +13,7 @@ const ThemeColors: ThemeColorsType = {
   borderColor: 'transparent',
   calendarSelectedDayTextColor: background,
   calendarSelectedDotColor: background,
+  chartBar: Colors.green200,
   chip: '#424242',
   chipSelected: 'rgba(255, 255, 255, .20)',
   secondaryText: 'rgba(255, 255, 255, .7)',

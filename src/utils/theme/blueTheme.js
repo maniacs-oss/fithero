@@ -15,6 +15,7 @@ const ThemeColors: ThemeColorsType = {
   borderColor: Platform.OS === 'android' ? '#344d69' : '#2A3D55',
   calendarSelectedDayTextColor: primary,
   calendarSelectedDotColor: primary,
+  chartBar: '#F5F5DC',
   chip: '#526c87',
   chipSelected: selected,
   primary,

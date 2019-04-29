@@ -21,31 +21,12 @@ import i18n from './i18n';
 import regionDayMap from './regionDayMap';
 import type { FirstDayOfTheWeekType } from '../redux/modules/settings';
 
-// TODO this function won't work properly if we change the moment.locale
-const getFirstDayOfTheWeek = (
-  date: Date,
-  firstDayOfTheWeek: FirstDayOfTheWeekType
-) => {
-  const now = moment(date);
-  const firstDay = firstDayOfTheWeekToNumber(firstDayOfTheWeek);
-  const firstWeekDay = now
-    .clone()
-    .weekday(firstDay)
-    .startOf('day');
-  if (!firstWeekDay.isAfter(now)) {
-    return firstWeekDay;
-  }
-  return now
-    .clone()
-    .weekday(firstDay - 7)
-    .startOf('day');
+const getFirstDayOfTheWeek = (date: Date) => {
+  return moment(date).startOf('week');
 };
 
-export const getCurrentWeek = (
-  date: Date,
-  firstDayOfTheWeek: FirstDayOfTheWeekType
-) => {
-  const start = getFirstDayOfTheWeek(date, firstDayOfTheWeek);
+export const getCurrentWeek = (date: Date) => {
+  const start = getFirstDayOfTheWeek(date);
   const days = [start.clone().toDate()];
 
   for (let i = 1; i <= 6; i++) {
@@ -60,17 +41,10 @@ export const getCurrentWeek = (
   return days;
 };
 
-export const getFirstAndLastWeekday = (
-  date: Date,
-  firstDayOfTheWeek: FirstDayOfTheWeekType
-) => {
+export const getFirstAndLastWeekday = (date: Date) => {
   const now = moment(date);
-  const firstDay = firstDayOfTheWeekToNumber(firstDayOfTheWeek);
-  const start = getFirstDayOfTheWeek(date, firstDayOfTheWeek);
-  const end = now
-    .clone()
-    .weekday(firstDay + 6)
-    .startOf('day');
+  const start = getFirstDayOfTheWeek(date);
+  const end = now.clone().endOf('week');
 
   return [start.toDate(), end.toDate()];
 };
@@ -125,10 +99,8 @@ export const getFirstAndLastMonthDay = (date: Date) => {
   return [start.toDate(), end.toDate()];
 };
 
-export const getWeekStartByLocale = (): FirstDayOfTheWeekType => {
-  const country = RNLocalize.getCountry();
-
-  const day = regionDayMap[country];
+export const getWeekStartByLocale = (locale: string): FirstDayOfTheWeekType => {
+  const day = regionDayMap[locale];
   if (day === 0) {
     return 'sunday';
   } else if (day === 6) {
@@ -152,5 +124,43 @@ export const firstDayOfTheWeekToNumber = (
 export const getSafeTimezoneTime = (date: Date) => {
   return moment(date)
     .subtract(1, 'day')
+    .toDate();
+};
+
+export const getCurrentLocale = () => {
+  return RNLocalize.getCountry();
+};
+
+export const setMomentFirstDayOfTheWeek = (
+  locale: string,
+  day: number,
+  updateLocale?: boolean = false
+) => {
+  moment[updateLocale ? 'updateLocale' : 'locale'](locale, {
+    week: {
+      dow: day,
+    },
+  });
+};
+
+export const getLastWeeks = (numberOfWeeks: number) => {
+  const now = moment().startOf('week');
+  const weeks = [];
+
+  for (let i = numberOfWeeks - 1; i >= 0; i--) {
+    weeks.push(
+      now
+        .clone()
+        .subtract(i, 'weeks')
+        .toDate()
+    );
+  }
+
+  return weeks;
+};
+
+export const getEndOfTheWeek = () => {
+  return moment()
+    .endOf('week')
     .toDate();
 };

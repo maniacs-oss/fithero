@@ -10,7 +10,6 @@ import {
   getToday,
   toDate,
 } from '../../utils/date';
-import type { FirstDayOfTheWeekType } from '../../redux/modules/settings';
 import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
 
 export const getAllWorkouts = (): RealmResults<WorkoutSchemaType> =>
@@ -38,10 +37,8 @@ export const getWorkoutsByRange = (
 export const getWorkoutById = (id: string): RealmResults<WorkoutSchemaType> =>
   realm.objects('Workout').filtered(`id = $0`, id);
 
-export const getWorkoutsThisWeek = (
-  firstDayOfTheWeek: FirstDayOfTheWeekType
-) => {
-  const [start, end] = getFirstAndLastWeekday(getToday(), firstDayOfTheWeek);
+export const getWorkoutsThisWeek = () => {
+  const [start, end] = getFirstAndLastWeekday(getToday());
   return getWorkoutsByRange(start, end, true);
 };
 

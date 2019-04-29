@@ -12,7 +12,12 @@ import theme from './utils/theme';
 import { Settings } from './utils/constants';
 import { initSettings } from './redux/modules/settings';
 import { getDefaultUnitSystemByCountry } from './utils/metrics';
-import { getWeekStartByLocale } from './utils/date';
+import {
+  firstDayOfTheWeekToNumber,
+  getCurrentLocale,
+  getWeekStartByLocale,
+  setMomentFirstDayOfTheWeek,
+} from './utils/date';
 
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
@@ -48,6 +53,8 @@ export default class App extends React.Component<{}, State> {
 
   _loadSettings = async () => {
     // TODO Do it in the SplashScreen and render content after it
+    const locale = getCurrentLocale();
+
     const editSetsScreenType = await AsyncStorage.getItem(
       Settings.editSetsScreen
     );
@@ -62,9 +69,15 @@ export default class App extends React.Component<{}, State> {
       Settings.firstDayOfTheWeek
     );
     if (firstDayOfTheWeek === null) {
-      firstDayOfTheWeek = getWeekStartByLocale();
+      firstDayOfTheWeek = getWeekStartByLocale(locale);
       await AsyncStorage.setItem(Settings.firstDayOfTheWeek, firstDayOfTheWeek);
     }
+
+    setMomentFirstDayOfTheWeek(
+      locale,
+      firstDayOfTheWeekToNumber(firstDayOfTheWeek)
+    );
+
     store.dispatch(
       initSettings({
         editSetsScreenType: editSetsScreenType || 'list',

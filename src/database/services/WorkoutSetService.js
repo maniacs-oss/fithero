@@ -7,7 +7,6 @@ import { deleteWorkoutExercise } from './WorkoutExerciseService';
 import { getFirstAndLastWeekday, getToday } from '../../utils/date';
 import { WORKOUT_SET_SCHEMA_NAME } from '../schemas/WorkoutSetSchema';
 import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
-import type { FirstDayOfTheWeekType } from '../../redux/modules/settings';
 
 export const getMaxSetByType = (type: string) =>
   realm
@@ -63,8 +62,8 @@ export const getLastSetByType = (type: ?string) =>
     .filtered('type = $0', type)
     .sorted([['date', true], ['id', true]]);
 
-export const getSetsThisWeek = (firstDayOfTheWeek: FirstDayOfTheWeekType) => {
-  const [start, end] = getFirstAndLastWeekday(getToday(), firstDayOfTheWeek);
+export const getSetsThisWeek = () => {
+  const [start, end] = getFirstAndLastWeekday(getToday());
   return realm
     .objects(WORKOUT_SET_SCHEMA_NAME)
     .filtered(`date >= $0 AND date <= $1`, start, end);

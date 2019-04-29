@@ -18,5 +18,7 @@ include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
 include ':react-native-tabbed-view-pager-android'
 project(':react-native-tabbed-view-pager-android').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-tabbed-view-pager-android/android')
+include ':react-native-charts-wrapper'
+project(':react-native-charts-wrapper').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-charts-wrapper/android')
 
 include ':app'

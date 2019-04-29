@@ -7,7 +7,7 @@ type ResultType<T> = {
   timestamp: number,
 };
 
-type ArgsType = Array<string>;
+type ArgsType = Array<*>;
 
 type QueryType<T> = (
   ...args: ArgsType

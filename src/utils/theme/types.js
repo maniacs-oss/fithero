@@ -6,6 +6,7 @@ export type ThemeColorsType = {|
   +borderColor: string,
   +calendarSelectedDayTextColor: string,
   +calendarSelectedDotColor: string,
+  +chartBar: string,
   +chip: string,
   +chipSelected: string,
   +secondaryText: string,

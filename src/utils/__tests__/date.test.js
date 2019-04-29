@@ -12,6 +12,7 @@ import {
   getDay,
   getFirstAndLastMonthDay,
   getFirstAndLastWeekday,
+  setMomentFirstDayOfTheWeek,
 } from '../date';
 import { clearTranslateCache } from '../i18n';
 
@@ -22,7 +23,8 @@ beforeEach(() => {
 describe('getCurrentWeek and getShortDayInfo', () => {
   it('return correct days for current week', () => {
     // US locale, from 29.04 to 05.05
-    const days = getCurrentWeek(new Date('2018-05-01T00:00:00.000Z'), 'sunday');
+    setMomentFirstDayOfTheWeek('en', 0, true);
+    const days = getCurrentWeek(new Date('2018-05-01T00:00:00.000Z'));
     const dayStrings = days.map(day => getShortDayInfo(day));
     expect(dayStrings).toEqual([
       { date: 29, day: 'Sun' },
@@ -35,12 +37,11 @@ describe('getCurrentWeek and getShortDayInfo', () => {
     ]);
   });
 
-  // TODO Need to fix current week with locales
-  it.skip('return correct days for current week with a particular locale', () => {
+  it('return correct days for current week with a particular locale', () => {
     // PL locale, from 30.04 to 06.05
     moment.locale('pl');
 
-    const days = getCurrentWeek(new Date('2018-05-01T00:00:00.000Z'), 'monday');
+    const days = getCurrentWeek(new Date('2018-05-01T00:00:00.000Z'));
     const dayStrings = days.map(day => getShortDayInfo(day));
     expect(dayStrings).toEqual([
       { date: 30, day: 'pon' },
@@ -131,18 +132,18 @@ test('getDay', () => {
 describe('getFirstAndLastWeekday', () => {
   test('the week is in the same month', () => {
     const date = moment(new Date('2019-01-19T00:00:00.000')).utc();
-    const [first, last] = getFirstAndLastWeekday(date, 'sunday');
+    const [first, last] = getFirstAndLastWeekday(date);
 
     expect(first).toEqual(new Date('2019-01-13T00:00:00.000Z'));
-    expect(last).toEqual(new Date('2019-01-19T00:00:00.000Z'));
+    expect(last).toEqual(new Date('2019-01-19T23:59:59.999Z'));
   });
 
   test('the week is in different month', () => {
     const date = moment(new Date('2019-02-02T00:00:00.000')).utc();
-    const [first, last] = getFirstAndLastWeekday(date, 'sunday');
+    const [first, last] = getFirstAndLastWeekday(date);
 
     expect(first).toEqual(new Date('2019-01-27T00:00:00.000Z'));
-    expect(last).toEqual(new Date('2019-02-02T00:00:00.000Z'));
+    expect(last).toEqual(new Date('2019-02-02T23:59:59.999Z'));
   });
 });
 

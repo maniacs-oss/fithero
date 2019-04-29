@@ -121,9 +121,8 @@ class HomeScreen extends Component<Props, State> {
 
   render() {
     const { selectedDay } = this.state;
-    const { firstDayOfTheWeek } = this.props;
     const today = getToday();
-    const currentWeek = getCurrentWeek(today, firstDayOfTheWeek);
+    const currentWeek = getCurrentWeek(today);
 
     return (
       <Screen>
@@ -174,6 +173,7 @@ const styles = StyleSheet.create({
 
 export default connect(
   state => ({
+    // Even if not using the prop, we use it to re-render if this has changed
     firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
   }),
   null

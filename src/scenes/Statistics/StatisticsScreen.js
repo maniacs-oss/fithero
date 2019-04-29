@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { connect } from 'react-redux';
 
@@ -24,6 +24,7 @@ import type {
   FirstDayOfTheWeekType,
 } from '../../redux/modules/settings';
 import { toLb } from '../../utils/metrics';
+import WorkoutTimesChart from './WorkoutTimesChart';
 
 type Props = {
   defaultUnitSystem: DefaultUnitSystemType,
@@ -31,14 +32,21 @@ type Props = {
   theme: ThemeType,
 };
 
+const { width } = Dimensions.get('window');
+
 class StatisticsScreen extends React.Component<Props> {
   render() {
     const { defaultUnitSystem, theme } = this.props;
 
     return (
       <View style={styles.screen}>
-        <View style={styles.row}>
-          <Card style={[styles.first, styles.singleCard]}>
+        <ScrollView
+          horizontal
+          style={styles.carousel}
+          showsHorizontalScrollIndicator={false}
+          overScrollMode="never"
+        >
+          <Card style={[styles.singleCard, styles.first]}>
             <Text style={styles.singleTitle}>{i18n.t('total_workouts')}</Text>
             <DataProvider
               query={getAllWorkoutsWithExercises}
@@ -50,7 +58,7 @@ class StatisticsScreen extends React.Component<Props> {
               )}
             />
           </Card>
-          <Card style={[styles.last, styles.singleCard]}>
+          <Card style={styles.singleCard}>
             <Text style={styles.singleTitle}>{i18n.t('this_month')}</Text>
             <DataProvider
               query={getWorkoutsThisMonth}
@@ -62,13 +70,10 @@ class StatisticsScreen extends React.Component<Props> {
               )}
             />
           </Card>
-        </View>
-        <View style={styles.row}>
-          <Card style={[styles.first, styles.singleCard]}>
+          <Card style={styles.singleCard}>
             <Text style={styles.singleTitle}>{i18n.t('this_week')}</Text>
             <DataProvider
               query={getWorkoutsThisWeek}
-              args={[this.props.firstDayOfTheWeek]}
               parse={(data: Array<WorkoutSchemaType>) =>
                 data ? data.length : 0
               }
@@ -77,11 +82,10 @@ class StatisticsScreen extends React.Component<Props> {
               )}
             />
           </Card>
-          <Card style={[styles.last, styles.singleCard]}>
+          <Card style={[styles.singleCard, styles.last]}>
             <Text style={styles.singleTitle}>{i18n.t('week_volume')}</Text>
             <DataProvider
               query={getSetsThisWeek}
-              args={[this.props.firstDayOfTheWeek]}
               parse={(data: Array<WorkoutSetSchemaType>) =>
                 data.reduce(
                   (previousValue, s) => previousValue + s.reps * s.weight,
@@ -111,7 +115,13 @@ class StatisticsScreen extends React.Component<Props> {
               }}
             />
           </Card>
-        </View>
+        </ScrollView>
+        <Card style={styles.chartCard}>
+          <Text style={[styles.singleTitle, styles.chartTitle]}>
+            {i18n.t('workouts_per_week')}
+          </Text>
+          <WorkoutTimesChart theme={theme} />
+        </Card>
       </View>
     );
   }
@@ -119,22 +129,23 @@ class StatisticsScreen extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   screen: {
+    flex: 1,
     paddingVertical: 8,
-    paddingHorizontal: 16,
   },
-  row: {
-    flexDirection: 'row',
+  carousel: {
+    flexGrow: 0,
     marginBottom: 8,
   },
   first: {
-    marginRight: 4,
+    marginLeft: 16,
   },
   last: {
-    marginLeft: 4,
+    marginRight: 16,
   },
   singleCard: {
-    flex: 0.5,
+    width: width / 2.5,
     padding: 16,
+    marginRight: 8,
   },
   singleTitle: {
     fontSize: 14,
@@ -146,11 +157,20 @@ const styles = StyleSheet.create({
   unit: {
     fontSize: 14,
   },
+  chartCard: {
+    flex: 1,
+    padding: 16,
+    marginHorizontal: 16,
+  },
+  chartTitle: {
+    paddingBottom: 16,
+  },
 });
 
 export default connect(
   state => ({
     defaultUnitSystem: state.settings.defaultUnitSystem,
+    // Even if not using the prop, we use it to re-render if this has changed
     firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
   }),
   null

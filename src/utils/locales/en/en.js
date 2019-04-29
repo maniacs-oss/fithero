@@ -76,6 +76,7 @@ export default {
   total_workouts: 'Total workouts',
   week_volume: 'Week volume',
   weight_label: 'Weight ({{w}})',
+  workouts_per_week: 'Workouts per week',
   workout_notes: 'Workout notes',
   workout_comment__placeholder: 'Add a memorable comment here...',
   update: 'Update',

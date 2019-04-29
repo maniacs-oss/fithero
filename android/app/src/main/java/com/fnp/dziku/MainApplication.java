@@ -3,6 +3,9 @@ package com.fnp.dziku;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.ReadableNativeMap;
+import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import is.uncommon.rn.widgets.TabbedViewPagerAndroidPackage;
 
 import cl.json.RNSharePackage;
@@ -50,6 +53,7 @@ public class MainApplication extends Application implements ReactApplication, Sh
         protected List<ReactPackage> getPackages() {
             return Arrays.asList(
                     new MainReactPackage(),
+                    new MPAndroidChartPackage(),
                     new TabbedViewPagerAndroidPackage(),
                     new AsyncStoragePackage(),
                     new RNGestureHandlerPackage(),
@@ -77,6 +81,8 @@ public class MainApplication extends Application implements ReactApplication, Sh
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
+        ReadableNativeArray.setUseNativeAccessor(true);
+        ReadableNativeMap.setUseNativeAccessor(true);
     }
 
     @Override

@@ -144,6 +144,7 @@ android {
 
 dependencies {
     addUnimodulesDependencies()
+    implementation project(':react-native-charts-wrapper')
     implementation project(':react-native-tabbed-view-pager-android')
     implementation project(':react-native-share')
     implementation project(':@react-native-community_async-storage')

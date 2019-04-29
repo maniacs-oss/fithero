@@ -5,15 +5,14 @@ import { render } from 'react-native-testing-library';
 import moment from 'moment';
 
 import DayRow from '../DayRow';
-import { getCurrentWeek } from '../../../utils/date';
-import type { FirstDayOfTheWeekType } from '../../../redux/modules/settings';
+import {
+  getCurrentWeek,
+  setMomentFirstDayOfTheWeek,
+} from '../../../utils/date';
 
 describe('DayRow', () => {
-  const getRender = (day: string, firstDayOfTheWeek: FirstDayOfTheWeekType) => {
-    const currentWeek = getCurrentWeek(
-      moment(day).startOf('day'),
-      firstDayOfTheWeek
-    );
+  const getRender = (day: string) => {
+    const currentWeek = getCurrentWeek(moment(day).startOf('day'));
     return render(
       <DayRow
         currentWeek={currentWeek}
@@ -24,16 +23,12 @@ describe('DayRow', () => {
     );
   };
 
-  const { toJSON: mondayJSON } = getRender(
-    '2019-03-18T00:00:00.000Z',
-    'monday'
-  );
+  setMomentFirstDayOfTheWeek('en', 0, true);
+  const { toJSON: mondayJSON } = getRender('2019-03-18T00:00:00.000Z');
 
   it('day row starts on Monday or Sunday', () => {
-    const { toJSON: sundayJSON } = getRender(
-      '2019-03-17T00:00:00.000Z',
-      'sunday'
-    );
+    setMomentFirstDayOfTheWeek('en', 1, true);
+    const { toJSON: sundayJSON } = getRender('2019-03-17T00:00:00.000Z');
 
     // $FlowFixMe
     expect(mondayJSON()).toMatchDiffSnapshot(sundayJSON(), {
@@ -43,10 +38,8 @@ describe('DayRow', () => {
   });
 
   it('day row starts on Monday or Saturday', () => {
-    const { toJSON: saturdayJSON } = getRender(
-      '2019-03-16T00:00:00.000Z',
-      'saturday'
-    );
+    setMomentFirstDayOfTheWeek('en', 6, true);
+    const { toJSON: saturdayJSON } = getRender('2019-03-16T00:00:00.000Z');
 
     // $FlowFixMe
     expect(mondayJSON()).toMatchDiffSnapshot(saturdayJSON(), {

@@ -4,6 +4,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { Settings } from '../../utils/constants';
 import type { DispatchType } from '../../types';
+import {
+  firstDayOfTheWeekToNumber,
+  getCurrentLocale,
+  setMomentFirstDayOfTheWeek,
+} from '../../utils/date';
 
 export type EditSetsScreenType = 'list' | 'paper';
 export type DefaultUnitSystemType = 'metric' | 'imperial';
@@ -92,6 +97,11 @@ export const setDefaultUnitSystem = (payload: DefaultUnitSystemType) => async (
 export const setFirstDayOfTheWeek = (payload: FirstDayOfTheWeekType) => async (
   dispatch: (args: DispatchType<FirstDayOfTheWeekType>) => void
 ) => {
+  setMomentFirstDayOfTheWeek(
+    getCurrentLocale(),
+    firstDayOfTheWeekToNumber(payload),
+    true
+  );
   await AsyncStorage.setItem(Settings.firstDayOfTheWeek, payload);
   return dispatch({
     type: FIRST_DAY_OF_THE_WEEK,
