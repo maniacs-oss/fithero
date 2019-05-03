@@ -62,6 +62,9 @@ export const getToday = () => moment().startOf('day');
 export const isSameDay = (date: Date, today: string) =>
   moment(date).isSame(moment(today), 'day');
 
+export const isAfter = (date: Date | string) =>
+  moment(date).isAfter(getToday(), 'day');
+
 export const dateToWorkoutId = (date: Date | string) =>
   moment(date).format('YYYYMMDD');
 

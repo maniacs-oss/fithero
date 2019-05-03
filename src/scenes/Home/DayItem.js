@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
 
-import { getShortDayInfo } from '../../utils/date';
+import { getShortDayInfo, isAfter } from '../../utils/date';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 
@@ -30,18 +30,32 @@ class DayItem extends React.PureComponent<Props> {
   render() {
     const { dateString, isSelected, isWorkout, theme } = this.props;
     const { date, day } = getShortDayInfo(dateString);
+    const after = isAfter(dateString);
+    const textColor = {
+      color: !after ? theme.colors.text : theme.colors.text,
+    };
 
     return (
-      <TouchableRipple onPress={this._onSelected}>
+      <TouchableRipple onPress={this._onSelected} testID="day-touchable">
         <View style={styles.container}>
-          <View style={[styles.textContainer, isSelected && styles.selected]}>
-            <Text style={[styles.text, styles.textTop]}>{date}</Text>
-            <Text style={[styles.text, styles.textBottom]}>{day}</Text>
+          <View
+            style={[
+              styles.textContainer,
+              after && styles.future,
+              isSelected && styles.selected,
+            ]}
+            testID="day-text-container"
+          >
+            <Text style={[styles.text, styles.textTop, textColor]}>{date}</Text>
+            <Text style={[styles.text, styles.textBottom, textColor]}>
+              {day}
+            </Text>
           </View>
           <View style={styles.dots}>
             {isWorkout && (
               <View
                 style={[styles.dot, { backgroundColor: theme.colors.accent }]}
+                testID="day-dot"
               />
             )}
           </View>
@@ -61,7 +75,10 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'center',
-    opacity: 0.4,
+    opacity: 0.5,
+  },
+  future: {
+    opacity: 0.15,
   },
   selected: {
     opacity: 1,
