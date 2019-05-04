@@ -23,6 +23,15 @@ export default {
   'exercise__paper-placeholder':
     'Each line represents a set. You can type using the format repetitions x weight (RxW), e.g:\n\n8x120\n7x130\n6x140\n\nThis last line can be an optional comment.',
   empty_view__history: 'There are no sets recorded for this exercise.',
+  empty_view__no_workouts_title: 'No workouts',
+  empty_view__no_workouts_description_past:
+    'Did you forget to log your training?',
+  empty_view__no_workouts_description_today_1: 'Time to hit the gym!',
+  empty_view__no_workouts_description_today_2: "What's your excuse today?",
+  empty_view__no_workouts_description_first_workout:
+    'Start logging your first workout right away!',
+  empty_view__no_workouts_description_future:
+    'Make sure to fulfill the future!',
   first_day_of_the_week: 'First day of the week',
   history: 'History',
   imperial: 'Imperial',

@@ -3,21 +3,22 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Card, Text } from 'react-native-paper';
+import { withNavigation } from 'react-navigation';
 
 import withTheme from '../utils/theme/withTheme';
-import type { NavigateType } from '../types';
+import type { NavigationType } from '../types';
 import type { ThemeType } from '../utils/theme/withTheme';
 
 type Props = {
   comments: string,
   day: string,
-  navigate: NavigateType,
+  navigation: NavigationType<{ day: string }>,
   theme: ThemeType,
 };
 
 class WorkoutComments extends React.Component<Props> {
   _addWorkoutComment = () => {
-    this.props.navigate('Comments', { day: this.props.day });
+    this.props.navigation.navigate('Comments', { day: this.props.day });
   };
 
   render() {
@@ -41,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(WorkoutComments);
+export default withTheme(withNavigation(WorkoutComments));

@@ -67,13 +67,7 @@ class WorkoutScreen extends React.Component<Props> {
 
   _renderHeader(workout: ?WorkoutSchemaType, day: string) {
     if (workout && workout.comments) {
-      return (
-        <WorkoutComments
-          comments={workout.comments}
-          navigate={this.props.navigation.navigate}
-          day={day}
-        />
-      );
+      return <WorkoutComments comments={workout.comments} day={day} />;
     }
     return null;
   }
@@ -95,6 +89,7 @@ class WorkoutScreen extends React.Component<Props> {
               workout={workout}
               onPressItem={this._onExercisePress}
               ListHeaderComponent={() => this._renderHeader(workout, day)}
+              dayString={day}
             />
           )}
         />
@@ -106,6 +101,7 @@ class WorkoutScreen extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   list: {
+    flexGrow: 1,
     paddingTop: 8,
     paddingHorizontal: 4,
     paddingBottom: 56 + 32, // Taking FAB into account

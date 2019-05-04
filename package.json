@@ -68,7 +68,7 @@
       "**/__tests__/**/?(*.)+(spec|test).[tj]s?(x)"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@unimodules|expo(nent)?|@expo(nent)?/.*))"
+      "node_modules/(?!((jest-)?react-native|@react-navigation|@unimodules|expo(nent)?|@expo(nent)?/.*))"
     ]
   }
 }

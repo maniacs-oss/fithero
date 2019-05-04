@@ -111,7 +111,6 @@ class HomeScreen extends Component<Props, State> {
         {workouts && workouts[selectedDay] && workouts[selectedDay].comments ? (
           <WorkoutComments
             comments={workouts[selectedDay].comments}
-            navigate={this.props.navigation.navigate}
             day={selectedDay}
           />
         ) : null}
@@ -144,6 +143,7 @@ class HomeScreen extends Component<Props, State> {
               contentContainerStyle={styles.list}
               workout={workouts ? workouts[selectedDay] : null}
               onPressItem={this._onExercisePress}
+              dayString={selectedDay}
               ListHeaderComponent={() =>
                 this._renderHeader(workouts, currentWeek)
               }
@@ -159,6 +159,7 @@ class HomeScreen extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   list: {
+    flexGrow: 1,
     paddingBottom: 56 + 32, // Taking FAB into account
   },
   fab: {

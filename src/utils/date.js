@@ -167,3 +167,16 @@ export const getEndOfTheWeek = () => {
     .endOf('week')
     .toDate();
 };
+
+export type TimeMomentType = 'past' | 'today' | 'future';
+
+export const whenIsTheDay = (day: string): TimeMomentType => {
+  const date = moment(day).startOf('day');
+  const today = getToday();
+  if (date.isSame(today)) {
+    return 'today';
+  } else if (date.isAfter(today)) {
+    return 'future';
+  }
+  return 'past';
+};

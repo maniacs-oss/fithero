@@ -13,8 +13,10 @@ import {
 import DataProvider from './DataProvider';
 import { extractExerciseKeyFromDatabase } from '../database/utils';
 import type { DefaultUnitSystemType } from '../redux/modules/settings';
+import WorkoutEmptyView from './WorkoutEmptyView';
 
 type Props = {
+  dayString: string,
   defaultUnitSystem: DefaultUnitSystemType,
   contentContainerStyle?: View.propTypes.style,
   onPressItem: (exerciseKey: string, customExerciseName?: string) => void,
@@ -64,6 +66,19 @@ class WorkoutList extends React.Component<Props> {
     );
   };
 
+  _renderEmptyView = () => {
+    const { dayString, workout } = this.props;
+    if (
+      !workout ||
+      (workout &&
+        workout.isValid &&
+        (workout.exercises.length === 0 && !workout.comments))
+    ) {
+      return <WorkoutEmptyView dayString={dayString} />;
+    }
+    return null;
+  };
+
   render() {
     const { workout, ...rest } = this.props;
 
@@ -72,6 +87,7 @@ class WorkoutList extends React.Component<Props> {
         data={workout && workout.isValid() ? workout.exercises : []}
         keyExtractor={this._keyExtractor}
         renderItem={this._renderItem}
+        ListEmptyComponent={this._renderEmptyView()}
         {...rest}
       />
     );
