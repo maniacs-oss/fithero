@@ -24,7 +24,7 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+    super.onCreate(null); // null because of react-native-screens not restoring its views/fragments
     MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
   }
 
