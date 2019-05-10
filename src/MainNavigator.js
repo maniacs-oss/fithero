@@ -46,6 +46,7 @@ const MainStack = createMaterialBottomTabNavigator(
       borderTopWidth: StyleSheet.hairlineWidth,
     },
     shifting: false,
+    keyboardHidesNavigationBar: false,
   }
 );
 
