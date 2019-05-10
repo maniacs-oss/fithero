@@ -29,7 +29,7 @@ export default {
   empty_view__no_workouts_description_today_1: 'Time to hit the gym!',
   empty_view__no_workouts_description_today_2: "What's your excuse today?",
   empty_view__no_workouts_description_first_workout:
-    'Start logging your first workout right away!',
+    'Start logging your first workout today!',
   empty_view__no_workouts_description_future:
     'Make sure to fulfill the future!',
   first_day_of_the_week: 'First day of the week',

@@ -98,6 +98,7 @@
 		684A5C292273633A00A7951E /* RNLineChartManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 684A5BF42273633A00A7951E /* RNLineChartManagerBridge.m */; };
 		684A5C2A2273633A00A7951E /* LineDataExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684A5BF52273633A00A7951E /* LineDataExtract.swift */; };
 		684A5C2B2273633A00A7951E /* CustomChartDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684A5BF72273633A00A7951E /* CustomChartDateFormatter.swift */; };
+		688DEBAF2285CCF30075D1C4 /* RNSplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 688DEBAE2285CCF30075D1C4 /* RNSplashScreen.m */; };
 		6A0F20875C4047F993FF69D6 /* libRNLocalize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA27280D5B7C44E28DBC2E84 /* libRNLocalize.a */; };
 		6EDCEF53903846AB834702C7 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD800C5C915497594E2FFB7 /* libRNGestureHandler.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -546,6 +547,8 @@
 		684A5BF62273633A00A7951E /* RNBarLineChartManagerBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNBarLineChartManagerBridge.h; path = "../../node_modules/react-native-charts-wrapper/ios/ReactNativeCharts/RNBarLineChartManagerBridge.h"; sourceTree = "<group>"; };
 		684A5BF72273633A00A7951E /* CustomChartDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomChartDateFormatter.swift; path = "../../node_modules/react-native-charts-wrapper/ios/ReactNativeCharts/CustomChartDateFormatter.swift"; sourceTree = "<group>"; };
 		687F71F12270E0FB00198832 /* Dziku-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Dziku-Bridging-Header.h"; sourceTree = "<group>"; };
+		688DEBAD2285CCBC0075D1C4 /* RNSplashScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSplashScreen.h; sourceTree = "<group>"; };
+		688DEBAE2285CCF30075D1C4 /* RNSplashScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSplashScreen.m; sourceTree = "<group>"; };
 		68B141722250D8AB00F9AA16 /* Dziku.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Dziku.entitlements; path = Dziku/Dziku.entitlements; sourceTree = "<group>"; };
 		690C4C952B9849DFA26ED703 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		6B94D9F35C8C4E9B8022EA97 /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
@@ -742,6 +745,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				688DEBAD2285CCBC0075D1C4 /* RNSplashScreen.h */,
+				688DEBAE2285CCF30075D1C4 /* RNSplashScreen.m */,
 			);
 			name = Dziku;
 			sourceTree = "<group>";
@@ -1798,6 +1803,7 @@
 				684A5C2B2273633A00A7951E /* CustomChartDateFormatter.swift in Sources */,
 				684A5C252273633A00A7951E /* ChartGroupHolder.swift in Sources */,
 				684A5BFA2273633A00A7951E /* RNCandleStickChartView.swift in Sources */,
+				688DEBAF2285CCF30075D1C4 /* RNSplashScreen.m in Sources */,
 				684A5C1F2273633A00A7951E /* BalloonMarker.swift in Sources */,
 				684A5C102273633A00A7951E /* RNRadarChartView.swift in Sources */,
 				684A5C172273633A00A7951E /* RNScatterChartManagerBridge.m in Sources */,

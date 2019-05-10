@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { InteractionManager, StyleSheet, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { connect } from 'react-redux';
 
@@ -23,6 +23,7 @@ import type { FirstDayOfTheWeekType } from '../../redux/modules/settings';
 import HeaderOverflowButton from '../../components/HeaderOverflowButton';
 import i18n from '../../utils/i18n';
 import WorkoutComments from '../../components/WorkoutComments';
+import { hideSplashScreen } from '../../native/RNSplashScreen';
 
 type NavigationOptions = {
   navigation: NavigationType<{ addWorkoutComment: () => void }>,
@@ -68,6 +69,10 @@ class HomeScreen extends Component<Props, State> {
   componentDidMount() {
     this.props.navigation.setParams({
       addWorkoutComment: this._addWorkoutComment,
+    });
+
+    InteractionManager.runAfterInteractions(() => {
+      hideSplashScreen();
     });
   }
 

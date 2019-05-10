@@ -41,3 +41,6 @@ jest.mock('react-native-unimodules', () => ({
   },
 }));
 jest.mock('expo-document-picker');
+
+// Mock own native modules
+jest.mock('../src/native/RNSplashScreen');

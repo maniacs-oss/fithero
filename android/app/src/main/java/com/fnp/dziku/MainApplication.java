@@ -37,58 +37,59 @@ import io.realm.react.RealmReactPackage;
 
 public class MainApplication extends Application implements ReactApplication, ShareApplication {
 
-    private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(Arrays.asList(
-            new ReactAdapterPackage(),
-            new FileSystemPackage(),
-            new ConstantsPackage(),
-            new DocumentPickerPackage()
-    ), Collections.emptyList());
+  private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(Arrays.asList(
+      new ReactAdapterPackage(),
+      new FileSystemPackage(),
+      new ConstantsPackage(),
+      new DocumentPickerPackage()
+  ), Collections.emptyList());
 
-    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-        @Override
-        public boolean getUseDeveloperSupport() {
-            return BuildConfig.DEBUG;
-        }
-
-        @Override
-        protected List<ReactPackage> getPackages() {
-            return Arrays.asList(
-                    new MainReactPackage(),
-                    new RNScreensPackage(),
-                    new MPAndroidChartPackage(),
-                    new TabbedViewPagerAndroidPackage(),
-                    new AsyncStoragePackage(),
-                    new RNGestureHandlerPackage(),
-                    BugsnagReactNative.getPackage(),
-                    new RealmReactPackage(),
-                    new RNLocalizePackage(),
-                    new VectorIconsPackage(),
-                    new RNSharePackage(),
-                    new ModuleRegistryAdapter(mModuleRegistryProvider)
-            );
-        }
-
-        @Override
-        protected String getJSMainModuleName() {
-            return "index";
-        }
-    };
-
+  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
-    public ReactNativeHost getReactNativeHost() {
-        return mReactNativeHost;
+    public boolean getUseDeveloperSupport() {
+      return BuildConfig.DEBUG;
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        SoLoader.init(this, /* native exopackage */ false);
-        ReadableNativeArray.setUseNativeAccessor(true);
-        ReadableNativeMap.setUseNativeAccessor(true);
+    protected List<ReactPackage> getPackages() {
+      return Arrays.asList(
+          new MainReactPackage(),
+          new RNScreensPackage(),
+          new MPAndroidChartPackage(),
+          new TabbedViewPagerAndroidPackage(),
+          new AsyncStoragePackage(),
+          new RNGestureHandlerPackage(),
+          BugsnagReactNative.getPackage(),
+          new RealmReactPackage(),
+          new RNLocalizePackage(),
+          new VectorIconsPackage(),
+          new RNSharePackage(),
+          new ModuleRegistryAdapter(mModuleRegistryProvider),
+          new RNSplashScreenPackage()
+      );
     }
 
     @Override
-    public String getFileProviderAuthority() {
-        return BuildConfig.APPLICATION_ID + ".provider";
+    protected String getJSMainModuleName() {
+      return "index";
     }
+  };
+
+  @Override
+  public ReactNativeHost getReactNativeHost() {
+    return mReactNativeHost;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    SoLoader.init(this, /* native exopackage */ false);
+    ReadableNativeArray.setUseNativeAccessor(true);
+    ReadableNativeMap.setUseNativeAccessor(true);
+  }
+
+  @Override
+  public String getFileProviderAuthority() {
+    return BuildConfig.APPLICATION_ID + ".provider";
+  }
 }
