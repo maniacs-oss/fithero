@@ -29,7 +29,7 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.AppTheme);
-    super.onCreate(null); // null because of react-native-screens not restoring its views/fragments
+    super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
   }

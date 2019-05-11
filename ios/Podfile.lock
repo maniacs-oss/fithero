@@ -66,8 +66,6 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - RNScreens (1.0.0-alpha.22):
-    - React
   - SwiftyJSON (5.0.0)
   - UMBarCodeScannerInterface (1.0.0)
   - UMCameraInterface (1.0.0)
@@ -103,7 +101,6 @@ DEPENDENCIES:
   - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
-  - RNScreens (from `../node_modules/react-native-screens/RNScreens.podspec`)
   - SwiftyJSON (= 5.0)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
@@ -142,8 +139,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
-  RNScreens:
-    :path: "../node_modules/react-native-screens/RNScreens.podspec"
   UMBarCodeScannerInterface:
     :path: "../node_modules/unimodules-barcode-scanner-interface/ios"
   UMCameraInterface:
@@ -182,7 +177,6 @@ SPEC CHECKSUMS:
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
-  RNScreens: 354046589421edc3d83d5c6212475bf1fb9a731d
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   UMBarCodeScannerInterface: f623227f2f6e8fa5c45fef1cc2b5ae200dd14918
   UMCameraInterface: 2a22ae5a2d4f710d617e3fd2c5c0511019aea1c7
@@ -198,6 +192,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: c594f1584e28026f98cca344d10183f635896094
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: eb81528be6c1863a6df10663114ea00710265a78
+PODFILE CHECKSUM: 34dd75b9be22fac82e79af2cbe5a9fbcbe1e9445
 
 COCOAPODS: 1.5.3

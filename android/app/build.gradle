@@ -144,7 +144,6 @@ android {
 
 dependencies {
     addUnimodulesDependencies()
-    implementation project(':react-native-screens')
     implementation project(':react-native-charts-wrapper')
     implementation project(':react-native-tabbed-view-pager-android')
     implementation project(':react-native-share')
