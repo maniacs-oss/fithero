@@ -8,7 +8,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 import realm from '../';
 import { EXERCISE_SCHEMA_NAME } from '../schemas/ExerciseSchema';
 import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
-import { getToday } from '../../utils/date';
+import {
+  firstDayOfTheWeekToNumber,
+  getCurrentLocale,
+  getToday,
+  setMomentFirstDayOfTheWeek,
+} from '../../utils/date';
 import { deserializeExercises, deserializeWorkouts } from '../utils';
 import { name as packageName } from '../../../package.json';
 import { Settings } from '../../utils/constants';
@@ -81,10 +86,19 @@ export const restoreDatabase = async (
     });
     await AsyncStorage.multiSet(settings);
 
+    const firstDayOfTheWeek = backup.settings[Settings.firstDayOfTheWeek];
+    const locale = getCurrentLocale();
+    setMomentFirstDayOfTheWeek(
+      locale,
+      firstDayOfTheWeekToNumber(backup.settings[Settings.firstDayOfTheWeek]),
+      true
+    );
+
+    // Update store after setting moment
     initSettingsAction({
       editSetsScreenType: backup.settings[Settings.editSetsScreen] || 'list',
       defaultUnitSystem: backup.settings[Settings.defaultUnitSystem],
-      firstDayOfTheWeek: backup.settings[Settings.firstDayOfTheWeek],
+      firstDayOfTheWeek,
     });
 
     realm.write(() => {

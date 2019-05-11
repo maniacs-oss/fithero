@@ -4,13 +4,14 @@ import { FileSystem } from 'react-native-unimodules';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
 import Share from 'react-native-share';
+import * as DocumentPicker from 'expo-document-picker';
 
 import { backupDatabase, restoreDatabase } from '../BackupService';
 import { WORKOUT_SCHEMA_NAME } from '../../schemas/WorkoutSchema';
 import realm from '../../../database';
 import { EXERCISE_SCHEMA_NAME } from '../../schemas/ExerciseSchema';
 import { Settings } from '../../../utils/constants';
-import * as DocumentPicker from 'expo-document-picker';
+import { setMomentFirstDayOfTheWeek } from '../../../utils/date';
 
 jest.mock('NativeModules', () => ({
   RNShare: {},
@@ -23,6 +24,8 @@ jest.mock('../../../utils/date', () => {
   return {
     ...actualDate,
     getToday: () => mockMomentDate,
+    setMomentFirstDayOfTheWeek: jest.fn(),
+    getCurrentLocale: () => 'en',
   };
 });
 
@@ -165,6 +168,7 @@ describe('BackupService', () => {
       from: 'Downloads',
       to: 'testCache/fithero-backup-2019-03-30.json',
     });
+    expect(setMomentFirstDayOfTheWeek).toBeCalledWith('en', 1, true);
     expect(initSettings).toBeCalledWith({
       editSetsScreenType: 'list',
       defaultUnitSystem: 'metric',
