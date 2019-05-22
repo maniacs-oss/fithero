@@ -1,14 +1,22 @@
 package com.fnp.fithero;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.animation.AnimationUtils;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -16,6 +24,7 @@ public class MainActivity extends ReactActivity {
 
   static String currentLocale;
   private @Nullable ReactRootView mReactRootView;
+  private BroadcastReceiver mPowerSaverChangeReceiver;
 
   /**
    * Returns the name of the main component registered from JavaScript.
@@ -32,6 +41,33 @@ public class MainActivity extends ReactActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    mPowerSaverChangeReceiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        final PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        assert pm != null;
+
+        Objects.requireNonNull(getReactInstanceManager().getCurrentReactContext())
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit("POWER_SAVE_MODE_CHANGED", pm.isPowerSaveMode());
+      }
+    };
+
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
+    registerReceiver(mPowerSaverChangeReceiver, filter);
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    unregisterReceiver(mPowerSaverChangeReceiver);
+    mPowerSaverChangeReceiver = null;
   }
 
   @Override

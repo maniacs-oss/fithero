@@ -1,14 +1,19 @@
 /* @flow */
 
 import * as React from 'react';
-import { Platform, StatusBar, YellowBox } from 'react-native';
+import {
+  DeviceEventEmitter,
+  Platform,
+  StatusBar,
+  YellowBox,
+} from 'react-native';
 import { Provider } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
 import { Settings } from './utils/constants';
-import { initSettings } from './redux/modules/settings';
+import { APP_THEME, initSettings } from './redux/modules/settings';
 import { getDefaultUnitSystemByCountry } from './utils/metrics';
 import {
   firstDayOfTheWeekToNumber,
@@ -83,8 +88,26 @@ export default class App extends React.Component<{}, State> {
       })
     );
 
+    if (Platform.OS === 'android') {
+      this.baterySaverSubscription = DeviceEventEmitter.addListener(
+        'POWER_SAVE_MODE_CHANGED',
+        isBatterySaver => {
+          store.dispatch({
+            type: APP_THEME,
+            payload: isBatterySaver ? 'dark' : 'default',
+          });
+        }
+      );
+    }
+
     this.setState({ loading: false });
   };
+
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      this.baterySaverSubscription.remove();
+    }
+  }
 
   render() {
     return (
