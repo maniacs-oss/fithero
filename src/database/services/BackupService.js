@@ -96,8 +96,9 @@ export const restoreDatabase = async (
     );
 
     // Update store after setting moment
+    const appTheme = backup.settings[Settings.appTheme] || 'default';
     initSettingsAction({
-      appTheme: backup.settings[Settings.appTheme],
+      appTheme,
       editSetsScreenType: backup.settings[Settings.editSetsScreen] || 'list',
       defaultUnitSystem: backup.settings[Settings.defaultUnitSystem],
       firstDayOfTheWeek,
@@ -105,7 +106,7 @@ export const restoreDatabase = async (
 
     if (Platform.OS === 'android') {
       StatusBar.setBackgroundColor(
-        backup.settings[Settings.appTheme] === 'default' ? '#233656' : '#000000'
+        appTheme === 'default' ? '#233656' : '#000000'
       );
     }
 

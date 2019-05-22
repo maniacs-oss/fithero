@@ -96,6 +96,7 @@ const mockBackup = {
   workouts: mockWorkouts,
   exercises: [mockExercise],
   settings: {
+    [Settings.appTheme]: 'default',
     [Settings.editSetsScreen]: 'list',
     [Settings.defaultUnitSystem]: 'metric',
     [Settings.firstDayOfTheWeek]: 'monday',
@@ -108,11 +109,13 @@ describe('BackupService', () => {
   });
 
   AsyncStorage.getAllKeys.mockImplementation(() => [
+    Settings.appTheme,
     Settings.editSetsScreen,
     Settings.defaultUnitSystem,
     Settings.firstDayOfTheWeek,
   ]);
   AsyncStorage.multiGet.mockImplementation(() => [
+    [Settings.appTheme, 'default'],
     [Settings.editSetsScreen, 'list'],
     [Settings.defaultUnitSystem, 'metric'],
     [Settings.firstDayOfTheWeek, 'monday'],
@@ -170,6 +173,7 @@ describe('BackupService', () => {
     });
     expect(setMomentFirstDayOfTheWeek).toBeCalledWith('en', 1, true);
     expect(initSettings).toBeCalledWith({
+      appTheme: 'default',
       editSetsScreenType: 'list',
       defaultUnitSystem: 'metric',
       firstDayOfTheWeek: 'monday',
