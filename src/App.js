@@ -2,13 +2,11 @@
 
 import * as React from 'react';
 import { Platform, StatusBar, YellowBox } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
-import theme from './utils/theme';
 import { Settings } from './utils/constants';
 import { initSettings } from './redux/modules/settings';
 import { getDefaultUnitSystemByCountry } from './utils/metrics';
@@ -18,6 +16,7 @@ import {
   getWeekStartByLocale,
   setMomentFirstDayOfTheWeek,
 } from './utils/date';
+import PaperThemeProvider from './PaperThemeProvider';
 
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
@@ -46,18 +45,17 @@ export default class App extends React.Component<{}, State> {
     loading: true,
   };
 
-  constructor(props: {}) {
-    super(props);
+  componentDidMount() {
     this._loadSettings();
   }
 
   _loadSettings = async () => {
-    // TODO Do it in the SplashScreen and render content after it
     const locale = getCurrentLocale();
 
     const editSetsScreenType = await AsyncStorage.getItem(
       Settings.editSetsScreen
     );
+
     let defaultUnitSystem = await AsyncStorage.getItem(
       Settings.defaultUnitSystem
     );
@@ -65,6 +63,7 @@ export default class App extends React.Component<{}, State> {
       defaultUnitSystem = getDefaultUnitSystemByCountry();
       await AsyncStorage.setItem(Settings.defaultUnitSystem, defaultUnitSystem);
     }
+
     let firstDayOfTheWeek = await AsyncStorage.getItem(
       Settings.firstDayOfTheWeek
     );
@@ -72,33 +71,40 @@ export default class App extends React.Component<{}, State> {
       firstDayOfTheWeek = getWeekStartByLocale(locale);
       await AsyncStorage.setItem(Settings.firstDayOfTheWeek, firstDayOfTheWeek);
     }
-
     setMomentFirstDayOfTheWeek(
       locale,
       firstDayOfTheWeekToNumber(firstDayOfTheWeek)
     );
+
+    const appTheme =
+      (await AsyncStorage.getItem(Settings.appTheme)) || 'default';
 
     store.dispatch(
       initSettings({
         editSetsScreenType: editSetsScreenType || 'list',
         defaultUnitSystem,
         firstDayOfTheWeek,
+        appTheme: appTheme || 'default',
       })
     );
+
     this.setState({ loading: false });
   };
 
   render() {
     return (
       <Provider store={store}>
-        <PaperProvider theme={theme}>
-          <React.Fragment>
-            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-            {!this.state.loading && (
-              <MainNavigator persistenceKey={navigationPersistenceKey} />
+        {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
+        {!this.state.loading && (
+          <PaperThemeProvider
+            render={appTheme => (
+              <MainNavigator
+                persistenceKey={navigationPersistenceKey}
+                screenProps={{ theme: appTheme }}
+              />
             )}
-          </React.Fragment>
-        </PaperProvider>
+          />
+        )}
       </Provider>
     );
   }

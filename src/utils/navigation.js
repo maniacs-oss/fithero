@@ -1,8 +1,8 @@
 /* @flow */
 
-import theme from './theme';
+import type { ThemeType } from './theme/withTheme';
 
-export const defaultNavigationOptions = {
+export const getDefaultNavigationOptions = (theme: ThemeType) => ({
   title: 'FitHero',
   headerStyle: {
     elevation: 0,
@@ -11,4 +11,7 @@ export const defaultNavigationOptions = {
   },
   headerTintColor: theme.colors.toolbarTint,
   headerPressColorAndroid: 'rgba(255, 255, 255, .20)',
-};
+  cardStyle: {
+    backgroundColor: theme.colors.background,
+  },
+});

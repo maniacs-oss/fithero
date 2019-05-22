@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import PreferenceItem from './PreferenceItem';
@@ -9,10 +9,12 @@ import i18n from '../../utils/i18n';
 import ListChoiceDialog from './ListChoiceDialog';
 import {
   initSettings,
+  setAppTheme,
   setDefaultUnitSystem,
   setFirstDayOfTheWeek,
 } from '../../redux/modules/settings';
 import type {
+  AppThemeType,
   DefaultUnitSystemType,
   FirstDayOfTheWeekType,
   SettingsType,
@@ -22,11 +24,22 @@ import {
   backupDatabase,
   restoreDatabase,
 } from '../../database/services/BackupService';
+import Screen from '../../components/Screen';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
 const DEFAULT_UNIT_SYSTEM = 'default_unit_system';
 const FIRST_DAY_OF_THE_WEEK = 'first_day_of_the_week';
+const APP_THEME = 'app_theme';
+
+type NavigationOptions = {
+  screenProps: {
+    theme: AppThemeType,
+  },
+};
 
 type Props = {
+  appTheme: AppThemeType,
+  setAppTheme: (theme: AppThemeType) => void,
   defaultUnitSystem: DefaultUnitSystemType,
   setDefaultUnitSystem: (unit: DefaultUnitSystemType) => void,
   firstDayOfTheWeek: FirstDayOfTheWeekType,
@@ -39,6 +52,12 @@ type State = {
 };
 
 class SettingsScreen extends React.Component<Props, State> {
+  static navigationOptions = ({ screenProps }: NavigationOptions) => {
+    return {
+      ...getDefaultNavigationOptions(screenProps.theme),
+    };
+  };
+
   state = {
     showDialog: '',
   };
@@ -55,6 +74,10 @@ class SettingsScreen extends React.Component<Props, State> {
     this.setState({ showDialog: FIRST_DAY_OF_THE_WEEK });
   };
 
+  _showAppThemeChange = () => {
+    this.setState({ showDialog: APP_THEME });
+  };
+
   _onDefaultUnitSystemChange = value => {
     this.props.setDefaultUnitSystem(value);
     this.setState({ showDialog: '' });
@@ -65,12 +88,20 @@ class SettingsScreen extends React.Component<Props, State> {
     this.setState({ showDialog: '' });
   };
 
+  _onAppThemeChange = theme => {
+    if (Platform.OS === 'android') {
+      StatusBar.setBackgroundColor(theme === 'default' ? '#233656' : '#000000');
+    }
+    this.props.setAppTheme(theme);
+    this.setState({ showDialog: '' });
+  };
+
   _restoreDatabase = () => {
     restoreDatabase(this.props.initSettings);
   };
 
   render() {
-    const { defaultUnitSystem, firstDayOfTheWeek } = this.props;
+    const { appTheme, defaultUnitSystem, firstDayOfTheWeek } = this.props;
     const { showDialog } = this.state;
 
     const defaultUnitSystemValues = ['metric', 'imperial'];
@@ -84,9 +115,14 @@ class SettingsScreen extends React.Component<Props, State> {
       sunday: i18n.t('day__sunday'),
       saturday: i18n.t('day__saturday'),
     };
+    const appThemeValues = ['default', 'dark'];
+    const appThemeEntries = {
+      default: i18n.t('default_theme'),
+      dark: i18n.t('dark_theme'),
+    };
 
     return (
-      <View style={styles.screen}>
+      <Screen style={styles.screen}>
         <PreferenceItem
           title={i18n.t('default_unit_system')}
           selected={defaultUnitSystem}
@@ -107,7 +143,7 @@ class SettingsScreen extends React.Component<Props, State> {
         <PreferenceItem
           title={i18n.t('first_day_of_the_week')}
           selected={firstDayOfTheWeek}
-          values={['monday', 'sunday', 'saturday']}
+          values={firstDayOfTheWeekValues}
           entries={firstDayOfTheWeekEntries}
           onPress={this._showFirstDayOfTheWeekChange}
         />
@@ -120,6 +156,22 @@ class SettingsScreen extends React.Component<Props, State> {
           visible={showDialog === FIRST_DAY_OF_THE_WEEK}
           onValueChange={this._onFirstDayOfTheWeekChange}
         />
+        <PreferenceItem
+          title={i18n.t('app_theme')}
+          selected={appTheme}
+          values={appThemeValues}
+          entries={appThemeEntries}
+          onPress={this._showAppThemeChange}
+        />
+        <ListChoiceDialog
+          title={i18n.t('app_theme')}
+          onDismiss={this._onDialogDismiss}
+          selected={appTheme}
+          values={appThemeValues}
+          entries={appThemeEntries}
+          visible={showDialog === APP_THEME}
+          onValueChange={this._onAppThemeChange}
+        />
         <Divider style={styles.divider} />
         <PreferenceItem
           title={i18n.t('backup')}
@@ -131,7 +183,7 @@ class SettingsScreen extends React.Component<Props, State> {
           description={i18n.t('restore_description')}
           onPress={this._restoreDatabase}
         />
-      </View>
+      </Screen>
     );
   }
 }
@@ -147,12 +199,14 @@ const styles = StyleSheet.create({
 
 export default connect(
   state => ({
+    appTheme: state.settings.appTheme,
     defaultUnitSystem: state.settings.defaultUnitSystem,
     firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
   }),
   {
+    initSettings,
     setDefaultUnitSystem,
     setFirstDayOfTheWeek,
-    initSettings,
+    setAppTheme,
   }
 )(SettingsScreen);

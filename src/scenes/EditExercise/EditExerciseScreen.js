@@ -16,12 +16,20 @@ import {
 import HeaderButton from '../../components/HeaderButton';
 import HeaderIconButton from '../../components/HeaderIconButton';
 import type { NavigationType } from '../../types';
+import Screen from '../../components/Screen';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
-type NavigationOptions = {
+type NavigationObjectType = {
   navigation: NavigationType<{ id?: string, onSave: () => void }>,
 };
 
-type Props = NavigationOptions & {
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: ThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {
   theme: ThemeType,
 };
 
@@ -33,9 +41,13 @@ type State = {
 };
 
 export class EditExerciseScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }: NavigationOptions) => {
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => {
     const { params = {} } = navigation.state;
     return {
+      ...getDefaultNavigationOptions(screenProps.theme),
       title: params.id ? i18n.t('edit_exercise') : i18n.t('new_exercise'),
       headerLeft: (
         <HeaderIconButton icon="close" onPress={() => navigation.goBack()} />
@@ -115,8 +127,8 @@ export class EditExerciseScreen extends React.Component<Props, State> {
     const isErrorMuscle = this._isErrorMuscle();
 
     return (
-      <ScrollView>
-        <View style={styles.screen}>
+      <Screen style={styles.screen}>
+        <ScrollView>
           <TextInput
             label={i18n.t('name')}
             mode="outlined"
@@ -147,44 +159,40 @@ export class EditExerciseScreen extends React.Component<Props, State> {
             selectionColor={colors.textSelection}
             style={styles.inputRow}
           />
-          <View>
-            <View
-              testID="muscle-container"
-              style={[
-                styles.categoriesContainer,
-                {
-                  borderColor: isErrorMuscle
-                    ? colors.error
-                    : colors.placeholder,
-                  borderRadius: roundness,
-                },
-              ]}
-            >
-              <MuscleSelector
-                muscles={primary}
-                onValueChange={this._onPrimaryChange}
-                multiple={false}
-              />
-            </View>
-            <View
-              style={[
-                styles.outlinedLabelBackground,
-                { backgroundColor: colors.background },
-              ]}
-            >
-              <Text
-                testID="muscle-label"
-                style={[
-                  styles.label,
-                  { color: isErrorMuscle ? colors.error : colors.placeholder },
-                ]}
-              >
-                {i18n.t('primary_muscle')}
-              </Text>
-            </View>
+          <View
+            testID="muscle-container"
+            style={[
+              styles.categoriesContainer,
+              {
+                borderColor: isErrorMuscle ? colors.error : colors.placeholder,
+                borderRadius: roundness,
+              },
+            ]}
+          >
+            <MuscleSelector
+              muscles={primary}
+              onValueChange={this._onPrimaryChange}
+              multiple={false}
+            />
           </View>
-        </View>
-      </ScrollView>
+          <View
+            style={[
+              styles.outlinedLabelBackground,
+              { backgroundColor: colors.background },
+            ]}
+          >
+            <Text
+              testID="muscle-label"
+              style={[
+                styles.label,
+                { color: isErrorMuscle ? colors.error : colors.placeholder },
+              ]}
+            >
+              {i18n.t('primary_muscle')}
+            </Text>
+          </View>
+        </ScrollView>
+      </Screen>
     );
   }
 }
@@ -208,7 +216,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   categoriesContainer: {
-    borderWidth: 2,
+    // Using just borderWidth here, shows a strange bug effect when navigating
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
     marginHorizontal: 16,
     marginTop: 6,
     paddingVertical: 8,

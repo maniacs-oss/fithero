@@ -20,12 +20,22 @@ import HeaderIconButton from '../../components/HeaderIconButton';
 import type { ExerciseSchemaType } from '../../database/types';
 import { getAllExercises } from '../../database/services/ExerciseService';
 import { deserializeExercises } from '../../database/utils';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
+import type { AppThemeType } from '../../redux/modules/settings';
 
-type NavigationOptions = {
-  navigation: NavigationType<{ day: string }>,
+type NavigationObjectType = {
+  navigation: NavigationType<{
+    day: string,
+  }>,
 };
 
-type Props = NavigationOptions & {
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: AppThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {
   theme: ThemeType,
 };
 
@@ -38,7 +48,11 @@ type State = {
 export class ExercisesScreen extends Component<Props, State> {
   realmExercises: RealmResults<ExerciseSchemaType>;
 
-  static navigationOptions = ({ navigation }: NavigationOptions) => ({
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => ({
+    ...getDefaultNavigationOptions(screenProps.theme),
     ...Platform.select({
       android: { header: null },
     }),
@@ -196,11 +210,9 @@ export class ExercisesScreen extends Component<Props, State> {
 
     return (
       <Screen>
-        <View
-          style={[styles.searchToolbar, { backgroundColor: colors.surface }]}
-        >
+        <View style={styles.searchToolbar}>
           <Searchbar
-            style={styles.searchBar}
+            style={[styles.searchBar]}
             onChangeText={this._onSearchChange}
             placeholder={i18n.t('search')}
             icon={Platform.OS === 'android' ? 'arrow-back' : 'search'}
@@ -209,7 +221,11 @@ export class ExercisesScreen extends Component<Props, State> {
             theme={{ colors: { primary: colors.textSelection } }}
           />
           {Platform.OS === 'android' && (
-            <IconButton onPress={this._onAddExercise} icon="add" />
+            <IconButton
+              onPress={this._onAddExercise}
+              icon="add"
+              style={styles.clearAndroid}
+            />
           )}
         </View>
         <FlatList
@@ -248,8 +264,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     ...Platform.select({
       ios: { height: 44 },
-      android: { flex: 1, height: 48 },
+      android: { flex: 1, height: 48, paddingRight: 42 },
     }),
+  },
+  clearAndroid: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   listHeader: {
     paddingBottom: 8,

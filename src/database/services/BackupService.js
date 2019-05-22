@@ -18,6 +18,7 @@ import { deserializeExercises, deserializeWorkouts } from '../utils';
 import { name as packageName } from '../../../package.json';
 import { Settings } from '../../utils/constants';
 import type { SettingsType } from '../../redux/modules/settings';
+import { Platform, StatusBar } from 'react-native';
 
 export const backupDatabase = async () => {
   const keys = await AsyncStorage.getAllKeys();
@@ -96,10 +97,17 @@ export const restoreDatabase = async (
 
     // Update store after setting moment
     initSettingsAction({
+      appTheme: backup.settings[Settings.appTheme],
       editSetsScreenType: backup.settings[Settings.editSetsScreen] || 'list',
       defaultUnitSystem: backup.settings[Settings.defaultUnitSystem],
       firstDayOfTheWeek,
     });
+
+    if (Platform.OS === 'android') {
+      StatusBar.setBackgroundColor(
+        backup.settings[Settings.appTheme] === 'default' ? '#233656' : '#000000'
+      );
+    }
 
     realm.write(() => {
       realm.deleteAll();

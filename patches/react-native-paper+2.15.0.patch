@@ -1,3 +1,18 @@
+diff --git a/node_modules/react-native-paper/src/components/BottomNavigation.js b/node_modules/react-native-paper/src/components/BottomNavigation.js
+index 28dff89..20c4e50 100644
+--- a/node_modules/react-native-paper/src/components/BottomNavigation.js
++++ b/node_modules/react-native-paper/src/components/BottomNavigation.js
+@@ -673,6 +673,10 @@ class BottomNavigation<T: *> extends React.Component<Props<T>, State> {
+                 }
+               : null,
+             barStyle,
++            {
++              borderColor: theme.colors.borderColor,
++              borderTopWidth: StyleSheet.hairlineWidth,
++            }
+           ]}
+           pointerEvents={
+             keyboardHidesNavigationBar && this.state.keyboard ? 'none' : 'auto'
 diff --git a/node_modules/react-native-paper/src/components/Card/Card.js b/node_modules/react-native-paper/src/components/Card/Card.js
 index 6789ad9..a1c156c 100644
 --- a/node_modules/react-native-paper/src/components/Card/Card.js

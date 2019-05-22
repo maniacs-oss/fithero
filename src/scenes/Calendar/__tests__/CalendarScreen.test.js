@@ -19,6 +19,7 @@ test('remove realm listeners on unmounting', () => {
         navigate: jest.fn(),
         push: jest.fn(),
         goBack: jest.fn(),
+        dispatch: jest.fn(),
       }}
       firstDay={0}
       theme={theme}

@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { connect } from 'react-redux';
 
@@ -20,11 +20,20 @@ import { getSetsThisWeek } from '../../database/services/WorkoutSetService';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import type {
+  AppThemeType,
   DefaultUnitSystemType,
   FirstDayOfTheWeekType,
 } from '../../redux/modules/settings';
 import { toLb } from '../../utils/metrics';
 import WorkoutTimesChart from './WorkoutTimesChart';
+import Screen from '../../components/Screen';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
+
+type NavigationOptions = {
+  screenProps: {
+    theme: AppThemeType,
+  },
+};
 
 type Props = {
   defaultUnitSystem: DefaultUnitSystemType,
@@ -35,11 +44,17 @@ type Props = {
 const { width } = Dimensions.get('window');
 
 class StatisticsScreen extends React.Component<Props> {
+  static navigationOptions = ({ screenProps }: NavigationOptions) => {
+    return {
+      ...getDefaultNavigationOptions(screenProps.theme),
+    };
+  };
+
   render() {
     const { defaultUnitSystem, theme } = this.props;
 
     return (
-      <View style={styles.screen}>
+      <Screen style={styles.screen}>
         <ScrollView
           horizontal
           style={styles.carousel}
@@ -122,7 +137,7 @@ class StatisticsScreen extends React.Component<Props> {
           </Text>
           <WorkoutTimesChart theme={theme} />
         </Card>
-      </View>
+      </Screen>
     );
   }
 }

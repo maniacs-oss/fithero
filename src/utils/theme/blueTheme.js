@@ -1,6 +1,5 @@
 /* @flow */
 
-import { Platform } from 'react-native';
 import { Colors, DarkTheme } from 'react-native-paper';
 import type { ThemeColorsType } from './types';
 import type { ThemeType } from './withTheme';
@@ -12,12 +11,13 @@ const selected = '#66809B';
 const ThemeColors: ThemeColorsType = {
   accent,
   background: primary,
-  borderColor: Platform.OS === 'android' ? '#344d69' : '#2A3D55',
+  borderColor: '#2A3D55',
   calendarSelectedDayTextColor: primary,
   calendarSelectedDotColor: primary,
   chartBar: '#F5F5DC',
   chip: '#526c87',
   chipSelected: selected,
+  dialogBackground: '#415B76',
   primary,
   selected,
   secondaryText: 'rgba(255, 255, 255, .7)',

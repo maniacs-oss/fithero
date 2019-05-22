@@ -13,15 +13,22 @@ import { getAllWorkouts } from '../../database/services/WorkoutService';
 import type { WorkoutSchemaType } from '../../database/types';
 import withTheme from '../../utils/theme/withTheme';
 import type { ThemeType } from '../../utils/theme/withTheme';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
-type NavigationOptions = {
+type NavigationObjectType = {
   navigation: NavigationType<{
     today: string,
     scrollToToday?: () => void,
   }>,
 };
 
-type Props = NavigationOptions & {
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: ThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {
   firstDay: number,
   theme: ThemeType,
 };
@@ -43,9 +50,13 @@ export class CalendarScreen extends React.Component<Props, State> {
 
   workoutsListener: RealmResults<WorkoutSchemaType>;
 
-  static navigationOptions = ({ navigation }: NavigationOptions) => {
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => {
     const { params = {} } = navigation.state;
     return {
+      ...getDefaultNavigationOptions(screenProps.theme),
       headerRight: (
         <HeaderIconButton
           onPress={() => {

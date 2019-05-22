@@ -2,15 +2,18 @@
 
 export default {
   add: 'Add',
+  app_theme: 'App theme',
   backup: 'Backup',
   backup_description:
     'Backup your data to a cloud service such as Google Drive',
   cancel: 'Cancel',
   calendar: 'Calendar',
   comment_workout: 'Comment workout',
+  dark_theme: 'Dark theme',
   day__monday: 'Monday',
   day__sunday: 'Sunday',
   day__saturday: 'Saturday',
+  default_theme: 'Default theme',
   default_unit_system: 'Default unit system',
   default_unit_system_desc:
     'This will not affect the exercises that you logged in the past.',

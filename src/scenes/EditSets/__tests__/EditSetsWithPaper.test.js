@@ -41,6 +41,7 @@ const getComponent = (exercise: ?AddWorkoutExerciseSchemaType) => (
       setParams: jest.fn(),
       navigate: jest.fn(),
       push: jest.fn(),
+      dispatch: jest.fn(),
     }}
     theme={theme}
     defaultUnitSystem="metric"

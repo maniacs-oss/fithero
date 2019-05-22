@@ -12,14 +12,45 @@ import EditSetsTypeIcon from './EditSetsTypeIcon';
 import { getExerciseName } from '../../utils/exercises';
 import ExerciseHistory from './ExerciseHistory';
 import EditSetsScreen from './EditSetsScreen';
+import Screen from '../../components/Screen';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
+import type { NavigationType } from '../../types';
+import type { ThemeType } from '../../utils/theme/withTheme';
 
 const getContentComponent = index =>
   index === 0 ? EditSetsScreen : ExerciseHistory;
 
-class EditSetsNavigator extends React.Component<> {
+type NavigationObjectType = {
+  navigation: NavigationType<{
+    day: string,
+    exerciseKey: string,
+    exerciseName?: string,
+  }>,
+};
+
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: ThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {
+  theme: ThemeType,
+};
+
+type State = {
+  tabNames: Array<string>,
+};
+
+class EditSetsNavigator extends React.Component<Props, State> {
+  viewPager: typeof TabbedViewPager;
   selectedPage = 0;
 
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => ({
+    ...getDefaultNavigationOptions(screenProps.theme),
     headerTitle: getExerciseName(
       navigation.state.params.exerciseKey,
       navigation.state.params.exerciseName
@@ -27,7 +58,7 @@ class EditSetsNavigator extends React.Component<> {
     headerRight: <EditSetsTypeIcon />,
   });
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       tabNames: [
@@ -49,7 +80,7 @@ class EditSetsNavigator extends React.Component<> {
     return true;
   };
 
-  onPageSelected = position => {
+  onPageSelected = (position: number) => {
     this.selectedPage = position;
   };
 
@@ -57,35 +88,37 @@ class EditSetsNavigator extends React.Component<> {
     const { navigation, theme } = this.props;
 
     return (
-      <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>
-        <TabbedViewPager
-          tabMode="fixed"
-          tabBackground={theme.colors.background}
-          tabIndicatorColor={theme.colors.text}
-          tabIndicatorHeight={2}
-          tabTextColor={theme.colors.secondaryText}
-          tabSelectedTextColor={theme.colors.text}
-          tabElevation={0}
-          tabNames={this.state.tabNames}
-          style={styles.tabs}
-          initialPage={0}
-          onPageSelected={event =>
-            this.onPageSelected(event.nativeEvent.position)
-          }
-          ref={r => {
-            this.viewPager = r;
-          }}
-        >
-          {this.state.tabNames.map((tabName, i) => {
-            const ContentComponent = getContentComponent(i);
-            return (
-              <View key={i} style={styles.content}>
-                <ContentComponent navigation={navigation} />
-              </View>
-            );
-          })}
-        </TabbedViewPager>
-      </AndroidBackHandler>
+      <Screen>
+        <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>
+          <TabbedViewPager
+            tabMode="fixed"
+            tabBackground={theme.colors.background}
+            tabIndicatorColor={theme.colors.text}
+            tabIndicatorHeight={2}
+            tabTextColor={theme.colors.secondaryText}
+            tabSelectedTextColor={theme.colors.text}
+            tabElevation={0}
+            tabNames={this.state.tabNames}
+            style={styles.tabs}
+            initialPage={0}
+            onPageSelected={event =>
+              this.onPageSelected(event.nativeEvent.position)
+            }
+            ref={r => {
+              this.viewPager = r;
+            }}
+          >
+            {this.state.tabNames.map((tabName, i) => {
+              const ContentComponent = getContentComponent(i);
+              return (
+                <View key={i} style={styles.content}>
+                  <ContentComponent navigation={navigation} />
+                </View>
+              );
+            })}
+          </TabbedViewPager>
+        </AndroidBackHandler>
+      </Screen>
     );
   }
 }

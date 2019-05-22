@@ -1,13 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import {
-  Button,
-  DefaultTheme,
-  Dialog,
-  Paragraph,
-  Portal,
-} from 'react-native-paper';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 
 import i18n from '../utils/i18n';
 import withTheme from '../utils/theme/withTheme';
@@ -27,17 +21,18 @@ class DeleteWarningDialog extends React.Component<Props> {
     const { description, title, onConfirm, onDismiss, visible } = this.props;
     const { colors } = this.props.theme;
 
-    const dialogTheme = {
-      ...DefaultTheme,
-      colors: {
-        ...DefaultTheme.colors,
-        primary: colors.primary,
-      },
-    };
-
     return (
       <Portal>
-        <Dialog visible={visible} theme={dialogTheme} onDismiss={onDismiss}>
+        <Dialog
+          visible={visible}
+          theme={{
+            colors: {
+              primary: colors.accent,
+              surface: colors.dialogBackground,
+            },
+          }}
+          onDismiss={onDismiss}
+        >
           {title && <Dialog.Title>{title}</Dialog.Title>}
           <Dialog.Content>
             <Paragraph>{description}</Paragraph>

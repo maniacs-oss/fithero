@@ -14,8 +14,10 @@ import { dateToString, getDatePrettyFormat, getToday } from '../../utils/date';
 import withTheme from '../../utils/theme/withTheme';
 import type { NavigationType } from '../../types';
 import type { ThemeType } from '../../utils/theme/withTheme';
+import Screen from '../../components/Screen';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
-type NavigationOptions = {
+type NavigationObjectType = {
   navigation: NavigationType<{
     day: string,
     exerciseKey: string,
@@ -23,7 +25,13 @@ type NavigationOptions = {
   }>,
 };
 
-type Props = NavigationOptions & {
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: ThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {
   theme: ThemeType,
 };
 
@@ -32,10 +40,11 @@ type State = {
 };
 
 class EditSetsNavigator extends React.Component<Props, State> {
-  static navigationOptions = {
+  static navigationOptions = ({ screenProps }: NavigationOptions) => ({
+    ...getDefaultNavigationOptions(screenProps.theme),
     headerTitle: '',
     headerRight: <EditSetsTypeIcon />,
-  };
+  });
 
   state = {
     selectedIndex: 0,
@@ -49,7 +58,7 @@ class EditSetsNavigator extends React.Component<Props, State> {
       selectedIndex === 0 ? EditSetsScreen : ExerciseHistory;
 
     return (
-      <React.Fragment>
+      <Screen>
         <Text style={styles.title}>
           {getExerciseName(
             navigation.state.params.exerciseKey,
@@ -74,7 +83,7 @@ class EditSetsNavigator extends React.Component<Props, State> {
           style={styles.tabs}
         />
         <ContentComponent navigation={navigation} />
-      </React.Fragment>
+      </Screen>
     );
   }
 }

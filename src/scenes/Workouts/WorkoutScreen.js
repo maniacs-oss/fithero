@@ -18,17 +18,29 @@ import Screen from '../../components/Screen';
 import WorkoutComments from '../../components/WorkoutComments';
 import i18n from '../../utils/i18n';
 import HeaderOverflowButton from '../../components/HeaderOverflowButton';
+import type { ThemeType } from '../../utils/theme/withTheme';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
-type NavigationOptions = {
+type NavigationObjectType = {
   navigation: NavigationType<{ day: string, addWorkoutComment: () => void }>,
 };
 
-type Props = NavigationOptions & {};
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: ThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {};
 
 class WorkoutScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }: NavigationOptions) => {
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => {
     const { params = {} } = navigation.state;
     return {
+      ...getDefaultNavigationOptions(screenProps.theme),
       title: getDatePrettyFormat(navigation.state.params.day, getToday(), true),
       headerRight: (
         <HeaderOverflowButton

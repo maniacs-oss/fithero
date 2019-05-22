@@ -9,6 +9,7 @@ export type ThemeColorsType = {|
   +chartBar: string,
   +chip: string,
   +chipSelected: string,
+  +dialogBackground: string,
   +secondaryText: string,
   +selected: string,
   +surface: string,

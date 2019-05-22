@@ -21,6 +21,7 @@ it('handles validation errors', () => {
         navigate: jest.fn(),
         push: jest.fn(),
         goBack: jest.fn(),
+        dispatch: jest.fn(),
       }}
       theme={theme}
     />

@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
 import i18n from '../../utils/i18n';
 import withTheme from '../../utils/theme/withTheme';
@@ -20,12 +20,23 @@ import {
 import HeaderButton from '../../components/HeaderButton';
 import type { NavigationType } from '../../types';
 import type { ThemeType } from '../../utils/theme/withTheme';
+import Screen from '../../components/Screen';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
-type NavigationOptions = {
-  navigation: NavigationType<{ day: string, saveComments: () => void }>,
+type NavigationObjectType = {
+  navigation: NavigationType<{
+    day: string,
+    saveComments: () => void,
+  }>,
 };
 
-type Props = NavigationOptions & {
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: ThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {
   theme: ThemeType,
 };
 
@@ -34,9 +45,13 @@ type State = {
 };
 
 class CommentsScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }: NavigationOptions) => {
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => {
     const { params = {} } = navigation.state;
     return {
+      ...getDefaultNavigationOptions(screenProps.theme),
       headerRight: (
         <HeaderButton onPress={params.saveComments}>
           {i18n.t('save')}
@@ -86,7 +101,7 @@ class CommentsScreen extends React.Component<Props, State> {
     );
 
     return (
-      <View style={styles.screen}>
+      <Screen style={styles.screen}>
         <Title style={styles.section}>{i18n.t('workout_notes')}</Title>
         <Paragraph style={styles.section}>{dayString}</Paragraph>
         <TextInput
@@ -100,7 +115,7 @@ class CommentsScreen extends React.Component<Props, State> {
           value={comments}
           onChangeText={this._onCommentsChange}
         />
-      </View>
+      </Screen>
     );
   }
 }

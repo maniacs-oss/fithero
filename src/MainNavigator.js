@@ -1,10 +1,7 @@
 /* @flow */
 
-import { StyleSheet } from 'react-native';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-
-import theme from './utils/theme';
 
 import tabBarIcon from './components/tabBarIcon';
 import i18n from './utils/i18n';
@@ -12,7 +9,6 @@ import HomeNavigator from './scenes/HomeNavigator';
 import SettingsNavigator from './scenes/SettingsNavigator';
 import StatisticsNavigator from './scenes/StatisticsNavigator';
 import EditExerciseScreen from './scenes/EditExercise/EditExerciseScreen';
-import { defaultNavigationOptions } from './utils/navigation';
 
 const MainStack = createMaterialBottomTabNavigator(
   {
@@ -40,11 +36,6 @@ const MainStack = createMaterialBottomTabNavigator(
   },
   {
     initialRouteName: 'Home',
-    barStyle: {
-      backgroundColor: theme.colors.toolbar,
-      borderColor: theme.colors.borderColor,
-      borderTopWidth: StyleSheet.hairlineWidth,
-    },
     shifting: false,
     keyboardHidesNavigationBar: false,
   }
@@ -53,21 +44,20 @@ const MainStack = createMaterialBottomTabNavigator(
 export default createAppContainer(
   createStackNavigator(
     {
-      Main: MainStack,
+      Main: {
+        screen: MainStack,
+        navigationOptions: {
+          header: null,
+        },
+      },
       EditExercise: {
         screen: EditExerciseScreen,
-        navigationOptions: {
-          header: undefined,
-        },
       },
     },
     {
+      mode: 'modal',
       defaultNavigationOptions: {
-        ...defaultNavigationOptions,
-        header: null,
-      },
-      cardStyle: {
-        backgroundColor: theme.colors.background,
+        gesturesEnabled: false,
       },
     }
   )

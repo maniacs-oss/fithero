@@ -31,6 +31,7 @@ describe('ExercisesScreen', () => {
         setParams: jest.fn(),
         navigate: jest.fn(),
         push: jest.fn(),
+        dispatch: jest.fn(),
       }}
       theme={theme}
     />

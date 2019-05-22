@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-navigation-stack/src/views/StackView/StackViewLayout.js b/node_modules/react-navigation-stack/src/views/StackView/StackViewLayout.js
+index 43b34ca..8d1f97d 100644
+--- a/node_modules/react-navigation-stack/src/views/StackView/StackViewLayout.js
++++ b/node_modules/react-navigation-stack/src/views/StackView/StackViewLayout.js
+@@ -866,7 +866,7 @@ class StackViewLayout extends React.Component {
+         realPosition={transitionProps.position}
+         animatedStyle={style}
+         transparent={transparentCard}
+-        style={[paddingTopStyle, cardStyle]}
++        style={[paddingTopStyle, options.cardStyle, cardStyle]}
+         scene={scene}
+       >
+         {this._renderInnerScene(scene)}

@@ -1,7 +1,13 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { InteractionManager, StyleSheet, View } from 'react-native';
+import {
+  InteractionManager,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { FAB } from 'react-native-paper';
 import { connect } from 'react-redux';
 
@@ -19,17 +25,30 @@ import WorkoutList from '../../components/WorkoutList';
 import type { WorkoutSchemaType } from '../../database/types';
 import HeaderIconButton from '../../components/HeaderIconButton';
 import DataProvider from '../../components/DataProvider';
-import type { FirstDayOfTheWeekType } from '../../redux/modules/settings';
+import type {
+  AppThemeType,
+  FirstDayOfTheWeekType,
+} from '../../redux/modules/settings';
 import HeaderOverflowButton from '../../components/HeaderOverflowButton';
 import i18n from '../../utils/i18n';
 import WorkoutComments from '../../components/WorkoutComments';
 import { hideSplashScreen } from '../../native/RNSplashScreen';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
-type NavigationOptions = {
-  navigation: NavigationType<{ addWorkoutComment: () => void }>,
+type NavigationObjectType = {
+  navigation: NavigationType<{
+    addWorkoutComment: () => void,
+  }>,
 };
 
-type Props = NavigationOptions & {
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: AppThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {
+  appTheme: AppThemeType,
   firstDayOfTheWeek: FirstDayOfTheWeekType,
 };
 
@@ -38,7 +57,10 @@ type State = {
 };
 
 class HomeScreen extends Component<Props, State> {
-  static navigationOptions = ({ navigation }: NavigationOptions) => {
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => {
     const navigateToCalendar = () => {
       navigation.navigate('Calendar', {
         today: getToday().format('YYYY-MM-DD'),
@@ -46,6 +68,7 @@ class HomeScreen extends Component<Props, State> {
     };
     const { params = {} } = navigation.state;
     return {
+      ...getDefaultNavigationOptions(screenProps.theme),
       headerRight: (
         <View style={styles.headerButtons}>
           <HeaderIconButton icon="date-range" onPress={navigateToCalendar} />
@@ -72,6 +95,9 @@ class HomeScreen extends Component<Props, State> {
     });
 
     InteractionManager.runAfterInteractions(() => {
+      if (Platform.OS === 'android' && this.props.appTheme === 'dark') {
+        StatusBar.setBackgroundColor('#000000');
+      }
       hideSplashScreen();
     });
   }
@@ -179,6 +205,7 @@ const styles = StyleSheet.create({
 
 export default connect(
   state => ({
+    appTheme: state.settings.appTheme,
     // Even if not using the prop, we use it to re-render if this has changed
     firstDayOfTheWeek: state.settings.firstDayOfTheWeek,
   }),

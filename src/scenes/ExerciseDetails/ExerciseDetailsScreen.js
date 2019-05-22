@@ -19,10 +19,13 @@ import HeaderIconButton from '../../components/HeaderIconButton';
 import HeaderOverflowButton from '../../components/HeaderOverflowButton';
 import type { NavigationType } from '../../types';
 import DeleteWarningDialog from '../../components/DeleteWarningDialog';
+import Screen from '../../components/Screen';
+import type { AppThemeType } from '../../redux/modules/settings';
+import { getDefaultNavigationOptions } from '../../utils/navigation';
 
 const getExercise = memoize(id => exercises.find(e => e.id === id));
 
-type NavigationOptions = {
+type NavigationObjectType = {
   navigation: NavigationType<{
     id: string,
     editAction: () => void,
@@ -30,7 +33,13 @@ type NavigationOptions = {
   }>,
 };
 
-type Props = NavigationOptions & {};
+type NavigationOptions = NavigationObjectType & {
+  screenProps: {
+    theme: AppThemeType,
+  },
+};
+
+type Props = NavigationObjectType & {};
 
 type State = {
   showDeleteDialog: boolean,
@@ -38,15 +47,15 @@ type State = {
 };
 
 class ExerciseDetailsScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }: NavigationOptions) => {
+  static navigationOptions = ({
+    navigation,
+    screenProps,
+  }: NavigationOptions) => {
     const { params = {} } = navigation.state;
 
-    if (!isCustomExercise(params.id)) {
-      return null;
-    }
-
     return {
-      headerRight: (
+      ...getDefaultNavigationOptions(screenProps.theme),
+      headerRight: isCustomExercise(params.id) ? (
         <View style={styles.toolbarActions}>
           <HeaderIconButton onPress={() => params.editAction()} icon="edit" />
           <HeaderOverflowButton
@@ -56,6 +65,8 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
             last
           />
         </View>
+      ) : (
+        undefined
       ),
     };
   };
@@ -95,9 +106,9 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
   };
 
   _renderBody = exercise => (
-    <ScrollView>
-      <React.Fragment>
-        <View style={styles.screen}>
+    <Screen style={styles.screen}>
+      <ScrollView>
+        <React.Fragment>
           <Title style={styles.section}>
             {getExerciseName(exercise.id, exercise.name)}
           </Title>
@@ -126,16 +137,16 @@ class ExerciseDetailsScreen extends React.Component<Props, State> {
               </Paragraph>
             </View>
           )}
-        </View>
-        <DeleteWarningDialog
-          title={i18n.t('delete__exercise_title')}
-          description={i18n.t('delete__exercise_description')}
-          onConfirm={this._deleteExercise}
-          onDismiss={this._hideDeleteWarning}
-          visible={this.state.showDeleteDialog}
-        />
-      </React.Fragment>
-    </ScrollView>
+          <DeleteWarningDialog
+            title={i18n.t('delete__exercise_title')}
+            description={i18n.t('delete__exercise_description')}
+            onConfirm={this._deleteExercise}
+            onDismiss={this._hideDeleteWarning}
+            visible={this.state.showDeleteDialog}
+          />
+        </React.Fragment>
+      </ScrollView>
+    </Screen>
   );
 
   render() {

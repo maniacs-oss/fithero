@@ -29,6 +29,7 @@ export type NavigationType<T> = {
   // eslint-disable-next-line flowtype/no-weak-types
   setParams: (params: { [key: string]: any }) => void,
   goBack: (routeKey?: ?string) => boolean,
+  dispatch: (() => void) => void,
 };
 
 export type DispatchType<T> = {
