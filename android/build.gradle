@@ -3,8 +3,8 @@
 buildscript {
     ext {
         applicationId = "com.fnp.dziku"
-        versionCode = 20
-        versionName = "0.5.1"
+        versionCode = 21
+        versionName = "0.5.2"
         buildToolsVersion = "28.0.3"
         minSdkVersion = 21
         compileSdkVersion = 28
