@@ -110,16 +110,16 @@ describe('saving sets', () => {
     const component = TestRenderer.create(getComponent(null));
 
     component.getInstance()._saveSets();
-    expect(addExercise).not.toBeCalled();
-    expect(updateExercisePaperForWorkout).not.toBeCalled();
+    expect(addExercise).not.toHaveBeenCalled();
+    expect(updateExercisePaperForWorkout).not.toHaveBeenCalled();
   });
 
   it('it calls updateExercisePaperForWorkout if exercise was already there', () => {
     const component = TestRenderer.create(getComponent(mockExercise));
 
     component.getInstance()._saveSets();
-    expect(addExercise).not.toBeCalled();
-    expect(updateExercisePaperForWorkout).toBeCalledWith({
+    expect(addExercise).not.toHaveBeenCalled();
+    expect(updateExercisePaperForWorkout).toHaveBeenCalledWith({
       ...mockExercise,
     });
   });
@@ -138,9 +138,9 @@ describe('saving sets', () => {
     });
 
     component.getInstance()._saveSets();
-    expect(addExercise).toBeCalledWith({
+    expect(addExercise).toHaveBeenCalledWith({
       ...mockExercise,
     });
-    expect(updateExercisePaperForWorkout).not.toBeCalled();
+    expect(updateExercisePaperForWorkout).not.toHaveBeenCalled();
   });
 });

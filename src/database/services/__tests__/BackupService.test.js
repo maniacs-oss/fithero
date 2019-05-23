@@ -131,11 +131,11 @@ describe('BackupService', () => {
 
   it('backups the database and the settings', async () => {
     await backupDatabase();
-    expect(FileSystem.writeAsStringAsync).toBeCalledWith(
+    expect(FileSystem.writeAsStringAsync).toHaveBeenCalledWith(
       'testCache/fithero-backup-2019-03-30.json',
       JSON.stringify(mockBackup)
     );
-    expect(Share.open).toBeCalledWith({
+    expect(Share.open).toHaveBeenCalledWith({
       type: 'text/plain',
       url: 'file://testCache/fithero-backup-2019-03-30.json',
     });
@@ -147,10 +147,10 @@ describe('BackupService', () => {
       'fithero-backup-2019-03-10.json',
     ]);
     await backupDatabase();
-    expect(FileSystem.deleteAsync).toBeCalledWith(
+    expect(FileSystem.deleteAsync).toHaveBeenCalledWith(
       'testCache/fithero-backup-2019-02-20.json'
     );
-    expect(FileSystem.deleteAsync).toBeCalledWith(
+    expect(FileSystem.deleteAsync).toHaveBeenCalledWith(
       'testCache/fithero-backup-2019-03-10.json'
     );
   });
@@ -167,21 +167,30 @@ describe('BackupService', () => {
 
     await restoreDatabase(initSettings);
 
-    expect(FileSystem.copyAsync).toBeCalledWith({
+    expect(FileSystem.copyAsync).toHaveBeenCalledWith({
       from: 'Downloads',
       to: 'testCache/fithero-backup-2019-03-30.json',
     });
-    expect(setMomentFirstDayOfTheWeek).toBeCalledWith('en', 1, true);
-    expect(initSettings).toBeCalledWith({
+    expect(setMomentFirstDayOfTheWeek).toHaveBeenCalledWith('en', 1, true);
+    expect(initSettings).toHaveBeenCalledWith({
       appTheme: 'default',
       editSetsScreenType: 'list',
       defaultUnitSystem: 'metric',
       firstDayOfTheWeek: 'monday',
     });
-    expect(realm.deleteAll).toBeCalled();
-    expect(realm.create).toBeCalledWith(EXERCISE_SCHEMA_NAME, mockExercise);
-    expect(realm.create).toBeCalledWith(WORKOUT_SCHEMA_NAME, mockWorkouts[0]);
-    expect(realm.create).toBeCalledWith(WORKOUT_SCHEMA_NAME, mockWorkouts[1]);
+    expect(realm.deleteAll).toHaveBeenCalled();
+    expect(realm.create).toHaveBeenCalledWith(
+      EXERCISE_SCHEMA_NAME,
+      mockExercise
+    );
+    expect(realm.create).toHaveBeenCalledWith(
+      WORKOUT_SCHEMA_NAME,
+      mockWorkouts[0]
+    );
+    expect(realm.create).toHaveBeenCalledWith(
+      WORKOUT_SCHEMA_NAME,
+      mockWorkouts[1]
+    );
   });
 
   it('does not do a restore if user cancels the operation', async () => {
@@ -191,6 +200,6 @@ describe('BackupService', () => {
 
     await restoreDatabase(jest.fn());
 
-    expect(FileSystem.readAsStringAsync).not.toBeCalled();
+    expect(FileSystem.readAsStringAsync).not.toHaveBeenCalled();
   });
 });

@@ -56,7 +56,7 @@ describe('DayItem', () => {
     const touchable = getByTestId('day-touchable');
     fireEvent(touchable, 'onPress');
 
-    expect(onDaySelected).toBeCalled();
+    expect(onDaySelected).toHaveBeenCalled();
   });
 
   it('renders without a  dot if there is no workout', () => {

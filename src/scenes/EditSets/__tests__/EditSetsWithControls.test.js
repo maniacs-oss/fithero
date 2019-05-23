@@ -361,21 +361,21 @@ describe('EditSetsWithControls', () => {
     });
 
     it.skip('adds a set and dismiss the keyboard', () => {
-      expect(Keyboard.dismiss).not.toBeCalled();
+      expect(Keyboard.dismiss).not.toHaveBeenCalled();
 
       wrapper.instance()._onAddSet();
 
-      expect(Keyboard.dismiss).toBeCalled();
+      expect(Keyboard.dismiss).toHaveBeenCalled();
 
       // TODO test rest of logic inside here
     });
 
     it('deletes a set and dismiss the keyboard', () => {
-      expect(Keyboard.dismiss).not.toBeCalled();
+      expect(Keyboard.dismiss).not.toHaveBeenCalled();
 
       wrapper.instance()._onDeleteSet();
 
-      expect(Keyboard.dismiss).toBeCalled();
+      expect(Keyboard.dismiss).toHaveBeenCalled();
       expect(deleteSet).toHaveBeenCalledTimes(1);
     });
   });

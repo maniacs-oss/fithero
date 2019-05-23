@@ -22,7 +22,7 @@ describe('EDIT_SETS_SCREEN_TYPE', () => {
     const dispatch = jest.fn();
     setEditSetsScreenType('paper')(dispatch);
 
-    expect(AsyncStorage.setItem).toBeCalledWith(
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
       Settings.editSetsScreen,
       'paper'
     );
@@ -101,6 +101,6 @@ describe('EDIT_SETS_SCREEN_TYPE', () => {
 
   it('calls setMomentFirstDayOfTheWeek on setting first day of the week', () => {
     setFirstDayOfTheWeek('saturday')(jest.fn());
-    expect(setMomentFirstDayOfTheWeek).toBeCalled();
+    expect(setMomentFirstDayOfTheWeek).toHaveBeenCalled();
   });
 });

@@ -15,9 +15,8 @@ import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
 export const getAllWorkouts = (): RealmResults<WorkoutSchemaType> =>
   realm.objects('Workout');
 
-export const getAllWorkoutsWithExercises = (): RealmResults<
-  WorkoutSchemaType
-> => realm.objects('Workout').filtered('exercises.@count > 0');
+export const getAllWorkoutsWithExercises = (): RealmResults<WorkoutSchemaType> =>
+  realm.objects('Workout').filtered('exercises.@count > 0');
 
 export const getWorkoutsByRange = (
   start: Date,

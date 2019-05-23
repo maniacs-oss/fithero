@@ -37,7 +37,7 @@ test('addSet', () => {
   addSet(mockSet);
 
   expect(mockRealmExercise.sets.push).toHaveBeenCalledTimes(1);
-  expect(mockRealmExercise.sets.push).toBeCalledWith(mockSet);
+  expect(mockRealmExercise.sets.push).toHaveBeenCalledWith(mockSet);
 });
 
 test('updateSet', () => {
@@ -90,7 +90,7 @@ describe('deleteSet', () => {
     deleteSet(set.id);
 
     expect(realm.delete).toHaveBeenCalledTimes(1);
-    expect(realm.delete).toBeCalledWith(set);
+    expect(realm.delete).toHaveBeenCalledWith(set);
   });
 
   it('deletes the set and the exercise', () => {
@@ -108,8 +108,8 @@ describe('deleteSet', () => {
     deleteSet(set.id);
 
     expect(realm.delete).toHaveBeenCalledTimes(2);
-    expect(realm.delete).toBeCalledWith(set);
-    expect(realm.delete).toBeCalledWith(exercise);
+    expect(realm.delete).toHaveBeenCalledWith(set);
+    expect(realm.delete).toHaveBeenCalledWith(exercise);
   });
 
   it('deletes the set, the exercise and the workout', () => {
@@ -132,9 +132,9 @@ describe('deleteSet', () => {
     deleteSet(set.id);
 
     expect(realm.delete).toHaveBeenCalledTimes(3);
-    expect(realm.delete).toBeCalledWith(set);
-    expect(realm.delete).toBeCalledWith(exercise);
-    expect(realm.delete).toBeCalledWith(workout);
+    expect(realm.delete).toHaveBeenCalledWith(set);
+    expect(realm.delete).toHaveBeenCalledWith(exercise);
+    expect(realm.delete).toHaveBeenCalledWith(workout);
   });
 
   it('reassess the sort if we delete an exercise', () => {

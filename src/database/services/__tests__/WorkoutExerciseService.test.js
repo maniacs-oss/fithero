@@ -32,13 +32,13 @@ describe('addExercise', () => {
     addExercise(mockExercise);
 
     expect(realm.create).toHaveBeenCalledTimes(1);
-    expect(realm.create).toBeCalledWith('Workout', {
+    expect(realm.create).toHaveBeenCalledWith('Workout', {
       id: mockRealmWorkout.id,
       date: mockRealmWorkout.date,
     });
 
     expect(mockRealmWorkout.exercises.push).toHaveBeenCalledTimes(1);
-    expect(mockRealmWorkout.exercises.push).toBeCalledWith(mockExercise);
+    expect(mockRealmWorkout.exercises.push).toHaveBeenCalledWith(mockExercise);
   });
 
   it('pushes the new exercise directly into a existing workout', () => {
@@ -49,7 +49,7 @@ describe('addExercise', () => {
     expect(realm.create).toHaveBeenCalledTimes(0);
 
     expect(mockRealmWorkout.exercises.push).toHaveBeenCalledTimes(1);
-    expect(mockRealmWorkout.exercises.push).toBeCalledWith(mockExercise);
+    expect(mockRealmWorkout.exercises.push).toHaveBeenCalledWith(mockExercise);
   });
 });
 
@@ -110,7 +110,7 @@ describe('updateExercisePaperForWorkout', () => {
     updateExercisePaperForWorkout(mutatedExercise);
 
     expect(mockSets.push).toHaveBeenCalledTimes(0);
-    expect(realm.delete).not.toBeCalled();
+    expect(realm.delete).not.toHaveBeenCalled();
   });
 
   it('adds a new set correctly', () => {
@@ -134,7 +134,7 @@ describe('updateExercisePaperForWorkout', () => {
 
     expect(mutatedExercise.sets).toHaveLength(2);
     expect(mockSets.push).toHaveBeenCalledTimes(1);
-    expect(realm.delete).not.toBeCalled();
+    expect(realm.delete).not.toHaveBeenCalled();
   });
 
   it('deletes the set and the whole exercise', () => {

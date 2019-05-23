@@ -39,7 +39,7 @@ describe('addExercise', () => {
     const generated = [...Array(102)].map((_, i) => leftPad(i + 1, 6, 0));
     generated.forEach(g => {
       addExercise(exercise);
-      expect(realm.create).toBeCalledWith(EXERCISE_SCHEMA_NAME, {
+      expect(realm.create).toHaveBeenCalledWith(EXERCISE_SCHEMA_NAME, {
         id: `${userExerciseIdPrefix}${g}`,
         ...exercise,
       });

@@ -145,8 +145,8 @@ describe('ExercisesScreen', () => {
   });
 
   it('pushes a new screen when clicking an exercise and dismiss the keyboard', () => {
-    expect(Keyboard.dismiss).not.toBeCalled();
+    expect(Keyboard.dismiss).not.toHaveBeenCalled();
     wrapper.instance()._onExercisePress('bench-press');
-    expect(Keyboard.dismiss).toBeCalled();
+    expect(Keyboard.dismiss).toHaveBeenCalled();
   });
 });
