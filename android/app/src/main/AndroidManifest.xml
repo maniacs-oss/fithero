@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Need to figure out why these permissions get added, I think is probably because of
+    expo unimodules -->
+    <uses-permission tools:node="remove" android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission tools:node="remove" android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="false"
