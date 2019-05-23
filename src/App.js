@@ -33,7 +33,7 @@ if (global.__DEV__) {
 }
 
 const navigationPersistenceKey = global.__DEV__
-  ? 'DEV_dziku-navigation-key'
+  ? 'DEV_fithero-navigation-key'
   : null;
 
 type State = {

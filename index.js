@@ -9,4 +9,4 @@ if (!global.__DEV__) {
   require('./src/utils/bugsnag');
 }
 
-AppRegistry.registerComponent('Dziku', () => App);
+AppRegistry.registerComponent('FitHero', () => App);

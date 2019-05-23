@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">FitHero</string>
-    <string name="file_provider" translatable="false">com.fnp.dziku.provider</string>
+    <string name="file_provider" translatable="false">com.fnp.fithero.provider</string>
 </resources>

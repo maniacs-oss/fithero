@@ -1,4 +1,4 @@
-package com.fnp.dziku;
+package com.fnp.fithero;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

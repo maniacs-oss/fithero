@@ -1,4 +1,4 @@
-package com.fnp.dziku;
+package com.fnp.fithero;
 
 import android.app.Activity;
 

@@ -1,4 +1,4 @@
-package com.fnp.dziku;
+package com.fnp.fithero;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "Dziku";
+    return "FitHero";
   }
 
   @Override

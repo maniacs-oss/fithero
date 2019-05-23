@@ -24,7 +24,7 @@
   
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"Dziku"
+                                                   moduleName:@"FitHero"
                                             initialProperties:nil];
   
   rootView.backgroundColor = [[UIColor alloc] initWithRed:0.25f green:0.36f blue:0.46f alpha:1];
