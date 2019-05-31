@@ -159,37 +159,41 @@ export class EditExerciseScreen extends React.Component<Props, State> {
             selectionColor={colors.textSelection}
             style={styles.inputRow}
           />
-          <View
-            testID="muscle-container"
-            style={[
-              styles.categoriesContainer,
-              {
-                borderColor: isErrorMuscle ? colors.error : colors.placeholder,
-                borderRadius: roundness,
-              },
-            ]}
-          >
-            <MuscleSelector
-              muscles={primary}
-              onValueChange={this._onPrimaryChange}
-              multiple={false}
-            />
-          </View>
-          <View
-            style={[
-              styles.outlinedLabelBackground,
-              { backgroundColor: colors.background },
-            ]}
-          >
-            <Text
-              testID="muscle-label"
+          <View>
+            <View
+              testID="muscle-container"
               style={[
-                styles.label,
-                { color: isErrorMuscle ? colors.error : colors.placeholder },
+                styles.categoriesContainer,
+                {
+                  borderColor: isErrorMuscle
+                    ? colors.error
+                    : colors.placeholder,
+                  borderRadius: roundness,
+                },
               ]}
             >
-              {i18n.t('primary_muscle')}
-            </Text>
+              <MuscleSelector
+                muscles={primary}
+                onValueChange={this._onPrimaryChange}
+                multiple={false}
+              />
+            </View>
+            <View
+              style={[
+                styles.outlinedLabelBackground,
+                { backgroundColor: colors.background },
+              ]}
+            >
+              <Text
+                testID="muscle-label"
+                style={[
+                  styles.label,
+                  { color: isErrorMuscle ? colors.error : colors.placeholder },
+                ]}
+              >
+                {i18n.t('primary_muscle')}
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </Screen>
