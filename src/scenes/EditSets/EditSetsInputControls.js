@@ -55,22 +55,20 @@ class EditSetsInputControls extends React.Component<Props> {
         <Caption style={[styles.lineTitle, labelStyle]}>{label}</Caption>
         <View style={styles.lineInput}>
           {EditSetsInputControls._renderInput(controls[0])}
-          <View style={styles.textInputContainer}>
-            <TextInput
-              value={input}
-              onChangeText={onChangeText}
-              underlineColorAndroid="transparent"
-              selectionColor={theme.colors.textSelection}
-              style={[
-                {
-                  color: theme.colors.text,
-                },
-                styles.textInput,
-              ]}
-              placeholderTextColor={theme.colors.placeholder}
-              {...rest}
-            />
-          </View>
+          <TextInput
+            value={input}
+            onChangeText={onChangeText}
+            underlineColorAndroid="transparent"
+            selectionColor={theme.colors.textSelection}
+            style={[
+              {
+                color: theme.colors.text,
+              },
+              styles.textInput,
+            ]}
+            placeholderTextColor={theme.colors.placeholder}
+            {...rest}
+          />
           {EditSetsInputControls._renderInput(controls[1])}
         </View>
       </View>
@@ -93,12 +91,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
   },
-  textInputContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   textInput: {
+    flex: 1,
     fontSize: 20,
     textAlign: 'center',
   },

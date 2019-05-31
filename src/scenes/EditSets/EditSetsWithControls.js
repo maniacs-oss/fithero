@@ -135,9 +135,11 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   };
 
   _onChangeWeightInput = (value: string) => {
-    if (value === '.' || !isNaN(value)) {
+    const parsedValue = value.replace(',', '.');
+    // TODO handle comma correctly depending on the locale (save it using dot but showing it using comma)
+    if (!isNaN(parsedValue)) {
       this.setState({
-        weight: value,
+        weight: parsedValue,
       });
     }
   };
@@ -186,7 +188,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
 
     const unit = getWeightUnit(exercise, defaultUnitSystem);
     let weight = 0;
-    if (weightToConvert !== '.' && !isNaN(weightToConvert)) {
+    if (weightToConvert !== '' && !isNaN(weightToConvert)) {
       weight =
         unit === 'metric'
           ? parseFloat(weightToConvert)

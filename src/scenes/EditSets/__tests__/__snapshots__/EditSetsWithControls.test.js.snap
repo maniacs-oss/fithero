@@ -9,8 +9,8 @@ Snapshot Diff:
 -             Weight (kgs)
 +             Weight (lb)
 @@ --- --- @@
--                 value="90"
-+                 value="198.42"
+-               value="90"
++               value="198.42"
 @@ --- --- @@
 -             100
 +             220.46
