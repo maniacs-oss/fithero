@@ -13,7 +13,7 @@ import type { NavigationType, RealmResults } from '../../types';
 import ChipsCategory from '../../components/ChipsCategory';
 import { mapCategories, mainCategories } from '../../utils/muscles';
 import i18n from '../../utils/i18n';
-import { getExerciseName } from '../../utils/exercises';
+import { getExerciseName, searchExerciseByName } from '../../utils/exercises';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
 import HeaderIconButton from '../../components/HeaderIconButton';
@@ -134,7 +134,6 @@ export class ExercisesScreen extends Component<Props, State> {
   _onSelectCategory = (id: string) => {
     this.setState(prevState => ({
       tagSelection: {
-        ...prevState.tagSelection,
         [id]: !prevState.tagSelection[id],
       },
     }));
@@ -153,30 +152,27 @@ export class ExercisesScreen extends Component<Props, State> {
   }
 
   _getFilterData(searchQuery, tagSelection, hasTagsSelected) {
-    function escapeSpecialChars(regex) {
-      return regex.replace(/([()[{*+.$^\\|?])/g, '\\$1');
-    }
-
     return this.state.exercises.filter(e => {
       const exerciseName = getExerciseName(e.id, e.name);
-      const matchesSearch =
-        exerciseName
-          .toLowerCase()
-          .trim()
-          .search(escapeSpecialChars(searchQuery.toLowerCase().trim())) > -1;
+      let matchesTags = false;
 
-      // There is search query and tags
-      if (hasTagsSelected && matchesSearch) {
+      if (hasTagsSelected) {
         for (let i = 0; i < e.primary.length; i++) {
           if (tagSelection[mapCategories[e.primary[i]]]) {
-            return true;
+            matchesTags = true;
           }
         }
-        // There are no tags but matches the search
-      } else if (!hasTagsSelected && matchesSearch) {
-        return true;
+
+        if (!matchesTags) {
+          return false;
+        }
+
+        if (matchesTags && !searchQuery) {
+          return true;
+        }
       }
-      return false;
+
+      return searchExerciseByName(searchQuery, exerciseName);
     });
   }
 
