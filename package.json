@@ -36,7 +36,7 @@
     "react-navigation-backhandler": "^1.1.1",
     "react-navigation-material-bottom-tabs": "^1.0.0",
     "react-redux": "^6.0.0",
-    "realm": "^2.28.0",
+    "realm": "^2.28.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },
