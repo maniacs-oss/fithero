@@ -170,28 +170,28 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Charts: ec1f57f9340054155691e84d4544a1d239d382c5
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
-  EXConstants: 6ad60de0802ba69068b6d7b63e4e82c06d6807a4
-  EXDocumentPicker: c471a1738be543bcb56e106fbb2969fdf1bce36c
-  EXFileSystem: 22a53ba7e31987166aca49778e53cce8181b1ad8
-  EXPermissions: 332e6241b48d34a8363a78d87d90a20436a9eff9
+  EXConstants: a338ed187829ab25b8817f84cd84eecc13e64fd4
+  EXDocumentPicker: c89ba1555a8c4367d31e4a4bcda9825a18e9788e
+  EXFileSystem: 18c9980f52e3bd6a28670c17e0d33a9c1584a336
+  EXPermissions: ce3e170052df9d496aa51e1c372080cb2508fb16
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
-  React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
+  React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
-  UMBarCodeScannerInterface: f623227f2f6e8fa5c45fef1cc2b5ae200dd14918
-  UMCameraInterface: 2a22ae5a2d4f710d617e3fd2c5c0511019aea1c7
-  UMConstantsInterface: 9884d2a4a4563b20d7efbafba421151698dd8991
-  UMCore: c057256783718d88e019597f70b14c7312b14d91
-  UMFaceDetectorInterface: 402f381792274f3cfe39f0b5969f192733c666dc
-  UMFileSystemInterface: afd29c624dfb8d466e6df7cf7de80a3bdd9d5d8a
-  UMFontInterface: cb06a806e1f43acfee615bca477aac86d467aa4b
-  UMImageLoaderInterface: ce7c8dd0b4f11fc9a8571d4e8608fc0bae7b89a6
-  UMPermissionsInterface: 2a4e59492eb0a32410af28dff8d498ea4030deaf
-  UMReactNativeAdapter: b5ea1cc455cdb00114f6922d17bb64ca770a421f
-  UMSensorsInterface: 4b16dad6584fc08d11b10a3a45490034cd5ff37f
-  UMTaskManagerInterface: c594f1584e28026f98cca344d10183f635896094
-  yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
+  UMBarCodeScannerInterface: 53fd3cbf24fe5c58f3ba82ac8c27f0373fbf52fa
+  UMCameraInterface: d5a2727e76d6b47e3201f863102c055ddbcc6206
+  UMConstantsInterface: 800fb8f95fca9bb2c18ae554e4cb4df4383f6cbf
+  UMCore: c3266dbcd7530f90c63e99a22ee088f3cc323cf9
+  UMFaceDetectorInterface: 0a3116d1313f0a4ea5e8187dbaac8ebe23708135
+  UMFileSystemInterface: a726855fa018f4e76141bb0eab3c576d904286b2
+  UMFontInterface: d43144a9fd2139935623d03b5b617f2d37c4069a
+  UMImageLoaderInterface: c1c22fde92be958166ae6c133d7937a5fd1d8ef8
+  UMPermissionsInterface: 3c47ca68fbcd43286292d678fcb08a62f0189af0
+  UMReactNativeAdapter: d1ca37ccecbfa95306adeebfa5e1d5514bf3d479
+  UMSensorsInterface: 136a828e73e4d69694cdd8d6203a99d38471b90e
+  UMTaskManagerInterface: f88793bd35248182e15591e0aa5b045132312be0
+  yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
 PODFILE CHECKSUM: 2845272c3d7bc16b37b99440174d4c805cf31692
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.7.0
