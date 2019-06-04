@@ -1,19 +1,12 @@
 /* @flow */
 
-import {
-  addExercise,
-  deleteWorkoutExercise,
-  updateExercisePaperForWorkout,
-} from '../WorkoutExerciseService';
+import { addExercise, deleteWorkoutExercise } from '../WorkoutExerciseService';
 import realm from '../../index';
 import {
-  RealmArray,
-  dates,
   mockRealmWorkout,
   mockWorkouts,
   getMockExercises,
   mockSets,
-  mockMultipleSets,
 } from './helpers/databaseMocks';
 
 jest.mock('realm');
@@ -87,81 +80,4 @@ describe('deleteWorkoutExercise', () => {
 
   // TODO
   it.skip('deletes an exercise and change the order of the others', () => {});
-});
-
-describe('updateExercisePaperForWorkout', () => {
-  it('updates an exercise correctly', () => {
-    const mockNewRealmWorkout = {
-      ...mockRealmWorkout,
-      exercises: getMockExercises(mockSets),
-    };
-
-    realm.objectForPrimaryKey = jest.fn(() => mockNewRealmWorkout);
-
-    const mutatedExercise = {
-      id: mockExercise.id,
-      sets: mockSets,
-      date: dates[0].date,
-      type: mockExercise.type,
-      sort: 1,
-    };
-
-    // $FlowFixMe Hard to type this way of mocking RealmArray for tests
-    updateExercisePaperForWorkout(mutatedExercise);
-
-    expect(mockSets.push).toHaveBeenCalledTimes(0);
-    expect(realm.delete).not.toHaveBeenCalled();
-  });
-
-  it('adds a new set correctly', () => {
-    const mockNewRealmWorkout = {
-      ...mockRealmWorkout,
-      exercises: getMockExercises(mockSets),
-    };
-
-    realm.objectForPrimaryKey = jest.fn(() => mockNewRealmWorkout);
-
-    const mutatedExercise = {
-      id: mockExercise.id,
-      sets: mockMultipleSets,
-      date: dates[0].date,
-      type: mockExercise.type,
-      sort: 1,
-    };
-
-    // $FlowFixMe Hard to type this way of mocking RealmArray for tests
-    updateExercisePaperForWorkout(mutatedExercise);
-
-    expect(mutatedExercise.sets).toHaveLength(2);
-    expect(mockSets.push).toHaveBeenCalledTimes(1);
-    expect(realm.delete).not.toHaveBeenCalled();
-  });
-
-  it('deletes the set and the whole exercise', () => {
-    const mockNewRealmWorkout = {
-      ...mockRealmWorkout,
-      exercises: getMockExercises(mockSets),
-    };
-
-    realm.objectForPrimaryKey = jest.fn(() => mockNewRealmWorkout);
-
-    const mutatedExercise = {
-      id: mockExercise.id,
-      sets: new RealmArray(),
-      date: dates[0].date,
-      type: mockExercise.type,
-      sort: 1,
-    };
-
-    // $FlowFixMe Hard to type this way of mocking RealmArray for tests
-    updateExercisePaperForWorkout(mutatedExercise);
-
-    expect(mockSets.push).toHaveBeenCalledTimes(0);
-    expect(realm.delete).toHaveBeenCalledTimes(2);
-    expect(realm.delete).toHaveBeenNthCalledWith(1, [mockSets[0]]);
-    expect(realm.delete).toHaveBeenNthCalledWith(
-      2,
-      mockNewRealmWorkout.exercises[0]
-    );
-  });
 });

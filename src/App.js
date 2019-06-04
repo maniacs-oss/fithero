@@ -52,10 +52,6 @@ export default class App extends React.Component<{}, State> {
   _loadSettings = async () => {
     const locale = getCurrentLocale();
 
-    const editSetsScreenType = await AsyncStorage.getItem(
-      Settings.editSetsScreen
-    );
-
     let defaultUnitSystem = await AsyncStorage.getItem(
       Settings.defaultUnitSystem
     );
@@ -81,7 +77,6 @@ export default class App extends React.Component<{}, State> {
 
     store.dispatch(
       initSettings({
-        editSetsScreenType: editSetsScreenType || 'list',
         defaultUnitSystem,
         firstDayOfTheWeek,
         appTheme: appTheme || 'default',

@@ -8,7 +8,6 @@ import { AndroidBackHandler } from 'react-navigation-backhandler';
 import withTheme from '../../utils/theme/withTheme';
 import i18n from '../../utils/i18n';
 import { dateToString, getDatePrettyFormat, getToday } from '../../utils/date';
-import EditSetsTypeIcon from './EditSetsTypeIcon';
 import { getExerciseName } from '../../utils/exercises';
 import ExerciseHistory from './ExerciseHistory';
 import EditSetsScreen from './EditSetsScreen';
@@ -55,7 +54,6 @@ class EditSetsNavigator extends React.Component<Props, State> {
       navigation.state.params.exerciseKey,
       navigation.state.params.exerciseName
     ),
-    headerRight: <EditSetsTypeIcon />,
   });
 
   constructor(props: Props) {

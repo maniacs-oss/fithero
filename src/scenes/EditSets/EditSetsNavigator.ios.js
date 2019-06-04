@@ -9,7 +9,6 @@ import { getExerciseName } from '../../utils/exercises';
 import ExerciseHistory from './ExerciseHistory';
 
 import i18n from '../../utils/i18n';
-import EditSetsTypeIcon from './EditSetsTypeIcon';
 import { dateToString, getDatePrettyFormat, getToday } from '../../utils/date';
 import withTheme from '../../utils/theme/withTheme';
 import type { NavigationType } from '../../types';
@@ -43,7 +42,6 @@ class EditSetsNavigator extends React.Component<Props, State> {
   static navigationOptions = ({ screenProps }: NavigationOptions) => ({
     ...getDefaultNavigationOptions(screenProps.theme),
     headerTitle: '',
-    headerRight: <EditSetsTypeIcon />,
   });
 
   state = {

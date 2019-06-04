@@ -99,7 +99,6 @@ export const restoreDatabase = async (
     const appTheme = backup.settings[Settings.appTheme] || 'default';
     initSettingsAction({
       appTheme,
-      editSetsScreenType: backup.settings[Settings.editSetsScreen] || 'list',
       defaultUnitSystem: backup.settings[Settings.defaultUnitSystem],
       firstDayOfTheWeek,
     });

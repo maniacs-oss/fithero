@@ -45,49 +45,6 @@ export const deleteWorkoutExercise = (
   }
 };
 
-export const updateExercisePaperForWorkout = (
-  exercise: AddWorkoutExerciseSchemaType
-) => {
-  realm.write(() => {
-    const workoutId = dateToWorkoutId(exercise.date);
-    const workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
-    const existingExercise = workout.exercises.filtered(
-      `id = "${exercise.id}"`
-    )[0];
-    const existingSets = existingExercise.sets;
-
-    // Check for sets that have been deleted first
-    const setsToDelete = [];
-    existingSets.forEach(existingSet => {
-      const set = exercise.sets.find(s => s.id === existingSet.id);
-      if (!set) {
-        setsToDelete.push(existingSet);
-      }
-    });
-
-    if (setsToDelete.length > 0) {
-      realm.delete(setsToDelete);
-    }
-
-    if (exercise.sets.length > 0) {
-      exercise.sets.forEach(s => {
-        const set = existingSets.filtered(`id = "${s.id}"`)[0];
-        if (set) {
-          // Update set
-          set.reps = s.reps;
-          set.weight = s.weight;
-        } else {
-          // Add new set
-          existingSets.push(s);
-        }
-      });
-    } else {
-      // Delete exercise
-      deleteWorkoutExercise(existingExercise);
-    }
-  });
-};
-
 export const getExercisesByType = (type: string) =>
   realm
     .objects(WORKOUT_EXERCISE_SCHEMA_NAME)
