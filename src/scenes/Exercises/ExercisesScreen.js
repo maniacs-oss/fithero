@@ -1,8 +1,14 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { FlatList, Keyboard, Platform, StyleSheet, View } from 'react-native';
-import { IconButton, Searchbar } from 'react-native-paper';
+import {
+  SectionList,
+  Keyboard,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { Caption, Divider, IconButton, Searchbar } from 'react-native-paper';
 import { exercises as dzikuExercises } from 'dziku-exercises';
 import sortBy from 'lodash/sortBy';
 
@@ -17,11 +23,16 @@ import { getExerciseName, searchExerciseByName } from '../../utils/exercises';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
 import HeaderIconButton from '../../components/HeaderIconButton';
-import type { ExerciseSchemaType } from '../../database/types';
+import type {
+  ExerciseSchemaType,
+  WorkoutExerciseSchemaType,
+} from '../../database/types';
 import { getAllExercises } from '../../database/services/ExerciseService';
 import { deserializeExercises } from '../../database/utils';
 import { getDefaultNavigationOptions } from '../../utils/navigation';
 import type { AppThemeType } from '../../redux/modules/settings';
+import { getRecentExercises } from '../../database/services/WorkoutExerciseService';
+import { getToday, toDate } from '../../utils/date';
 
 type NavigationObjectType = {
   navigation: NavigationType<{
@@ -41,12 +52,14 @@ type Props = NavigationObjectType & {
 
 type State = {
   exercises: Array<ExerciseSchemaType>,
+  recentExercises: Array<ExerciseSchemaType>,
   searchQuery: string,
   tagSelection: { [key: string]: boolean },
 };
 
 export class ExercisesScreen extends Component<Props, State> {
   realmExercises: RealmResults<ExerciseSchemaType>;
+  realmRecentExercises: RealmResults<WorkoutExerciseSchemaType>;
 
   static navigationOptions = ({
     navigation,
@@ -72,10 +85,16 @@ export class ExercisesScreen extends Component<Props, State> {
     // a lot of problems when for example, the Restore function deletes all the database.
     // The user will not often add, modify or delete exercises so deserialize here is acceptable
     const customExercises = deserializeExercises(this.realmExercises);
+    const exercises = sortBy([...customExercises, ...dzikuExercises], e =>
+      getExerciseName(e.id, e.name)
+    );
+    this.realmRecentExercises = getRecentExercises(toDate(getToday()));
+    const recentExercises = exercises.filter(e =>
+      this.realmRecentExercises.find(r => e.id === r.type)
+    );
     this.state = {
-      exercises: sortBy([...customExercises, ...dzikuExercises], e =>
-        getExerciseName(e.id, e.name)
-      ),
+      exercises,
+      recentExercises,
       searchQuery: '',
       tagSelection: Object.assign(
         {},
@@ -100,10 +119,25 @@ export class ExercisesScreen extends Component<Props, State> {
         });
       }
     });
+    this.realmRecentExercises.addListener((workoutExercises, changes) => {
+      if (
+        changes.insertions.length > 0 ||
+        changes.modifications.length > 0 ||
+        changes.deletions.length > 0
+      ) {
+        const recentExercises = this.state.exercises.filter(e =>
+          workoutExercises.find(r => e.id === r.type)
+        );
+        this.setState({
+          recentExercises,
+        });
+      }
+    });
   }
 
   componentWillUnmount() {
     this.realmExercises.removeAllListeners();
+    this.realmRecentExercises.removeAllListeners();
   }
 
   _onExercisePress = (exercise: ExerciseSchemaType) => {
@@ -131,6 +165,15 @@ export class ExercisesScreen extends Component<Props, State> {
     />
   );
 
+  _renderSectionHeader = ({ section: { title } }) => (
+    <View style={{ backgroundColor: this.props.theme.colors.background }}>
+      <View style={styles.sectionHeaderContent}>
+        <Caption style={styles.sectionHeaderText}>{title}</Caption>
+      </View>
+      <Divider />
+    </View>
+  );
+
   _onSelectCategory = (id: string) => {
     this.setState(prevState => ({
       tagSelection: {
@@ -143,16 +186,21 @@ export class ExercisesScreen extends Component<Props, State> {
     this.setState({ searchQuery: value });
   };
 
-  _getData(searchQuery, tagSelection) {
+  _getData(exercises, searchQuery, tagSelection) {
     const hasTagsSelected = !!Object.values(tagSelection).find(t => t === true);
     if (!searchQuery && !hasTagsSelected) {
-      return this.state.exercises;
+      return exercises;
     }
-    return this._getFilterData(searchQuery, tagSelection, hasTagsSelected);
+    return this._getFilterData(
+      exercises,
+      searchQuery,
+      tagSelection,
+      hasTagsSelected
+    );
   }
 
-  _getFilterData(searchQuery, tagSelection, hasTagsSelected) {
-    return this.state.exercises.filter(e => {
+  _getFilterData(exercises, searchQuery, tagSelection, hasTagsSelected) {
+    return exercises.filter(e => {
       const exerciseName = getExerciseName(e.id, e.name);
       let matchesTags = false;
 
@@ -183,7 +231,7 @@ export class ExercisesScreen extends Component<Props, State> {
   _renderHeader = () => {
     const { day } = this.props.navigation.state.params;
     return (
-      <View style={styles.listHeader}>
+      <View>
         <ExerciseHeader day={day} style={styles.header} />
         <ChipsCategory
           items={mainCategories}
@@ -199,7 +247,12 @@ export class ExercisesScreen extends Component<Props, State> {
   };
 
   render() {
-    const { searchQuery, tagSelection } = this.state;
+    const {
+      exercises,
+      recentExercises,
+      searchQuery,
+      tagSelection,
+    } = this.state;
     const {
       theme: { colors },
     } = this.props;
@@ -224,13 +277,24 @@ export class ExercisesScreen extends Component<Props, State> {
             />
           )}
         </View>
-        <FlatList
-          data={this._getData(searchQuery, tagSelection)}
+        <SectionList
+          sections={[
+            {
+              title: i18n.t('recent'),
+              data: this._getData(recentExercises, searchQuery, tagSelection),
+            },
+            {
+              title: i18n.t('exercises'),
+              data: this._getData(exercises, searchQuery, tagSelection),
+            },
+          ]}
+          renderSectionHeader={this._renderSectionHeader}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           ListHeaderComponent={this._renderHeader}
           keyboardShouldPersistTaps="always"
           contentContainerStyle={styles.list}
+          stickySectionHeadersEnabled={true}
         />
       </Screen>
     );
@@ -268,11 +332,15 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
-  listHeader: {
-    paddingBottom: 8,
-  },
   list: {
     paddingTop: 4,
+  },
+  sectionHeaderContent: {
+    height: 48,
+    justifyContent: 'center',
+  },
+  sectionHeaderText: {
+    paddingHorizontal: 16,
   },
 });
 

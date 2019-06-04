@@ -72,6 +72,7 @@ export default {
       zero: '{{count}} reps',
     },
   },
+  recent: 'Recent',
   restore: 'Restore',
   restore_description: 'Restore your data from a backup',
   save: 'Save',

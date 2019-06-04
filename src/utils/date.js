@@ -180,3 +180,13 @@ export const whenIsTheDay = (day: string): TimeMomentType => {
   }
   return 'past';
 };
+
+export const getTimeAgo = (
+  date: Date | string,
+  unit: string,
+  value: number
+) => {
+  return moment(date)
+    .subtract(value, unit)
+    .toDate();
+};

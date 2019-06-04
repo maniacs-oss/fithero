@@ -2,7 +2,7 @@
 
 import realm from '../index';
 import type { AddWorkoutExerciseSchemaType } from '../types';
-import { dateToWorkoutId } from '../../utils/date';
+import { dateToWorkoutId, getTimeAgo } from '../../utils/date';
 import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
 import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
 
@@ -93,3 +93,10 @@ export const getExercisesByType = (type: string) =>
     .objects(WORKOUT_EXERCISE_SCHEMA_NAME)
     .filtered('type = $0', type)
     .sorted([['date', true]]);
+
+export const getRecentExercises = (date: string) => {
+  const monthAgo = getTimeAgo(date, 'month', 1);
+  return realm
+    .objects(WORKOUT_EXERCISE_SCHEMA_NAME)
+    .filtered('date >= $0 AND TRUEPREDICATE DISTINCT(type)', monthAgo);
+};

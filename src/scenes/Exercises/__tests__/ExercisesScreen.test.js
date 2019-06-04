@@ -14,11 +14,16 @@ class RealmResults extends Array<*> {
 }
 
 const mockRealmResults = new RealmResults();
+const mockRealmRecentResults = new RealmResults();
+mockRealmRecentResults.push({ type: 'bench-press' }, { type: 'barbell-squat' });
 
 jest.mock('Platform', () => ({ OS: 'android', select: jest.fn() }));
 jest.mock('Keyboard');
 jest.mock('../../../database/services/ExerciseService', () => ({
   getAllExercises: () => mockRealmResults,
+}));
+jest.mock('../../../database/services/WorkoutExerciseService', () => ({
+  getRecentExercises: () => mockRealmRecentResults,
 }));
 
 describe('ExercisesScreen', () => {
@@ -36,7 +41,7 @@ describe('ExercisesScreen', () => {
       theme={theme}
     />
   );
-  const List = wrapper.find('FlatList');
+  const List = wrapper.find('SectionList');
 
   const state = wrapper.state();
   const createState = (searchQuery, tagSelection) => ({
@@ -51,13 +56,19 @@ describe('ExercisesScreen', () => {
   });
 
   it('shows all exercises if no filters', () => {
-    expect(List.props().data).toHaveLength(exercises.length);
+    expect(List.props().sections[0].data[0]).toEqual(
+      expect.objectContaining({ id: 'barbell-squat' })
+    );
+    expect(List.props().sections[0].data[1]).toEqual(
+      expect.objectContaining({ id: 'bench-press' })
+    );
+    expect(List.props().sections[1].data).toHaveLength(exercises.length);
   });
 
   it('filters by search query', () => {
     const data = wrapper
       .instance()
-      ._getData('Barbell Squat', wrapper.state().tagSelection);
+      ._getData(exercises, 'Barbell Squat', wrapper.state().tagSelection);
 
     expect(data.find(e => e.id === 'barbell-squat')).toBeDefined();
   });
@@ -67,7 +78,7 @@ describe('ExercisesScreen', () => {
 
     const data = wrapper
       .instance()
-      ._getData(newState.searchQuery, newState.tagSelection);
+      ._getData(exercises, newState.searchQuery, newState.tagSelection);
     const filteredExercises = exercises.filter(e => e.primary[0] === 'abs');
 
     expect(data).toEqual(filteredExercises);
@@ -78,7 +89,7 @@ describe('ExercisesScreen', () => {
 
     const data = wrapper
       .instance()
-      ._getData(newState.searchQuery, newState.tagSelection);
+      ._getData(exercises, newState.searchQuery, newState.tagSelection);
 
     expect(data).toEqual([
       expect.objectContaining({
@@ -94,7 +105,7 @@ describe('ExercisesScreen', () => {
 
     const data = wrapper
       .instance()
-      ._getData(newState.searchQuery, newState.tagSelection);
+      ._getData(exercises, newState.searchQuery, newState.tagSelection);
 
     expect(data).toEqual([]);
   });
@@ -104,7 +115,7 @@ describe('ExercisesScreen', () => {
 
     const data = wrapper
       .instance()
-      ._getData(newState.searchQuery, newState.tagSelection);
+      ._getData(exercises, newState.searchQuery, newState.tagSelection);
 
     expect(
       data.find(e => e.id === 'decline-barbell-bench-press')
