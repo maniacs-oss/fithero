@@ -208,7 +208,7 @@ describe('EditSetsWithControls', () => {
           .onChangeText('');
 
         expect(wrapper.state()[stateLabel]).toEqual(
-          stateLabel === 'weight' ? '' : '0'
+          stateLabel === 'weight' ? '' : ''
         );
       };
 

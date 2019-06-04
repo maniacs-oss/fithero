@@ -137,7 +137,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   _onChangeWeightInput = (value: string) => {
     const parsedValue = value.replace(',', '.');
     // TODO handle comma correctly depending on the locale (save it using dot but showing it using comma)
-    if (!isNaN(parsedValue)) {
+    if (value === '-' || !isNaN(parsedValue)) {
       this.setState({
         weight: parsedValue,
       });
@@ -145,7 +145,9 @@ export class EditSetsWithControls extends React.Component<Props, State> {
   };
 
   _onChangeRepsInput = (value: string) => {
-    this.setState({ reps: parseInt(value, 10) >= 0 ? value : '0' });
+    this.setState({
+      reps: value === '' || parseInt(value, 10) >= 0 ? value : '0',
+    });
   };
 
   _keyExtractor = item => item.id;
@@ -195,7 +197,7 @@ export class EditSetsWithControls extends React.Component<Props, State> {
           : toKg(parseFloat(weightToConvert));
     }
 
-    const reps = parseInt(repsToConvert, 10);
+    const reps = repsToConvert ? parseInt(repsToConvert, 10) : 0;
 
     if (!exercise) {
       const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
