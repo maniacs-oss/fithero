@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.2</string>
+	<string>1.0.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,8 +37,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Permission added by a external library, we will not use it.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Permission added by a external library, we will not use it.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Permission added by a external library, we will not use it.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Permission added by a external library, we will not use it.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Permission added by a external library, we will not use it.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Permission added by a external library, we will not use it.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
