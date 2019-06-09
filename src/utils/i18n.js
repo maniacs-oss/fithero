@@ -29,6 +29,17 @@ i18nJS.locale = languageTag;
 
 export const clearTranslateCache = () => translate.cache.clear();
 
+export const changeLanguage = () => {
+  const { languageTag } =
+    RNLocalize.findBestAvailableLanguage(['en', 'es']) || fallback;
+  if (i18nJS.locale !== languageTag) {
+    clearTranslateCache();
+    i18nJS.locale = languageTag;
+    return true;
+  }
+  return false;
+};
+
 const i18n = {
   t: translate,
 };

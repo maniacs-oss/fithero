@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 public class MainActivity extends ReactActivity {
 
-  static String currentLocale;
   private @Nullable ReactRootView mReactRootView;
 
   /**
@@ -31,7 +30,6 @@ public class MainActivity extends ReactActivity {
     setTheme(R.style.AppTheme);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
   }
 
   @Override
@@ -72,18 +70,6 @@ public class MainActivity extends ReactActivity {
     if (mReactRootView != null && !mReactRootView.isAttachedToWindow()) {
       mReactRootView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
       setContentView(mReactRootView);
-    }
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-
-    String locale = newConfig.locale.toString();
-    if (!MainActivity.currentLocale.equals(locale)) {
-      MainActivity.currentLocale = locale;
-      final ReactInstanceManager instanceManager = getReactInstanceManager();
-      instanceManager.recreateReactContextInBackground();
     }
   }
 }

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Platform, StatusBar, YellowBox } from 'react-native';
 import { Provider } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as RNLocalize from 'react-native-localize';
 
 import store from './redux/configureStore';
 import MainNavigator from './MainNavigator';
@@ -17,6 +18,7 @@ import {
   setMomentFirstDayOfTheWeek,
 } from './utils/date';
 import PaperThemeProvider from './PaperThemeProvider';
+import { changeLanguage } from './utils/i18n';
 
 if (global.__DEV__) {
   YellowBox.ignoreWarnings([
@@ -47,6 +49,15 @@ export default class App extends React.Component<{}, State> {
 
   componentDidMount() {
     this._loadSettings();
+    if (Platform.OS === 'android') {
+      RNLocalize.addEventListener('change', this._handleLocalizationChange);
+    }
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      RNLocalize.removeEventListener('change', this._handleLocalizationChange);
+    }
   }
 
   _loadSettings = async () => {
@@ -84,6 +95,12 @@ export default class App extends React.Component<{}, State> {
     );
 
     this.setState({ loading: false });
+  };
+
+  _handleLocalizationChange = () => {
+    if (changeLanguage()) {
+      this.forceUpdate();
+    }
   };
 
   render() {
