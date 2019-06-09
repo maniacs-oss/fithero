@@ -1,6 +1,6 @@
 /* @flow */
 
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
@@ -30,13 +30,12 @@ const ExerciseHistory = (props: Props) => {
   const type = props.navigation.state.params.exerciseKey;
 
   const { data, timestamp } = useRealmResultsHook<WorkoutExerciseSchemaType>(
-    getExercisesByType,
-    [type]
+    useCallback(() => getExercisesByType(type), [type])
   );
   const { data: maxSet } = useRealmResultsHook<WorkoutSetSchemaType>(
-    getMaxSetByType,
-    [type]
+    useCallback(() => getMaxSetByType(type), [type])
   );
+
   const maxSetId = maxSet.length > 0 ? maxSet[0].id : null;
   const todayString = dateToString(getToday());
 

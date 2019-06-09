@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { processColor, Platform, StyleSheet } from 'react-native';
 import { BarChart } from 'react-native-charts-wrapper';
 import max from 'lodash/max';
@@ -28,8 +28,10 @@ const WorkoutTimesChart = ({ theme }: Props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const endOfTheWeek = useMemo(() => getEndOfTheWeek(), [today]);
   const { data: workouts, timestamp } = useRealmResultsHook<WorkoutSchemaType>(
-    getWorkoutsByRange,
-    [lastWeeks[0], endOfTheWeek, true]
+    useCallback(() => getWorkoutsByRange(lastWeeks[0], endOfTheWeek, true), [
+      endOfTheWeek,
+      lastWeeks,
+    ])
   );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const groups = useMemo(() => groupWorkoutsByWeek(workouts, lastWeeks), [
