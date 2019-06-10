@@ -68,3 +68,10 @@ export const getSetsThisWeek = () => {
     .objects(WORKOUT_SET_SCHEMA_NAME)
     .filtered(`date >= $0 AND date <= $1`, start, end);
 };
+
+export const getSetsByTypeAndMaxReps = (type: string, reps: string) => {
+  return realm
+    .objects(WORKOUT_SET_SCHEMA_NAME)
+    .filtered(`type = $0 AND reps <= $1`, type, reps)
+    .sorted('date');
+};
