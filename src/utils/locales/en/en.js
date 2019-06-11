@@ -76,6 +76,7 @@ export default {
   restore: 'Restore',
   restore_description: 'Restore your data from a backup',
   save: 'Save',
+  share_workout: 'Share workout',
   secondary_muscle: {
     one: 'Secondary muscle',
     other: 'Secondary muscles',

@@ -20,7 +20,10 @@ import {
   getSafeTimezoneTime,
   getToday,
 } from '../../utils/date';
-import { getWorkoutsByRange } from '../../database/services/WorkoutService';
+import {
+  getWorkoutById,
+  getWorkoutsByRange,
+} from '../../database/services/WorkoutService';
 import WorkoutList from '../../components/WorkoutList';
 import type { WorkoutSchemaType } from '../../database/types';
 import HeaderIconButton from '../../components/HeaderIconButton';
@@ -34,10 +37,11 @@ import i18n from '../../utils/i18n';
 import WorkoutComments from '../../components/WorkoutComments';
 import { hideSplashScreen } from '../../native/RNSplashScreen';
 import { getDefaultNavigationOptions } from '../../utils/navigation';
+import { shareWorkout } from '../../utils/share';
 
 type NavigationObjectType = {
   navigation: NavigationType<{
-    addWorkoutComment: () => void,
+    handleToolbarMenu: () => void,
   }>,
 };
 
@@ -73,8 +77,8 @@ class HomeScreen extends Component<Props, State> {
         <View style={styles.headerButtons}>
           <HeaderIconButton icon="date-range" onPress={navigateToCalendar} />
           <HeaderOverflowButton
-            actions={[i18n.t('comment_workout')]}
-            onPress={params.addWorkoutComment}
+            actions={[i18n.t('comment_workout'), i18n.t('share_workout')]}
+            onPress={params.handleToolbarMenu}
             last
           />
         </View>
@@ -91,7 +95,7 @@ class HomeScreen extends Component<Props, State> {
 
   componentDidMount() {
     this.props.navigation.setParams({
-      addWorkoutComment: this._addWorkoutComment,
+      handleToolbarMenu: this._handleToolbarMenu,
     });
 
     InteractionManager.runAfterInteractions(() => {
@@ -102,9 +106,28 @@ class HomeScreen extends Component<Props, State> {
     });
   }
 
+  _handleToolbarMenu = (index: number) => {
+    switch (index) {
+      case 0:
+        this._addWorkoutComment();
+        break;
+      case 1:
+        this._shareWorkout();
+        break;
+      default:
+        break;
+    }
+  };
+
   _addWorkoutComment = () => {
     const { selectedDay } = this.state;
     this.props.navigation.navigate('Comments', { day: selectedDay });
+  };
+
+  _shareWorkout = async () => {
+    const workouts = getWorkoutById(this.state.selectedDay);
+    const workout = workouts.length > 0 ? workouts[0] : null;
+    await shareWorkout(workout);
   };
 
   _onAddExercises = () => {
