@@ -6,8 +6,11 @@
  *
  * https://docs.bugsnag.com/platforms/react-native/#basic-configuration
  */
+
 import { Client } from 'bugsnag-react-native';
 
-const client = new Client('7cb80c4b3678382f5880b407003b05b1');
+import { BUGSNAG_KEY } from '../../secrets';
+
+const client = new Client(BUGSNAG_KEY);
 
 module.exports = client;
