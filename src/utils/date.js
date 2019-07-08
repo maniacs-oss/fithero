@@ -1,21 +1,7 @@
 /* @flow */
 
-// import { NativeModules } from 'react-native';
 import moment from 'moment';
 import * as RNLocalize from 'react-native-localize';
-
-// To import locales we want translations from
-// import 'moment/locale/pl';
-// import 'moment/locale/es';
-// moment.locale(NativeModules.RNI18n.languages[0]);
-
-// To change the starting week day to Monday
-// Although locale do it for you, it can override the locale
-// moment.updateLocale('en', {
-//   week: {
-//     dow: 1,
-//   },
-// });
 
 import i18n from './i18n';
 import regionDayMap from './regionDayMap';
@@ -139,7 +125,7 @@ export const setMomentFirstDayOfTheWeek = (
   day: number,
   updateLocale?: boolean = false
 ) => {
-  moment[updateLocale ? 'updateLocale' : 'locale'](locale, {
+  moment[updateLocale ? 'updateLocale' : 'locale'](locale.toLowerCase(), {
     week: {
       dow: day,
     },

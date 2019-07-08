@@ -1,0 +1,81 @@
+{
+    "add": "A\u00f1adir",
+    "app_theme": "Tema",
+    "backup": "Copia de seguridad",
+    "backup_description": "Haz una copia de seguridad de tus datos a un servicio en la nube como Google Drive",
+    "cancel": "Cancelar",
+    "calendar": "Calendario",
+    "comment_workout": "Comentar la sesi\u00f3n",
+    "dark_theme": "Modo oscuro",
+    "day__monday": "Lunes",
+    "day__sunday": "Domingo",
+    "day__saturday": "S\u00e1bado",
+    "default_theme": "Por defecto",
+    "default_unit_system": "Sistema de unidades por defecto",
+    "default_unit_system_desc": "Esto no afectar\u00e1 a los ejercicios que hayas apuntado en el pasado.",
+    "delete": "Borrar",
+    "delete__exercise_title": "Eliminar el ejercicio",
+    "delete__exercise_description": "Eliminar un ejercicio borrar\u00e1 cualquier referencia a \u00e9l por cada sesi\u00f3n de entrenamiento. \u00bfEst\u00e1s seguro?",
+    "edit_exercise": "Editar ejercicio",
+    "exercises": "Ejercicios",
+    "empty_view__history": "No hay sets registrados para este ejercicio.",
+    "empty_view__no_workouts_title": "No hay ejercicios",
+    "empty_view__no_workouts_description_past": "\u00bfTe olvidaste de registrar tu entrenamiento?",
+    "empty_view__no_workouts_description_today_1": "\u00a1Hora de ir al gimnasio!",
+    "empty_view__no_workouts_description_today_2": "\u00bfCu\u00e1l es tu excusa hoy?",
+    "empty_view__no_workouts_description_first_workout": "\u00a1Comienza a\u00f1adiendo tu primer entrenamiento hoy!",
+    "empty_view__no_workouts_description_future": "\u00a1Aseg\u00farate de cumplir el futuro!",
+    "first_day_of_the_week": "Primer d\u00eda de la semana",
+    "history": "Historial",
+    "imperial": "Imperial",
+    "kg": {
+        "unit": {
+            "one": "kg",
+            "other": "kgs"
+        },
+        "value": {
+            "one": "{{count}} kg",
+            "other": "{{count}} kgs"
+        }
+    },
+    "lb": "lb",
+    "menu__home": "Inicio",
+    "menu__settings": "Ajustes",
+    "menu__statistics": "Estad\u00edsticas",
+    "metric": "M\u00e9trico",
+    "name": "Nombre",
+    "new_exercise": "Nuevo ejercicio",
+    "notes": "Notas",
+    "primary_muscle": "M\u00fasculo primario",
+    "reps": {
+        "title": "Reps",
+        "unit": {
+            "one": "rep",
+            "other": "reps"
+        },
+        "value": {
+            "one": "{{count}} rep",
+            "other": "{{count}} reps"
+        }
+    },
+    "recent": "Recientes",
+    "restore": "Restaurar",
+    "restore_description": "Restaura tus datos desde una copia de seguridad",
+    "save": "Guardar",
+    "secondary_muscle": {
+        "one": "M\u00fasculo secundario",
+        "other": "M\u00fasculo secundarios"
+    },
+    "search": "Buscar",
+    "sets": "Sets",
+    "this_month": "Este mes",
+    "this_week": "Esta semana",
+    "today": "Hoy",
+    "total_workouts": "Total de sesiones",
+    "week_volume": "Volumen de la semana",
+    "weight_label": "Peso ({{w}})",
+    "workouts_per_week": "Sesiones por semana",
+    "workout_notes": "Notas para la sesi\u00f3n",
+    "workout_comment__placeholder": "A\u00f1ade un comentario memorable aqu\u00ed...",
+    "update": "Actualizar"
+}

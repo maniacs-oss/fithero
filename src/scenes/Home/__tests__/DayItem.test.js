@@ -2,15 +2,19 @@
 
 import * as React from 'react';
 import { fireEvent, render } from 'react-native-testing-library';
+import mockMoment from 'moment';
 
 import DayItem from '../DayItem';
 import theme from '../../../utils/theme';
+import { isAfter } from '../../../utils/date';
 
-jest.mock('moment', () => {
-  const realMoment = jest.requireActual('moment');
-  return (date: string) =>
-    date ? realMoment(date) : realMoment('2019-05-03T00:00:00.000Z');
-});
+jest.mock('../../../utils/date', () => ({
+  getShortDayInfo: jest.fn(() => ({
+    date: mockMoment('2019-05-02T00:00:00.000Z').get('date'),
+    day: '2019-05-02T00:00:00.000Z',
+  })),
+  isAfter: jest.fn(() => false),
+}));
 
 describe('DayItem', () => {
   const _getRender = props => {
@@ -37,6 +41,8 @@ describe('DayItem', () => {
   });
 
   it('renders a future day', () => {
+    // $FlowFixMe
+    isAfter.mockImplementation(() => true);
     const { getByTestId } = _getRender({
       dateString: '2019-05-04T00:00:00.000Z',
     });

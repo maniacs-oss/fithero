@@ -62,7 +62,9 @@ class StatisticsScreen extends React.Component<Props> {
           overScrollMode="never"
         >
           <Card style={[styles.singleCard, styles.first]}>
-            <Text style={styles.singleTitle}>{i18n.t('total_workouts')}</Text>
+            <Text numberOfLines={1} style={styles.singleTitle}>
+              {i18n.t('total_workouts')}
+            </Text>
             <DataProvider
               query={getAllWorkoutsWithExercises}
               parse={(data: Array<WorkoutSchemaType>) =>
@@ -74,7 +76,9 @@ class StatisticsScreen extends React.Component<Props> {
             />
           </Card>
           <Card style={styles.singleCard}>
-            <Text style={styles.singleTitle}>{i18n.t('this_month')}</Text>
+            <Text numberOfLines={1} style={styles.singleTitle}>
+              {i18n.t('this_month')}
+            </Text>
             <DataProvider
               query={getWorkoutsThisMonth}
               parse={(data: Array<WorkoutSchemaType>) =>
@@ -86,7 +90,9 @@ class StatisticsScreen extends React.Component<Props> {
             />
           </Card>
           <Card style={styles.singleCard}>
-            <Text style={styles.singleTitle}>{i18n.t('this_week')}</Text>
+            <Text numberOfLines={1} style={styles.singleTitle}>
+              {i18n.t('this_week')}
+            </Text>
             <DataProvider
               query={getWorkoutsThisWeek}
               parse={(data: Array<WorkoutSchemaType>) =>
@@ -98,7 +104,9 @@ class StatisticsScreen extends React.Component<Props> {
             />
           </Card>
           <Card style={[styles.singleCard, styles.last]}>
-            <Text style={styles.singleTitle}>{i18n.t('week_volume')}</Text>
+            <Text numberOfLines={1} style={styles.singleTitle}>
+              {i18n.t('week_volume')}
+            </Text>
             <DataProvider
               query={getSetsThisWeek}
               parse={(data: Array<WorkoutSetSchemaType>) =>

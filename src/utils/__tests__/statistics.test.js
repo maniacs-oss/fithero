@@ -3,13 +3,7 @@
 import moment from 'moment';
 
 import { groupWorkoutsByWeek } from '../statistics';
-import { getLastWeeks, toDate } from '../date';
-
-jest.mock('moment', () => {
-  const realMoment = jest.requireActual('moment');
-  return (date: string) =>
-    date ? realMoment(date) : realMoment('2019-04-27T00:00:00.000Z');
-});
+import { toDate } from '../date';
 
 const dates = [
   '2019-04-22T00:00:00.000Z',
@@ -28,7 +22,13 @@ const mockWorkouts = (() => {
   }));
 })();
 
-const weeks = getLastWeeks(5);
+const weeks = [
+  moment('2019-03-23T23:00:00.000Z').toDate(),
+  moment('2019-03-30T23:00:00.000Z').toDate(),
+  moment('2019-04-06T22:00:00.000Z').toDate(),
+  moment('2019-04-13T22:00:00.000Z').toDate(),
+  moment('2019-04-20T22:00:00.000Z').toDate(),
+];
 
 test('groupWorkoutsByWeek', () => {
   const groups = groupWorkoutsByWeek(mockWorkouts, weeks);
