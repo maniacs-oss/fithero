@@ -168,7 +168,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  Charts: ec1f57f9340054155691e84d4544a1d239d382c5
+  Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   EXConstants: a338ed187829ab25b8817f84cd84eecc13e64fd4
   EXDocumentPicker: c89ba1555a8c4367d31e4a4bcda9825a18e9788e
