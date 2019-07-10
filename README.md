@@ -30,7 +30,7 @@ You focus on your training. **FitHero** will focus on the rest. Built with [Reac
 
 ## Feedback & Contributing
 
-Feel free to send us feedback on [Twitter]() or [file an issue](https://github.com/ferrannp/fithero/issues). Feature requests are welcome, however, they need to be discussed and we cannot guarantee that everything will be implemented. Therefore, preparing a detailed RFC (request for changes) is a good idea. If you wish to contribute, please take a quick look at the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
+Feel free to send us feedback on [Twitter](https://twitter.com/fitheroapp) or [file an issue](https://github.com/ferrannp/fithero/issues). Feature requests are welcome, however, they need to be discussed and we cannot guarantee that everything will be implemented. Therefore, preparing a detailed RFC (request for changes) is a good idea. If you wish to contribute, please take a quick look at the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
 
 ## License
 
